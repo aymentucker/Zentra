@@ -9,10 +9,10 @@ struct ScanReviewView: View {
     @StateObject private var cleanup = CleanupConfirmationModel()
     @Environment(\.layoutDirection) private var layoutDirection
 
-    private var selectedItems: [ClassifiedScanItem] {
-        snapshot.safeItems.filter { selected.contains($0.id) }
+    private var selectedCandidates: [CleanupCandidate] {
+        snapshot.safeCandidates.filter { selected.contains($0.id) }
     }
-    private var selectedBytes: Int64 { selectedItems.reduce(0) { $0 + $1.file.size } }
+    private var selectedBytes: Int64 { selectedCandidates.reduce(0) { $0 + $1.size } }
 
     var body: some View {
         ZStack {
@@ -61,7 +61,7 @@ struct ScanReviewView: View {
     }
 
     private var selectAllSafeBar: some View {
-        let allSafeIDs = Set(snapshot.safeItems.map(\.id))
+        let allSafeIDs = Set(snapshot.safeCandidates.map(\.id))
         let allSelected = !allSafeIDs.isEmpty && allSafeIDs.isSubset(of: selected)
 
         return HStack(spacing: 12) {
@@ -283,7 +283,7 @@ struct ScanReviewView: View {
 
     private func buildPlan() {
         do {
-            plan = try CleanupPlanBuilder().build(from: selectedItems)
+            plan = try CleanupPlanBuilder().build(from: selectedCandidates)
             planError = nil
         } catch {
             plan = nil
