@@ -308,6 +308,7 @@ extension ScanCategory {
         case .logs: "scan.category.logs"
         case .temporary: "scan.category.temporary"
         case .developer: "scan.category.developer"
+        case .creator: "scan.category.creator"
         case .userData: "scan.category.userData"
         case .other: "scan.category.other"
         }
