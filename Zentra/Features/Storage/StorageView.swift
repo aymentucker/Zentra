@@ -45,7 +45,7 @@ struct StorageView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 22) {
                     header
-                    if model.state == .scanning { progressCard }
+                    if model.state == .scanning { StorageScanChart(files: model.fileCount, bytes: model.scannedBytes, currentURL: model.currentURL) }
                     if let analysis = model.analysis {
                         overview(analysis)
                         fullDiskNotice(analysis)
@@ -75,17 +75,6 @@ struct StorageView: View {
                 Button("scan.cancel") { model.cancel() }.buttonStyle(.plain).foregroundStyle(Color.zentraTextSecondary)
             } else { ZentraPrimaryButton("storage.scan", action: model.start) }
         }
-    }
-
-    private var progressCard: some View {
-        ZentraCard { HStack(spacing: 13) {
-            ProgressView().controlSize(.small)
-            VStack(alignment: .leading, spacing: 4) {
-                Text("storage.scanning").zentraFont(12, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
-                Text("\(model.fileCount) · \(ByteCountFormatter.string(fromByteCount: model.scannedBytes, countStyle: .file))").zentraFont(10.5).foregroundStyle(Color.zentraTextTertiary)
-                if let url = model.currentURL { Text(url.lastPathComponent).lineLimit(1).zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary) }
-            }; Spacer()
-        }}
     }
 
     private func overview(_ analysis: StorageAnalysis) -> some View {
