@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CleanupView: View {
     @StateObject private var scanSession = ScanSession()
+    @StateObject private var sourceAnalysis = CleanupSourceAnalysisModel()
     private let sourceCatalog = CleanupSourceCatalog()
     @State private var enabledSources = Set(CleanupSourceKind.allCases)
 
@@ -31,6 +32,11 @@ struct CleanupView: View {
                 .frame(maxWidth: 820)
                 .frame(maxWidth: .infinity)
                 .padding(36)
+            }
+        }
+        .task {
+            if sourceAnalysis.summaries.isEmpty {
+                sourceAnalysis.start(sources: sourceCatalog.availableSources())
             }
         }
     }
@@ -73,8 +79,15 @@ struct CleanupView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(source.kind.titleKey).zentraFont(13, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
                     Text(source.kind.detailKey).zentraFont(11).foregroundStyle(Color.zentraTextTertiary)
-                    Text(String(format: NSLocalizedString("cleanup.locations.count", comment: ""), source.targets.count))
-                        .zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
+                    if let summary = sourceAnalysis.summaries[source.kind] {
+                        Text("\(summary.itemCount) · \(ByteCountFormatter.string(fromByteCount: summary.totalBytes, countStyle: .file))")
+                            .zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
+                    } else if sourceAnalysis.isAnalyzing {
+                        Text("cleanup.analyzing").zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
+                    } else {
+                        Text(String(format: NSLocalizedString("cleanup.locations.count", comment: ""), source.targets.count))
+                            .zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
+                    }
                 }
                 Spacer()
                 Button {
