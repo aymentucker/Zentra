@@ -1,83 +1,99 @@
 import SwiftUI
 
 struct SmartCareView: View {
-    @StateObject private var scanSession = ScanSession()
-    private let targetPolicy = ScanTargetPolicy()
+    @StateObject private var model = SmartCareCoordinator()
 
     var body: some View {
         ZStack {
             LinearGradient(colors: [Color.zentraBackground, Color.zentraBackground, Color.zentraAccent.opacity(0.07)], startPoint: .topLeading, endPoint: .bottomTrailing).ignoresSafeArea()
-
             ScrollView {
-                VStack(spacing: 26) {
-                    ZentraMark().frame(width: 92, height: 92).shadow(color: Color.zentraAccent.opacity(0.24), radius: 26, x: 0, y: 10)
-
-                    VStack(spacing: 9) {
-                        Text("smart.title").zentraFont(34, weight: .bold).foregroundStyle(Color.zentraTextPrimary)
-                        Text("smart.subtitle").zentraFont(15).foregroundStyle(Color.zentraTextSecondary).multilineTextAlignment(.center)
-                    }
-
-                    scanAction
-
-                    if scanSession.state == .scanning || scanSession.state == .preparingResults {
-                        ScanProgressCard(progress: scanSession.progress)
-                    }
-
-                    if let review = scanSession.review {
-                        ScanReviewView(snapshot: review)
-                    }
-
-                    if case .failed = scanSession.state {
-                        ZentraStateView(
-                            state: .error,
-                            title: "scan.error.title",
-                            message: "scan.error.message",
-                            retryAction: startScan
-                        )
-                    }
-
-                    if scanSession.result == nil && scanSession.state != .scanning && scanSession.state != .preparingResults {
-                        HStack(spacing: 14) {
-                            StatusCard(title: "nav.cleanup")
-                            StatusCard(title: "nav.performance")
-                            StatusCard(title: "nav.applications")
-                        }
-                        .frame(maxWidth: 720)
-                    }
-                }
-                .frame(maxWidth: 760)
-                .frame(maxWidth: .infinity)
-                .padding(36)
+                VStack(alignment: .leading, spacing: 24) {
+                    hero
+                    if case .scanning(let module) = model.state { scanning(module) }
+                    if let summary = model.summary { results(summary) }
+                    else if !isScanning { readiness }
+                    if case .failed = model.state { errorCard }
+                }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 48).padding(.vertical, 36)
             }
         }
     }
 
-    @ViewBuilder
-    private var scanAction: some View {
-        if scanSession.state == .scanning {
-            Button("scan.cancel") { scanSession.cancel() }
-                .buttonStyle(.plain)
-                .zentraFont(13, weight: .medium)
-                .foregroundStyle(Color.zentraTextSecondary)
-        } else {
-            ZentraPrimaryButton("smart.scan", action: startScan)
+    private var isScanning: Bool { if case .scanning = model.state { return true }; return false }
+
+    private var hero: some View {
+        HStack(spacing: 22) {
+            ZentraMark().frame(width: 78, height: 78).shadow(color: Color.zentraAccent.opacity(0.2), radius: 22, y: 8)
+            VStack(alignment: .leading, spacing: 7) {
+                Text("smart.title").zentraFont(30, weight: .bold).foregroundStyle(Color.zentraTextPrimary)
+                Text("smart.subtitle.integrated").zentraFont(12.5).foregroundStyle(Color.zentraTextSecondary)
+            }
+            Spacer()
+            if isScanning { Button("scan.cancel") { model.cancel() }.buttonStyle(.plain).foregroundStyle(Color.zentraTextSecondary) }
+            else { ZentraPrimaryButton(model.summary == nil ? "smart.scan" : "smart.scan.again") { model.start() } }
         }
     }
 
-    private func startScan() {
-        scanSession.start(targets: targetPolicy.smartCareTargets())
+    private func scanning(_ module: SmartCareModule) -> some View {
+        ZentraCard { VStack(alignment: .leading, spacing: 14) {
+            HStack { ProgressView().controlSize(.small); Text(module.titleKey).zentraFont(13, weight: .semibold); Spacer(); Text("\(Int(model.progress * 100))%").zentraFont(10, weight: .semibold).foregroundStyle(Color.zentraAccent) }
+            ProgressView(value: model.progress).tint(Color.zentraAccent)
+            if module == .cleanup, let url = model.scanProgress.currentURL { Text(url.path).lineLimit(1).truncationMode(.middle).zentraFont(9).foregroundStyle(Color.zentraTextTertiary) }
+            Text("smart.scan.safety").zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary)
+        } }
     }
+
+    private func results(_ s: SmartCareSummary) -> some View {
+        VStack(alignment: .leading, spacing: 18) {
+            HStack(spacing: 12) {
+                healthCard(s)
+                safetyMetric("smart.safe", s.safeCount, s.safeBytes, "checkmark.shield.fill", Color.zentraAccent)
+                safetyMetric("smart.review", s.reviewCount, s.reviewBytes, "eye.fill", Color.zentraTextSecondary)
+                safetyMetric("smart.protected", s.protectedCount, s.protectedBytes, "lock.fill", Color.zentraTextTertiary)
+            }
+            Text("smart.overview").zentraFont(15, weight: .semibold)
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 240), spacing: 12)], spacing: 12) {
+                moduleCard("nav.cleanup", "smart.cleanup.detail", ByteCountFormatter.string(fromByteCount: s.cleanup.totalBytes, countStyle: .file), "sparkles")
+                moduleCard("nav.developer", "smart.workspace.detail", ByteCountFormatter.string(fromByteCount: s.workspace.safeBytes + s.workspace.reviewBytes + s.workspace.protectedBytes, countStyle: .file), "hammer")
+                moduleCard("nav.applications", "smart.applications.detail", "\(s.applications.applications.count)", "square.grid.2x2")
+                moduleCard("nav.performance", "smart.performance.detail", String(format: "CPU %.0f%% · RAM %.0f%%", s.performance.cpuPercent, s.performance.memory.pressure * 100), "gauge.with.dots.needle.67percent")
+            }
+            recommendation(s)
+        }
+    }
+
+    private func healthCard(_ s: SmartCareSummary) -> some View {
+        ZentraCard { VStack(alignment: .leading, spacing: 7) { Text("\(s.healthScore)").zentraFont(24, weight: .bold).foregroundStyle(Color.zentraAccent); Text("smart.health").zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary) }.frame(maxWidth: .infinity, alignment: .leading) }
+    }
+
+    private func safetyMetric(_ title: LocalizedStringKey, _ count: Int, _ bytes: Int64, _ icon: String, _ color: Color) -> some View {
+        ZentraCard { VStack(alignment: .leading, spacing: 6) { Image(systemName: icon).foregroundStyle(color); Text("\(count)").zentraFont(17, weight: .semibold); Text(title).zentraFont(9.5).foregroundStyle(Color.zentraTextSecondary); Text(ByteCountFormatter.string(fromByteCount: bytes, countStyle: .file)).zentraFont(8.5).foregroundStyle(Color.zentraTextTertiary) }.frame(maxWidth: .infinity, alignment: .leading) }
+    }
+
+    private func moduleCard(_ title: LocalizedStringKey, _ detail: LocalizedStringKey, _ value: String, _ icon: String) -> some View {
+        ZentraCard { VStack(alignment: .leading, spacing: 8) { Image(systemName: icon).foregroundStyle(Color.zentraAccent); HStack { Text(title).zentraFont(12, weight: .semibold); Spacer(); Text(value).zentraFont(11, weight: .semibold).foregroundStyle(Color.zentraAccent) }; Text(detail).zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary) }.frame(maxWidth: .infinity, alignment: .leading) }
+    }
+
+    private func recommendation(_ s: SmartCareSummary) -> some View {
+        ZentraCard { HStack(spacing: 12) { Image(systemName: "lightbulb.fill").foregroundStyle(Color.zentraAccent); VStack(alignment: .leading, spacing: 3) { Text("smart.recommendation").zentraFont(11.5, weight: .semibold); Text(s.reviewCount > 0 ? "smart.recommendation.review" : "smart.recommendation.ready").zentraFont(9.5).foregroundStyle(Color.zentraTextSecondary) }; Spacer(); Text("smart.noAutoDelete").zentraFont(8.5).foregroundStyle(Color.zentraTextTertiary) } }
+    }
+
+    private var readiness: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("smart.ready.title").zentraFont(15, weight: .semibold)
+            HStack(spacing: 12) { readyCard("nav.cleanup", "sparkles"); readyCard("nav.developer", "hammer"); readyCard("nav.applications", "square.grid.2x2"); readyCard("nav.performance", "gauge.with.dots.needle.67percent") }
+            ZentraCard { HStack { Image(systemName: "doc.on.doc").foregroundStyle(Color.zentraAccent); Text("smart.deepTools").zentraFont(10.5).foregroundStyle(Color.zentraTextSecondary); Spacer() } }
+        }
+    }
+
+    private func readyCard(_ title: LocalizedStringKey, _ icon: String) -> some View {
+        ZentraCard { VStack(alignment: .leading, spacing: 8) { Image(systemName: icon).foregroundStyle(Color.zentraAccent); Text(title).zentraFont(11, weight: .semibold); Text("status.ready").zentraFont(9).foregroundStyle(Color.zentraTextTertiary) }.frame(maxWidth: .infinity, alignment: .leading) }
+    }
+
+    private var errorCard: some View { ZentraStateView(state: .error, title: "scan.error.title", message: "scan.error.message", retryAction: { model.start() }) }
 }
 
-private struct StatusCard: View {
-    let title: LocalizedStringKey
-    var body: some View {
-        ZentraCard {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(title).zentraFont(13, weight: .medium).foregroundStyle(Color.zentraTextSecondary)
-                Text("status.ready").zentraFont(17, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
+private extension SmartCareModule {
+    var titleKey: LocalizedStringKey {
+        switch self { case .cleanup: "smart.scanning.cleanup"; case .workspace: "smart.scanning.workspace"; case .applications: "smart.scanning.applications"; case .performance: "smart.scanning.performance" }
     }
 }
