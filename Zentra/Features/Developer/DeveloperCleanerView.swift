@@ -25,7 +25,9 @@ struct DeveloperCleanerView: View {
 
                     if !model.selectedResults.isEmpty { actionBar }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)\n                .padding(.horizontal, 48)\n                .padding(.vertical, 36)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 48)
+                .padding(.vertical, 36)
             }
         }
         .task { if model.results.isEmpty { model.scan() } }
