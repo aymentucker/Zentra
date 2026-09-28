@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 import AppKit
 
 struct StorageScanPreset: Identifiable, Hashable {
@@ -34,8 +35,7 @@ struct StorageLocationPicker: View {
     @Environment(\.dismiss) private var dismiss
 
     private var selectedURLs: [URL] {
-        let presetURLs = presets.filter { selected.contains($0.id) }.map(\.url)
-        return StorageTargetPolicy().normalized(presetURLs + customURLs)
+        StorageTargetPolicy().normalized(presets.filter { selected.contains($0.id) }.map(\.url) + customURLs)
     }
 
     var body: some View {
@@ -87,9 +87,15 @@ struct StorageLocationPicker: View {
             if selected.contains(item.id) { selected.remove(item.id) } else { selected.insert(item.id) }
         }
     }
+
     private func selectAll() { selected = Set(presets.filter{$0.id != "disk"}.map(\.id)) }
+
     private func chooseFolder() {
-        let panel=NSOpenPanel(); panel.canChooseDirectories=true; panel.canChooseFiles=false; panel.allowsMultipleSelection=true; panel.prompt=String(localized:"storage.location.choose")
+        let panel=NSOpenPanel()
+        panel.canChooseDirectories=true
+        panel.canChooseFiles=false
+        panel.allowsMultipleSelection=true
+        panel.prompt=String(localized:"storage.location.choose")
         guard panel.runModal() == .OK else{return}
         selected.remove("disk")
         for url in panel.urls where !customURLs.contains(url) { customURLs.append(url) }
