@@ -12,11 +12,22 @@ struct StorageView: View {
     @State private var pendingTrash: [StorageItem] = []
     @State private var showTrashConfirmation = false
     @State private var visualPath: [URL] = []
+    @State private var sortMode: StorageSortMode = .size
+    @State private var searchText = ""
 
     private var displayedItems: [StorageItem] {
         guard let analysis = model.analysis else { return [] }
         let threshold = Int64(minimumSizeMB * 1_024 * 1_024)
-        return analysis.items.filter { $0.size >= threshold && (selectedCategory == nil || $0.category == selectedCategory) }.sorted { $0.size > $1.size }
+        let filtered = analysis.items.filter {
+            $0.size >= threshold &&
+            (selectedCategory == nil || $0.category == selectedCategory) &&
+            (searchText.isEmpty || $0.url.lastPathComponent.localizedCaseInsensitiveContains(searchText))
+        }
+        switch sortMode {
+        case .size: return filtered.sorted { $0.size > $1.size }
+        case .name: return filtered.sorted { $0.url.lastPathComponent.localizedCaseInsensitiveCompare($1.url.lastPathComponent) == .orderedAscending }
+        case .modified: return filtered.sorted { ($0.modifiedAt ?? .distantPast) > ($1.modifiedAt ?? .distantPast) }
+        }
     }
     private var visualDirectory: URL {
         visualPath.last ?? FileManager.default.homeDirectoryForCurrentUser
@@ -120,7 +131,16 @@ struct StorageView: View {
                     Label("storage.view.list", systemImage: "list.bullet").tag(DisplayMode.list)
                 }.pickerStyle(.segmented).frame(width: 230)
             }
-            HStack {
+            HStack(spacing: 10) {
+                HStack(spacing: 6) {
+                    Image(systemName: "magnifyingglass").foregroundStyle(Color.zentraTextTertiary)
+                    TextField("storage.search", text: $searchText).textFieldStyle(.plain).zentraFont(10.5)
+                }.padding(.horizontal, 10).frame(width: 210, height: 30).background(RoundedRectangle(cornerRadius: 9).fill(Color.zentraSurface))
+                Picker("", selection: $sortMode) {
+                    Text("storage.sort.size").tag(StorageSortMode.size)
+                    Text("storage.sort.name").tag(StorageSortMode.name)
+                    Text("storage.sort.modified").tag(StorageSortMode.modified)
+                }.frame(width: 130)
                 Text("storage.minimumSize").zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
                 Text("≥ \(Int(minimumSizeMB)) MB").zentraFont(10, weight: .semibold).foregroundStyle(Color.zentraTextSecondary)
                 Slider(value: $minimumSizeMB, in: 50...1000, step: 50).frame(maxWidth: 220)
@@ -131,6 +151,12 @@ struct StorageView: View {
             else if displayMode == .visual {
                 visualExplorer
             } else {
+                HStack {
+                    Button("storage.selection.selectVisible") {
+                        selection.selected.formUnion(displayedItems.prefix(300).map(\.id))
+                    }.buttonStyle(.plain).zentraFont(10).foregroundStyle(Color.zentraAccent)
+                    Spacer()
+                }
                 LazyVStack(spacing: 8) { ForEach(displayedItems.prefix(300)) { item in fileRow(item) } }
             }
         }
@@ -221,4 +247,9 @@ extension StorageCategory {
         case .archives: "archivebox"; case .applications: "app"; case .developer: "hammer"; case .other: "doc"
         }
     }
+}
+
+
+private enum StorageSortMode: String, CaseIterable {
+    case size, name, modified
 }
