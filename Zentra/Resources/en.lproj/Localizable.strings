@@ -74,3 +74,13 @@
 "cleanup.result.success" = "Cleanup completed";
 "cleanup.result.partial" = "Cleanup completed with some issues";
 "cleanup.result.summary" = "%d succeeded · %d failed · %@ processed";
+
+"cleanup.title" = "Cleanup";
+"cleanup.subtitle" = "Find removable data with conservative safety rules before anything changes.";
+"cleanup.scan" = "Scan for cleanup";
+"cleanup.userCaches" = "User caches";
+"cleanup.userCaches.detail" = "Older disposable cache files are reviewed before cleanup.";
+"cleanup.logs" = "Application logs";
+"cleanup.logs.detail" = "Old ordinary logs can be reviewed; diagnostics stay protected from automatic selection.";
+"cleanup.safePolicy" = "Safety first";
+"cleanup.safePolicy.detail" = "Only approved safe items can enter a cleanup plan.";
