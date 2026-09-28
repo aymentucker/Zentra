@@ -24,4 +24,20 @@ final class StorageAnalyzerTests: XCTestCase {
         let analysis = StorageAnalysis(items: [small, big], categoryBytes: [.video: small.size + big.size], totalBytes: small.size + big.size, skippedItems: 0)
         XCTAssertEqual(analysis.largeFiles.map(\.url), [big.url])
     }
+
+    func testTreeBuilderAggregatesImmediateFolders() {
+        let home = FileManager.default.homeDirectoryForCurrentUser
+        let docs = home.appendingPathComponent("Documents")
+        let project = docs.appendingPathComponent("Project")
+        let a = StorageItem(url: project.appendingPathComponent("a.mov"), size: 70, modifiedAt: nil, category: .video)
+        let b = StorageItem(url: project.appendingPathComponent("b.mov"), size: 30, modifiedAt: nil, category: .video)
+        let direct = StorageItem(url: docs.appendingPathComponent("note.pdf"), size: 10, modifiedAt: nil, category: .documents)
+        let nodes = StorageTreeBuilder().children(of: docs, from: [a, b, direct])
+        let folder = nodes.first { $0.isDirectory }
+        XCTAssertEqual(folder?.name, "Project")
+        XCTAssertEqual(folder?.totalBytes, 100)
+        XCTAssertEqual(folder?.fileCount, 2)
+        XCTAssertTrue(nodes.contains { !$0.isDirectory && $0.name == "note.pdf" })
+    }
 }
+
