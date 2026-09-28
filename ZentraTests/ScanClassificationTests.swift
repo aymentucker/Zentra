@@ -51,8 +51,27 @@ final class ScanClassificationTests: XCTestCase {
         let old = Date().addingTimeInterval(-8 * 86_400)
         let file = ScannedFile(id: url, url: url, size: 10, isDirectory: false, modifiedAt: old)
         let result = classifier.classify(file)
-        XCTAssertEqual(result.category, .cache)
+        XCTAssertEqual(result.category, .creator)
         XCTAssertEqual(result.safety.level, .safe)
     }
+
+    func testCreatorProjectMediaIsNotMistakenForCache() {
+        let url = home.appendingPathComponent("Movies/ClientProject/master.mov")
+        let old = Date().addingTimeInterval(-60 * 86_400)
+        let file = ScannedFile(id: url, url: url, size: 10, isDirectory: false, modifiedAt: old)
+        let result = classifier.classify(file)
+        XCTAssertEqual(result.category, .userData)
+        XCTAssertEqual(result.safety.level, .protected)
+    }
+
+    func testXcodeArchiveIsNotKnownDisposableDeveloperCache() {
+        let url = home.appendingPathComponent("Library/Developer/Xcode/Archives/2026/App.xcarchive/App")
+        let old = Date().addingTimeInterval(-60 * 86_400)
+        let file = ScannedFile(id: url, url: url, size: 10, isDirectory: false, modifiedAt: old)
+        let result = classifier.classify(file)
+        XCTAssertNotEqual(result.category, .developer)
+        XCTAssertNotEqual(result.safety.level, .safe)
+    }
 }
+
 
