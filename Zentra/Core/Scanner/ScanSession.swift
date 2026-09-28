@@ -61,27 +61,35 @@ final class ScanSession: ObservableObject {
     }
 
     nonisolated private static func makeReviewSnapshot(_ summary: ScanSummary) -> ScanReviewSnapshot {
-        let classified = ScanClassifier().classify(summary).filter { !$0.file.isDirectory }
-        var allGroups: [ScanCategory: [ClassifiedScanItem]] = [:]
+        let classifier = ScanClassifier()
+        var displayGroups: [ScanCategory: [ClassifiedScanItem]] = [:]
         var counts: [ScanCategory: Int] = [:]
         var bytes: [ScanCategory: Int64] = [:]
 
-        for item in classified {
+        var totalBytes: Int64 = 0
+
+        for file in summary.files {
+            let item = classifier.classify(file)
             counts[item.category, default: 0] += 1
             bytes[item.category, default: 0] += item.file.size
-            allGroups[item.category, default: []].append(item)
-        }
+            totalBytes += item.file.size
 
-        var displayGroups: [ScanCategory: [ClassifiedScanItem]] = [:]
-        for (category, items) in allGroups {
-            displayGroups[category] = Array(items.sorted { $0.file.size > $1.file.size }.prefix(30))
+            var visible = displayGroups[item.category, default: []]
+            if visible.count < 30 {
+                visible.append(item)
+                visible.sort { $0.file.size > $1.file.size }
+            } else if let last = visible.last, item.file.size > last.file.size {
+                visible[visible.count - 1] = item
+                visible.sort { $0.file.size > $1.file.size }
+            }
+            displayGroups[item.category] = visible
         }
 
         return ScanReviewSnapshot(
             groups: displayGroups,
             counts: counts,
             bytes: bytes,
-            totalBytes: classified.reduce(0) { $0 + $1.file.size }
+            totalBytes: totalBytes
         )
     }
 
