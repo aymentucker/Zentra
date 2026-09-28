@@ -252,3 +252,23 @@
 "applications.artifact.logs" = "السجلات";
 "applications.artifact.containers" = "حاوية التطبيق";
 "applications.artifact.groupContainers" = "الحاوية المشتركة";
+
+"performance.title" = "الأداء";
+"performance.subtitle" = "راقب المعالج والذاكرة والعمليات وخدمات بدء التشغيل دون تعديلات تلقائية غير آمنة.";
+"performance.refresh" = "تحديث";
+"performance.loading" = "جارٍ قراءة أداء النظام…";
+"performance.cpu" = "استخدام المعالج";
+"performance.memory" = "ضغط الذاكرة";
+"performance.uptime" = "مدة التشغيل";
+"performance.memory.title" = "الذاكرة";
+"performance.memory.note" = "يعرض Zentra استخدام الذاكرة دون إجبار macOS على تفريغ الذاكرة.";
+"performance.available" = "متاح";
+"performance.processes" = "أعلى العمليات استخدامًا للمعالج";
+"performance.startup" = "خدمات بدء التشغيل";
+"performance.startup.note" = "فحص للقراءة فقط لـ LaunchAgents وLaunchDaemons. لا يعطّل Zentra خدمات النظام تلقائيًا.";
+"performance.startup.count" = "%d عنصر";
+"performance.startup.empty" = "لم يتم العثور على ملفات خدمات بدء تشغيل في المواقع المفحوصة.";
+"performance.startup.user" = "خدمة مستخدم";
+"performance.startup.system" = "خدمة نظام";
+"performance.uptime.days" = "%d يوم";
+"performance.uptime.hours" = "%d ساعة";
