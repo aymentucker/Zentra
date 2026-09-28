@@ -96,3 +96,8 @@
 "scan.category.creator" = "Creator caches";
 
 "scan.safety.items" = "%d items";
+
+"scan.safeSelection.title" = "Safe cleanup selection";
+"scan.safeSelection.summary" = "%d safe items · %@";
+"scan.safeSelection.select" = "Select all safe";
+"scan.safeSelection.clear" = "Clear safe selection";
