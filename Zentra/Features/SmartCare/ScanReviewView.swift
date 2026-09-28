@@ -6,6 +6,7 @@ struct ScanReviewView: View {
     @State private var selected = Set<URL>()
     @State private var plan: CleanupPlan?
     @State private var planError: String?
+    @StateObject private var cleanup = CleanupConfirmationModel()
     @Environment(\.layoutDirection) private var layoutDirection
 
     private var selectedItems: [ClassifiedScanItem] {
@@ -14,6 +15,7 @@ struct ScanReviewView: View {
     private var selectedBytes: Int64 { selectedItems.reduce(0) { $0 + $1.file.size } }
 
     var body: some View {
+        ZStack {
         VStack(alignment: .leading, spacing: 18) {
             summaryHeader
 
@@ -31,6 +33,13 @@ struct ScanReviewView: View {
                 Text(planError).zentraFont(11).foregroundStyle(Color.zentraTextSecondary)
                     .padding(.horizontal, 4)
             }
+            if cleanup.state == .executing { executionProgress }
+            if cleanup.state == .completed, let report = cleanup.report { resultView(report) }
+        }
+
+        if cleanup.state == .confirming, let plan {
+            confirmationOverlay(plan)
+        }
         }
     }
 
@@ -137,11 +146,75 @@ struct ScanReviewView: View {
                     .zentraFont(10.5).foregroundStyle(Color.zentraTextTertiary)
             }
             Spacer()
-            Text("scan.plan.noAction").zentraFont(10.5).foregroundStyle(Color.zentraTextTertiary)
+            Button("cleanup.review.action") { cleanup.requestConfirmation() }
+                .buttonStyle(.plain)
+                .zentraFont(11, weight: .semibold)
+                .foregroundStyle(Color.zentraAccent)
+                .padding(.horizontal, 12).frame(height: 30)
+                .background(Capsule().fill(Color.zentraAccent.opacity(0.10)))
         }
         .padding(14)
         .background(RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Color.zentraSurface))
         .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(Color.zentraAccent.opacity(0.14), lineWidth: 1))
+    }
+
+    private func confirmationOverlay(_ plan: CleanupPlan) -> some View {
+        ZStack {
+            Color.black.opacity(0.50).ignoresSafeArea().onTapGesture { cleanup.dismissConfirmation() }
+            ZentraCard {
+                VStack(alignment: .leading, spacing: 18) {
+                    Image(systemName: "trash.circle.fill")
+                        .font(.system(size: 34))
+                        .foregroundStyle(Color.zentraAccent)
+                    Text("cleanup.confirm.title").zentraFont(19, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
+                    Text(String(format: NSLocalizedString("cleanup.confirm.message", comment: ""), plan.itemCount, ByteCountFormatter.string(fromByteCount: plan.totalBytes, countStyle: .file)))
+                        .zentraFont(12.5).foregroundStyle(Color.zentraTextSecondary).fixedSize(horizontal: false, vertical: true)
+                    HStack {
+                        Spacer()
+                        Button("cleanup.cancel") { cleanup.dismissConfirmation() }
+                            .buttonStyle(.plain).zentraFont(12, weight: .medium)
+                            .foregroundStyle(Color.zentraTextSecondary).padding(.horizontal, 14).frame(height: 36)
+                            .background(Capsule().fill(Color.white.opacity(0.06)))
+                        Button("cleanup.confirm.action") { cleanup.execute(plan) }
+                            .buttonStyle(.plain).zentraFont(12, weight: .semibold)
+                            .foregroundStyle(Color.black).padding(.horizontal, 16).frame(height: 36)
+                            .background(Capsule().fill(Color.zentraAccent))
+                            .keyboardShortcut(.defaultAction)
+                    }
+                }.frame(width: 420)
+            }.shadow(color: .black.opacity(0.45), radius: 32, y: 14)
+        }
+    }
+
+    private var executionProgress: some View {
+        HStack(spacing: 12) {
+            ProgressView().controlSize(.small)
+            VStack(alignment: .leading, spacing: 3) {
+                Text("cleanup.executing").zentraFont(12, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
+                Text("cleanup.executing.detail").zentraFont(10.5).foregroundStyle(Color.zentraTextTertiary)
+            }
+            Spacer()
+            Button("cleanup.cancel") { cleanup.cancel() }
+                .buttonStyle(.plain).zentraFont(11).foregroundStyle(Color.zentraTextSecondary)
+        }
+        .padding(14)
+        .background(RoundedRectangle(cornerRadius: 14).fill(Color.zentraSurface))
+    }
+
+    private func resultView(_ report: CleanupExecutionReport) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: report.failedCount == 0 ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+                .foregroundStyle(report.failedCount == 0 ? Color.zentraAccent : Color.zentraTextSecondary)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(report.failedCount == 0 ? "cleanup.result.success" : "cleanup.result.partial")
+                    .zentraFont(12, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
+                Text(String(format: NSLocalizedString("cleanup.result.summary", comment: ""), report.succeededCount, report.failedCount, ByteCountFormatter.string(fromByteCount: report.processedBytes, countStyle: .file)))
+                    .zentraFont(10.5).foregroundStyle(Color.zentraTextTertiary)
+            }
+            Spacer()
+        }
+        .padding(14)
+        .background(RoundedRectangle(cornerRadius: 14).fill(Color.zentraSurface))
     }
 
     private func buildPlan() {
