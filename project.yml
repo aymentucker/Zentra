@@ -3,28 +3,37 @@ options:
   bundleIdPrefix: com.zentra
   deploymentTarget:
     macOS: "14.0"
+
 settings:
   base:
     SWIFT_VERSION: 5.0
     MACOSX_DEPLOYMENT_TARGET: 14.0
     PRODUCT_BUNDLE_IDENTIFIER: com.zentra.app
+
 targets:
   Zentra:
     type: application
     platform: macOS
     sources:
-      - Zentra
-    resources:
-      - Zentra/Resources
+      - path: Zentra
+        excludes:
+          - Resources
+          - Assets.xcassets
+      - path: Zentra/Resources
+        buildPhase: resources
+      - path: Zentra/Assets.xcassets
+        buildPhase: resources
     settings:
       base:
         PRODUCT_NAME: Zentra
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Zentra
+        INFOPLIST_KEY_CFBundleIconName: AppIcon
         CODE_SIGN_STYLE: Automatic
         ENABLE_HARDENED_RUNTIME: YES
         SWIFT_EMIT_LOC_STRINGS: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+
   ZentraTests:
     type: bundle.unit-test
     platform: macOS
@@ -37,6 +46,7 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         PRODUCT_BUNDLE_IDENTIFIER: com.zentra.tests
     scheme: {}
+
 schemes:
   Zentra:
     build:
