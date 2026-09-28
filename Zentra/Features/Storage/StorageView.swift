@@ -238,13 +238,13 @@ extension StorageCategory {
     var titleKey: LocalizedStringKey {
         switch self {
         case .documents: "storage.category.documents"; case .images: "storage.category.images"; case .video: "storage.category.video"; case .audio: "storage.category.audio"
-        case .archives: "storage.category.archives"; case .applications: "storage.category.applications"; case .developer: "storage.category.developer"; case .other: "storage.category.other"
+        case .archives: "storage.category.archives"; case .applications: "storage.category.applications"; case .developer: "storage.category.developer"; case .system: "storage.category.system"; case .library: "storage.category.library"; case .other: "storage.category.other"
         }
     }
     var icon: String {
         switch self {
         case .documents: "doc.text"; case .images: "photo"; case .video: "film"; case .audio: "waveform"
-        case .archives: "archivebox"; case .applications: "app"; case .developer: "hammer"; case .other: "doc"
+        case .archives: "archivebox"; case .applications: "app"; case .developer: "hammer"; case .system: "gearshape.2"; case .library: "books.vertical"; case .other: "doc"
         }
     }
 }
