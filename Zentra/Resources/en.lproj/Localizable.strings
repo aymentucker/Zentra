@@ -177,3 +177,18 @@
 "developer.safety.safe" = "Safe";
 "developer.safety.review" = "Review";
 "developer.safety.protected" = "Protected";
+
+"storage.location.title" = "Choose what to analyze";
+"storage.location.subtitle" = "Scan the whole startup disk or focus on selected folders. You can add any folder from Finder.";
+"storage.location.disk" = "Entire startup disk";
+"storage.location.home" = "Home folder";
+"storage.location.desktop" = "Desktop";
+"storage.location.documents" = "Documents";
+"storage.location.downloads" = "Downloads";
+"storage.location.movies" = "Movies";
+"storage.location.pictures" = "Pictures";
+"storage.location.library" = "Library";
+"storage.location.custom" = "Add folder…";
+"storage.location.choose" = "Choose";
+"storage.location.all" = "Select common folders";
+"storage.location.analyze" = "Analyze selected";
