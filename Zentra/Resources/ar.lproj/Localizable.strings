@@ -23,3 +23,11 @@
 "settings.language.description" = "اختر لغة الواجهة. يتغير اتجاه التصميم تلقائيًا.";
 "language.english" = "الإنجليزية";
 "language.arabic" = "العربية";
+
+"settings.experience" = "تجربة الاستخدام";
+"settings.experience.description" = "تحكم في سلوك الواجهة وتكاملات النظام الخفيفة.";
+"settings.reduceMotion" = "تقليل الحركة";
+"settings.reduceMotion.description" = "استخدام انتقالات وحركات أبسط داخل الواجهة.";
+"settings.menuBar" = "الحالة في شريط القوائم";
+"settings.menuBar.description" = "السماح لـ Zentra بإظهار الحالة في شريط قوائم macOS عند توفر الميزة.";
+"common.retry" = "إعادة المحاولة";
