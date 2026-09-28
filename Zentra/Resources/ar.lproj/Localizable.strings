@@ -295,3 +295,5 @@
 "smart.noAutoDelete" = "لا يوجد حذف تلقائي";
 "smart.ready.title" = "جاهز للفحص الذكي الموحد";
 "smart.deepTools" = "تبقى Duplicates وTidy Up أدوات متخصصة مستقلة حتى يظل Smart Care سريعًا ومتوقعًا.";
+
+"applications.error.partial.detail" = "تعذر على macOS نقل هذه العناصر إلى سلة المهملات: %@. تأكد من إغلاق التطبيق ومن أن Zentra لديه صلاحية تعديل مجلد Applications.";
