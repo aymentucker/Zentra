@@ -1,18 +1,9 @@
 import SwiftUI
 
 struct ScanReviewView: View {
-    let groups: [ScanCategory: [ClassifiedScanItem]]
-    let totalBytes: Int64
+    let snapshot: ScanReviewSnapshot
     @State private var expanded: Set<ScanCategory> = []
     @Environment(\.layoutDirection) private var layoutDirection
-
-    init(items: [ClassifiedScanItem]) {
-        let files = items.filter { !$0.file.isDirectory }
-        totalBytes = files.reduce(0) { $0 + $1.file.size }
-        groups = Dictionary(grouping: files, by: \.category).mapValues {
-            Array($0.sorted { $0.file.size > $1.file.size }.prefix(50))
-        }
-    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -22,27 +13,25 @@ struct ScanReviewView: View {
                     Text("scan.review.readonly").zentraFont(12).foregroundStyle(Color.zentraTextSecondary)
                 }
                 Spacer()
-                Text(ByteCountFormatter.string(fromByteCount: totalBytes, countStyle: .file))
+                Text(ByteCountFormatter.string(fromByteCount: snapshot.totalBytes, countStyle: .file))
                     .zentraFont(18, weight: .semibold).foregroundStyle(Color.zentraAccent)
             }
 
             LazyVStack(spacing: 0) {
                 ForEach(ScanCategory.allCases, id: \.self) { category in
-                    if let categoryItems = groups[category], !categoryItems.isEmpty {
-                        categorySection(category, items: categoryItems)
+                    if let categoryItems = snapshot.groups[category], !categoryItems.isEmpty {
+                        categorySection(category, items: categoryItems, count: snapshot.counts[category] ?? categoryItems.count, bytes: snapshot.bytes[category] ?? 0)
                     }
                 }
             }
         }
     }
 
-    private func categorySection(_ category: ScanCategory, items: [ClassifiedScanItem]) -> some View {
+    private func categorySection(_ category: ScanCategory, items: [ClassifiedScanItem], count: Int, bytes: Int64) -> some View {
         VStack(spacing: 0) {
             Button {
-                withAnimation(.easeOut(duration: 0.14)) {
-                    if expanded.contains(category) { expanded.remove(category) }
-                    else { expanded.insert(category) }
-                }
+                if expanded.contains(category) { expanded.remove(category) }
+                else { expanded.insert(category) }
             } label: {
                 HStack(spacing: 12) {
                     Image(systemName: chevronName(for: category))
@@ -52,7 +41,7 @@ struct ScanReviewView: View {
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text(category.titleKey).zentraFont(13, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
-                        Text("\(items.count) · \(ByteCountFormatter.string(fromByteCount: items.reduce(0) { $0 + $1.file.size }, countStyle: .file))")
+                        Text("\(count) · \(ByteCountFormatter.string(fromByteCount: bytes, countStyle: .file))")
                             .zentraFont(11).foregroundStyle(Color.zentraTextTertiary)
                     }
                     Spacer()
@@ -68,7 +57,7 @@ struct ScanReviewView: View {
                     ForEach(items) { item in ScanItemRow(item: item) }
                 }
                 .padding(.leading, 24)
-                .transition(.opacity.combined(with: .move(edge: .top)))
+
             }
 
             Divider().overlay(Color.white.opacity(0.06))
