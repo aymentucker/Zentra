@@ -53,3 +53,8 @@
 
 "scan.items" = "العناصر المكتشفة";
 "scan.discovered" = "الحجم المكتشف";
+
+"scan.review.selectHint" = "راجع وحدد العناصر الآمنة. تبقى البيانات المحمية مقفلة.";
+"scan.review.found" = "تم العثور عليها";
+"scan.selected.count" = "تم تحديد %d عنصر";
+"scan.plan.preview" = "مراجعة فقط — بدون حذف";
