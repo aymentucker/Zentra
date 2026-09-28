@@ -14,4 +14,18 @@ enum AppLanguage: String, CaseIterable, Identifiable {
         case .arabic: "language.arabic"
         }
     }
+
+    var badge: String {
+        switch self {
+        case .english: "EN"
+        case .arabic: "ع"
+        }
+    }
+
+    var nativeTitle: String {
+        switch self {
+        case .english: "English"
+        case .arabic: "العربية"
+        }
+    }
 }
