@@ -35,4 +35,12 @@ final class CleanupPlanTests: XCTestCase {
         XCTAssertEqual(plan.itemCount, 1)
         XCTAssertEqual(plan.totalBytes, 20)
     }
+
+    func testBuildFromCompactCandidates() throws {
+        let classified = item(path: "/tmp/candidate", level: .safe, size: 64)
+        let plan = try CleanupPlanBuilder().build(from: [CleanupCandidate(classified)])
+        XCTAssertEqual(plan.itemCount, 1)
+        XCTAssertEqual(plan.totalBytes, 64)
+    }
 }
+
