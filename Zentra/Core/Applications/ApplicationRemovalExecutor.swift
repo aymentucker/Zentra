@@ -18,8 +18,7 @@ actor ApplicationRemovalExecutor {
 
         for url in urls {
             do {
-                var destination: NSURL?
-                try FileManager.default.trashItem(at: url, resultingItemURL: &destination)
+                _ = try FileManager.default.trashItem(at: url, resultingItemURL: nil)
                 guard !FileManager.default.fileExists(atPath: url.path) else { throw CocoaError(.fileWriteUnknown) }
                 moved.append(url)
             } catch {
