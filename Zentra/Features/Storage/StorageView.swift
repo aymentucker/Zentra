@@ -179,12 +179,15 @@ struct StorageView: View {
     private var visualExplorer: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 7) {
+                Image(systemName: "internaldrive.fill").foregroundStyle(Color.zentraAccent)
                 Button { visualPath.removeAll() } label: { Image(systemName: "house.fill") }.buttonStyle(.plain).foregroundStyle(Color.zentraTextSecondary)
                 ForEach(Array(visualPath.enumerated()), id: \.offset) { index, url in
                     Image(systemName: "chevron.right").font(.system(size: 8)).foregroundStyle(Color.zentraTextTertiary)
                     Button(url.lastPathComponent) { visualPath = Array(visualPath.prefix(index + 1)) }.buttonStyle(.plain).zentraFont(9.5).foregroundStyle(index == visualPath.count - 1 ? Color.zentraAccent : Color.zentraTextSecondary)
                 }
                 Spacer()
+                Text(ByteCountFormatter.string(fromByteCount: visualNodes.reduce(Int64(0)) { $0 + $1.totalBytes }, countStyle: .file))
+                    .zentraFont(9.5, weight: .semibold).foregroundStyle(Color.zentraTextTertiary)
                 if !visualPath.isEmpty { Button("storage.visual.up") { visualPath.removeLast() }.buttonStyle(.plain).zentraFont(10).foregroundStyle(Color.zentraTextSecondary) }
             }
             StorageBubbleMap(
