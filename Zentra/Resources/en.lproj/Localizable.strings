@@ -50,3 +50,6 @@
 "scan.safety.safe" = "Safe";
 "scan.safety.review" = "Review";
 "scan.safety.protected" = "Protected";
+
+"scan.items" = "Items found";
+"scan.discovered" = "Discovered";
