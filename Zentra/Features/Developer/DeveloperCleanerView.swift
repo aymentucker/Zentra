@@ -51,6 +51,38 @@ struct DeveloperCleanerView: View {
         }
     }
 
+    private func cleanerTabButton(
+        _ value: CleanerTab,
+        title: LocalizedStringKey,
+        icon: String
+    ) -> some View {
+        let selected = tab == value
+        return Button {
+            withAnimation(.easeInOut(duration: 0.16)) {
+                tab = value
+            }
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.system(size: 11, weight: .semibold))
+                Text(title)
+                    .zentraFont(11, weight: .semibold)
+            }
+            .foregroundStyle(selected ? Color.zentraTextPrimary : Color.zentraTextSecondary)
+            .padding(.horizontal, 14)
+            .frame(height: 34)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(selected ? Color.zentraAccent.opacity(0.16) : Color.zentraSurface)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(selected ? Color.zentraAccent.opacity(0.50) : Color.white.opacity(0.04), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
     private var scanCard: some View {
         ZentraCard {
             VStack(alignment: .leading, spacing: 18) {
