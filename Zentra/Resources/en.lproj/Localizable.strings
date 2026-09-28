@@ -159,3 +159,21 @@
 "storage.scanChart.subtitle" = "Building a live picture of files across your Mac";
 "storage.scanChart.files" = "%d files discovered";
 "storage.scanChart.preparing" = "Preparing disk scan…";
+
+"developer.title" = "Developer & Creator";
+"developer.subtitle" = "Reclaim rebuildable workspace data without touching projects or source media.";
+"developer.tab.developer" = "Developer";
+"developer.tab.creator" = "Creator";
+"developer.rescan" = "Rescan";
+"developer.scanning" = "Inspecting workspace caches…";
+"developer.scanning.detail" = "Measuring known developer and creator locations. Nothing is changed during analysis.";
+"developer.empty" = "No workspace caches found";
+"developer.empty.detail" = "Zentra did not find supported cache locations for this section.";
+"developer.files" = "%d files";
+"developer.selected" = "%d locations selected";
+"developer.clean" = "Move to Trash";
+"developer.confirm.title" = "Move selected workspace data to Trash?";
+"developer.confirm.detail" = "%d locations (%@) will be moved to macOS Trash. Protected data cannot be included.";
+"developer.safety.safe" = "Safe";
+"developer.safety.review" = "Review";
+"developer.safety.protected" = "Protected";
