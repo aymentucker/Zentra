@@ -7,6 +7,8 @@ actor FileSystemScanner {
         var files: [ScannedFile] = []
         var totalBytes: Int64 = 0
         var skipped = 0
+        var discoveredCount = 0
+        var lastProgress = ContinuousClock.now
 
         let keys: Set<URLResourceKey> = [.isRegularFileKey, .isDirectoryKey, .fileSizeKey, .contentModificationDateKey, .isSymbolicLinkKey]
 
@@ -46,18 +48,23 @@ actor FileSystemScanner {
                 if values.isSymbolicLink == true { continue }
 
                 let isDir = values.isDirectory == true
-                let size = isDir ? 0 : Int64(values.fileSize ?? 0)
-                files.append(ScannedFile(id: url, url: url, size: size, isDirectory: isDir, modifiedAt: values.contentModificationDate))
+                guard !isDir else { continue }
+
+                let size = Int64(values.fileSize ?? 0)
+                files.append(ScannedFile(id: url, url: url, size: size, isDirectory: false, modifiedAt: values.contentModificationDate))
+                discoveredCount += 1
                 totalBytes += size
 
-                if files.count % 64 == 0 {
-                    await progress?(ScanProgress(discoveredItems: files.count, discoveredBytes: totalBytes, currentURL: url))
+                let now = ContinuousClock.now
+                if lastProgress.duration(to: now) >= .milliseconds(120) {
+                    await progress?(ScanProgress(discoveredItems: discoveredCount, discoveredBytes: totalBytes, currentURL: url))
+                    lastProgress = now
                     await Task.yield()
                 }
             }
         }
 
-        await progress?(ScanProgress(discoveredItems: files.count, discoveredBytes: totalBytes, currentURL: nil))
+        await progress?(ScanProgress(discoveredItems: discoveredCount, discoveredBytes: totalBytes, currentURL: nil))
         return ScanSummary(files: files, totalBytes: totalBytes, skippedItems: skipped)
     }
 
