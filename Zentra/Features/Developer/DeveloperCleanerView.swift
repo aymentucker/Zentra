@@ -17,7 +17,7 @@ struct DeveloperCleanerView: View {
                     Picker("",selection:$tab) {
                         Text("developer.tab.developer").tag(CleanerTab.developer)
                         Text("developer.tab.creator").tag(CleanerTab.creator)
-                    }.pickerStyle(.segmented).frame(maxWidth:360)
+                    }.pickerStyle(.segmented).frame(width: 300)
 
                     if model.isScanning { scanCard }
                     else if model.results.filter({ $0.location.group.isCreator == (tab == .creator) }).isEmpty { emptyCard }
@@ -25,7 +25,7 @@ struct DeveloperCleanerView: View {
 
                     if !model.selectedResults.isEmpty { actionBar }
                 }
-                .frame(maxWidth:900).frame(maxWidth:.infinity).padding(36)
+                .frame(maxWidth: .infinity, alignment: .leading)\n                .padding(.horizontal, 48)\n                .padding(.vertical, 36)
             }
         }
         .task { if model.results.isEmpty { model.scan() } }
@@ -51,14 +51,72 @@ struct DeveloperCleanerView: View {
 
     private var scanCard: some View {
         ZentraCard {
-            HStack(spacing:14) {
-                ProgressView().controlSize(.small)
-                VStack(alignment:.leading,spacing:4) {
-                    Text("developer.scanning").zentraFont(13,weight:.semibold)
-                    Text("developer.scanning.detail").zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
+            VStack(alignment: .leading, spacing: 18) {
+                HStack(spacing: 14) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.zentraAccent.opacity(0.10))
+                            .frame(width: 42, height: 42)
+                        ProgressView()
+                            .controlSize(.small)
+                    }
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("developer.scanning")
+                            .zentraFont(13, weight: .semibold)
+                            .foregroundStyle(Color.zentraTextPrimary)
+                        Text("developer.scanning.detail")
+                            .zentraFont(10)
+                            .foregroundStyle(Color.zentraTextTertiary)
+                    }
+                    Spacer()
                 }
-                Spacer()
+
+                HStack(spacing: 8) {
+                    ForEach(scanGroups, id: \.self) { group in
+                        HStack(spacing: 6) {
+                            Image(systemName: icon(group))
+                                .font(.system(size: 10, weight: .medium))
+                            Text(groupLabel(group))
+                                .zentraFont(9, weight: .medium)
+                        }
+                        .foregroundStyle(Color.zentraTextSecondary)
+                        .padding(.horizontal, 9)
+                        .padding(.vertical, 6)
+                        .background(
+                            Capsule()
+                                .fill(Color.white.opacity(0.045))
+                        )
+                    }
+                    Spacer()
+                }
+
+                ProgressView()
+                    .progressViewStyle(.linear)
+                    .tint(Color.zentraAccent)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    private var scanGroups: [WorkspaceCleanerGroup] {
+        tab == .developer
+            ? [.xcode, .flutter, .node, .gradle, .cocoaPods, .homebrew, .docker]
+            : [.adobe, .davinci, .finalCut]
+    }
+
+    private func groupLabel(_ group: WorkspaceCleanerGroup) -> String {
+        switch group {
+        case .xcode: return "Xcode"
+        case .flutter: return "Flutter"
+        case .node: return "Node"
+        case .gradle: return "Gradle"
+        case .cocoaPods: return "CocoaPods"
+        case .homebrew: return "Homebrew"
+        case .docker: return "Docker"
+        case .adobe: return "Adobe"
+        case .davinci: return "DaVinci"
+        case .finalCut: return "Final Cut"
         }
     }
 
