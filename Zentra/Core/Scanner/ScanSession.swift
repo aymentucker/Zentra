@@ -67,45 +67,7 @@ final class ScanSession: ObservableObject {
     }
 
     nonisolated private static func makeReviewSnapshot(_ summary: ScanSummary) -> ScanReviewSnapshot {
-        let classifier = ScanClassifier()
-        var displayGroups: [ScanCategory: [ClassifiedScanItem]] = [:]
-        var counts: [ScanCategory: Int] = [:]
-        var bytes: [ScanCategory: Int64] = [:]
-        var safetyCounts: [ScanSafetyLevel: Int] = [:]
-        var safetyBytes: [ScanSafetyLevel: Int64] = [:]
-        var safeCandidates: [CleanupCandidate] = []
-
-        var totalBytes: Int64 = 0
-
-        for file in summary.files {
-            let item = classifier.classify(file)
-            counts[item.category, default: 0] += 1
-            bytes[item.category, default: 0] += item.file.size
-            totalBytes += item.file.size
-            safetyCounts[item.safety.level, default: 0] += 1
-            safetyBytes[item.safety.level, default: 0] += item.file.size
-            if item.safety.level == .safe { safeCandidates.append(CleanupCandidate(item)) }
-
-            var visible = displayGroups[item.category, default: []]
-            if visible.count < 30 {
-                visible.append(item)
-                visible.sort { $0.file.size > $1.file.size }
-            } else if let last = visible.last, item.file.size > last.file.size {
-                visible[visible.count - 1] = item
-                visible.sort { $0.file.size > $1.file.size }
-            }
-            displayGroups[item.category] = visible
-        }
-
-        return ScanReviewSnapshot(
-            groups: displayGroups,
-            counts: counts,
-            bytes: bytes,
-            totalBytes: totalBytes,
-            safetyCounts: safetyCounts,
-            safetyBytes: safetyBytes,
-            safeCandidates: safeCandidates
-        )
+        ScanReviewBuilder().build(summary)
     }
 
     deinit { task?.cancel() }
