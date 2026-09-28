@@ -104,3 +104,23 @@
 
 "scan.preparing.title" = "جارٍ تجهيز نتائج التنظيف…";
 "scan.preparing.detail" = "يتم تصنيف النتائج وتطبيق قواعد الأمان.";
+
+"storage.title" = "التخزين";
+"storage.subtitle" = "اعرف ما الذي يستهلك المساحة في مجلداتك الشخصية وافحص الملفات الكبيرة بأمان.";
+"storage.scan" = "تحليل التخزين";
+"storage.scanning" = "جارٍ تحليل التخزين…";
+"storage.analyzed" = "البيانات المحللة";
+"storage.files" = "الملفات الموجودة";
+"storage.largeFiles" = "الملفات الكبيرة";
+"storage.categories" = "التصنيفات";
+"storage.noLargeFiles" = "لا توجد ملفات تطابق فلتر الحجم والتصنيف الحالي.";
+"storage.empty.title" = "اعرف أين تُستخدم مساحتك";
+"storage.empty.detail" = "حلّل سطح المكتب والمستندات والتنزيلات والفيديو والموسيقى والصور. لا يتم حذف أي شيء تلقائيًا.";
+"storage.category.documents" = "المستندات";
+"storage.category.images" = "الصور";
+"storage.category.video" = "الفيديو";
+"storage.category.audio" = "الصوت";
+"storage.category.archives" = "الأرشيفات";
+"storage.category.applications" = "التطبيقات";
+"storage.category.developer" = "المطور";
+"storage.category.other" = "أخرى";
