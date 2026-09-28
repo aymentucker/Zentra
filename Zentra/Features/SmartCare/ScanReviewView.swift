@@ -9,15 +9,17 @@ struct ScanReviewView: View {
     @StateObject private var cleanup = CleanupConfirmationModel()
     @Environment(\.layoutDirection) private var layoutDirection
 
-    private var selectedItems: [ClassifiedScanItem] {
-        snapshot.groups.values.flatMap { $0 }.filter { selected.contains($0.id) }
+    private var selectedCandidates: [CleanupCandidate] {
+        snapshot.safeCandidates.filter { selected.contains($0.id) }
     }
-    private var selectedBytes: Int64 { selectedItems.reduce(0) { $0 + $1.file.size } }
+    private var selectedBytes: Int64 { selectedCandidates.reduce(0) { $0 + $1.size } }
 
     var body: some View {
         ZStack {
         VStack(alignment: .leading, spacing: 18) {
             summaryHeader
+            safetyOverview
+            selectAllSafeBar
 
             LazyVStack(spacing: 10) {
                 ForEach(ScanCategory.allCases, id: \.self) { category in
@@ -56,6 +58,68 @@ struct ScanReviewView: View {
                 Text("scan.review.found").zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
             }
         }
+    }
+
+    private var selectAllSafeBar: some View {
+        let allSafeIDs = Set(snapshot.safeCandidates.map(\.id))
+        let allSelected = !allSafeIDs.isEmpty && allSafeIDs.isSubset(of: selected)
+
+        return HStack(spacing: 12) {
+            Image(systemName: "checkmark.shield")
+                .foregroundStyle(Color.zentraAccent)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("scan.safeSelection.title")
+                    .zentraFont(11.5, weight: .semibold)
+                    .foregroundStyle(Color.zentraTextPrimary)
+                Text(String(format: NSLocalizedString("scan.safeSelection.summary", comment: ""), snapshot.count(for: .safe), ByteCountFormatter.string(fromByteCount: snapshot.bytes(for: .safe), countStyle: .file)))
+                    .zentraFont(10)
+                    .foregroundStyle(Color.zentraTextTertiary)
+            }
+            Spacer()
+            Button(allSelected ? "scan.safeSelection.clear" : "scan.safeSelection.select") {
+                plan = nil
+                planError = nil
+                if allSelected { selected.subtract(allSafeIDs) }
+                else { selected.formUnion(allSafeIDs) }
+            }
+            .buttonStyle(.plain)
+            .zentraFont(10.5, weight: .semibold)
+            .foregroundStyle(Color.zentraAccent)
+            .disabled(allSafeIDs.isEmpty)
+        }
+        .padding(12)
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color.zentraAccent.opacity(0.055)))
+    }
+
+    private var safetyOverview: some View {
+        HStack(spacing: 10) {
+            safetyMetric(.safe, icon: "checkmark.shield.fill")
+            safetyMetric(.review, icon: "eye.fill")
+            safetyMetric(.protected, icon: "lock.fill")
+        }
+    }
+
+    private func safetyMetric(_ level: ScanSafetyLevel, icon: String) -> some View {
+        VStack(alignment: .leading, spacing: 7) {
+            HStack(spacing: 6) {
+                Image(systemName: icon)
+                    .font(.system(size: 11, weight: .semibold))
+                Text(level.titleKey)
+                    .zentraFont(10.5, weight: .semibold)
+            }
+            .foregroundStyle(level == .safe ? Color.zentraAccent : Color.zentraTextSecondary)
+
+            Text(ByteCountFormatter.string(fromByteCount: snapshot.bytes(for: level), countStyle: .file))
+                .zentraFont(15, weight: .semibold)
+                .foregroundStyle(Color.zentraTextPrimary)
+            Text(String(format: NSLocalizedString("scan.safety.items", comment: ""), snapshot.count(for: level)))
+                .zentraFont(9.5)
+                .foregroundStyle(Color.zentraTextTertiary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color.zentraSurface))
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.white.opacity(0.05), lineWidth: 1))
     }
 
     private func categoryCard(_ category: ScanCategory, items: [ClassifiedScanItem]) -> some View {
@@ -219,7 +283,7 @@ struct ScanReviewView: View {
 
     private func buildPlan() {
         do {
-            plan = try CleanupPlanBuilder().build(from: selectedItems)
+            plan = try CleanupPlanBuilder().build(from: selectedCandidates)
             planError = nil
         } catch {
             plan = nil
@@ -308,6 +372,7 @@ extension ScanCategory {
         case .logs: "scan.category.logs"
         case .temporary: "scan.category.temporary"
         case .developer: "scan.category.developer"
+        case .creator: "scan.category.creator"
         case .userData: "scan.category.userData"
         case .other: "scan.category.other"
         }

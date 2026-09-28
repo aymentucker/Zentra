@@ -74,3 +74,33 @@
 "cleanup.result.success" = "اكتمل التنظيف";
 "cleanup.result.partial" = "اكتمل التنظيف مع بعض المشاكل";
 "cleanup.result.summary" = "نجح %d · فشل %d · تمت معالجة %@";
+
+"cleanup.title" = "التنظيف";
+"cleanup.subtitle" = "اعثر على البيانات القابلة للتنظيف باستخدام قواعد أمان محافظة قبل إجراء أي تغيير.";
+"cleanup.scan" = "فحص للتنظيف";
+"cleanup.userCaches" = "ملفات الكاش";
+"cleanup.userCaches.detail" = "تتم مراجعة ملفات الكاش القديمة القابلة لإعادة الإنشاء قبل التنظيف.";
+"cleanup.logs" = "سجلات التطبيقات";
+"cleanup.logs.detail" = "يمكن مراجعة السجلات القديمة العادية، بينما لا يتم تحديد سجلات التشخيص تلقائيًا.";
+"cleanup.safePolicy" = "الأمان أولًا";
+"cleanup.safePolicy.detail" = "فقط العناصر الآمنة المعتمدة يمكن إضافتها إلى خطة التنظيف.";
+
+"cleanup.developer" = "كاش المطورين";
+"cleanup.developer.detail" = "مواقع Xcode وGradle وDart للبناء والكاش، مع استمرار مراجعة الأمان.";
+"cleanup.creator" = "كاش صناع المحتوى";
+"cleanup.creator.detail" = "مواقع كاش Adobe وDaVinci المعروفة عند توفرها.";
+"cleanup.locations.count" = "%d موقع متاح";
+
+"cleanup.analyzing" = "جارٍ حساب الحجم…";
+
+"scan.category.creator" = "كاش صناع المحتوى";
+
+"scan.safety.items" = "%d عنصر";
+
+"scan.safeSelection.title" = "تحديد التنظيف الآمن";
+"scan.safeSelection.summary" = "%d عنصر آمن · %@";
+"scan.safeSelection.select" = "تحديد كل العناصر الآمنة";
+"scan.safeSelection.clear" = "إلغاء تحديد العناصر الآمنة";
+
+"scan.preparing.title" = "جارٍ تجهيز نتائج التنظيف…";
+"scan.preparing.detail" = "يتم تصنيف النتائج وتطبيق قواعد الأمان.";

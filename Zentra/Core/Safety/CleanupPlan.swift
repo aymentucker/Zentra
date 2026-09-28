@@ -32,6 +32,14 @@ enum CleanupPlanError: LocalizedError, Equatable {
 }
 
 struct CleanupPlanBuilder: Sendable {
+    func build(from candidates: [CleanupCandidate]) throws -> CleanupPlan {
+        guard !candidates.isEmpty else { throw CleanupPlanError.emptySelection }
+        let unique = Dictionary(candidates.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first }).values
+        let planned = unique.map { CleanupPlanItem(id: $0.id, url: $0.url, size: $0.size, category: $0.category, reason: $0.reason) }
+        return CleanupPlan(id: UUID(), createdAt: Date(), items: planned.sorted { $0.size > $1.size })
+    }
+
+
     func build(from items: [ClassifiedScanItem]) throws -> CleanupPlan {
         guard !items.isEmpty else { throw CleanupPlanError.emptySelection }
 

@@ -6,6 +6,12 @@ struct ScanReviewSnapshot: Sendable {
     let counts: [ScanCategory: Int]
     let bytes: [ScanCategory: Int64]
     let totalBytes: Int64
+    let safetyCounts: [ScanSafetyLevel: Int]
+    let safetyBytes: [ScanSafetyLevel: Int64]
+    let safeCandidates: [CleanupCandidate]
+
+    func count(for level: ScanSafetyLevel) -> Int { safetyCounts[level, default: 0] }
+    func bytes(for level: ScanSafetyLevel) -> Int64 { safetyBytes[level, default: 0] }
 }
 
 @MainActor
@@ -61,36 +67,7 @@ final class ScanSession: ObservableObject {
     }
 
     nonisolated private static func makeReviewSnapshot(_ summary: ScanSummary) -> ScanReviewSnapshot {
-        let classifier = ScanClassifier()
-        var displayGroups: [ScanCategory: [ClassifiedScanItem]] = [:]
-        var counts: [ScanCategory: Int] = [:]
-        var bytes: [ScanCategory: Int64] = [:]
-
-        var totalBytes: Int64 = 0
-
-        for file in summary.files {
-            let item = classifier.classify(file)
-            counts[item.category, default: 0] += 1
-            bytes[item.category, default: 0] += item.file.size
-            totalBytes += item.file.size
-
-            var visible = displayGroups[item.category, default: []]
-            if visible.count < 30 {
-                visible.append(item)
-                visible.sort { $0.file.size > $1.file.size }
-            } else if let last = visible.last, item.file.size > last.file.size {
-                visible[visible.count - 1] = item
-                visible.sort { $0.file.size > $1.file.size }
-            }
-            displayGroups[item.category] = visible
-        }
-
-        return ScanReviewSnapshot(
-            groups: displayGroups,
-            counts: counts,
-            bytes: bytes,
-            totalBytes: totalBytes
-        )
+        ScanReviewBuilder().build(summary)
     }
 
     deinit { task?.cancel() }

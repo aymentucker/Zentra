@@ -47,6 +47,7 @@ struct ContentView: View {
     private var destinationView: some View {
         switch selection {
         case .smartCare: SmartCareView()
+        case .cleanup: CleanupView()
         case .settings: SettingsView()
         default: FeaturePlaceholderView(destination: selection)
         }

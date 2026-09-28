@@ -74,3 +74,33 @@
 "cleanup.result.success" = "Cleanup completed";
 "cleanup.result.partial" = "Cleanup completed with some issues";
 "cleanup.result.summary" = "%d succeeded · %d failed · %@ processed";
+
+"cleanup.title" = "Cleanup";
+"cleanup.subtitle" = "Find removable data with conservative safety rules before anything changes.";
+"cleanup.scan" = "Scan for cleanup";
+"cleanup.userCaches" = "User caches";
+"cleanup.userCaches.detail" = "Older disposable cache files are reviewed before cleanup.";
+"cleanup.logs" = "Application logs";
+"cleanup.logs.detail" = "Old ordinary logs can be reviewed; diagnostics stay protected from automatic selection.";
+"cleanup.safePolicy" = "Safety first";
+"cleanup.safePolicy.detail" = "Only approved safe items can enter a cleanup plan.";
+
+"cleanup.developer" = "Developer caches";
+"cleanup.developer.detail" = "Xcode, Gradle and Dart build/cache locations. Items still require safety review.";
+"cleanup.creator" = "Creator caches";
+"cleanup.creator.detail" = "Known Adobe and DaVinci cache locations when present.";
+"cleanup.locations.count" = "%d locations available";
+
+"cleanup.analyzing" = "Calculating size…";
+
+"scan.category.creator" = "Creator caches";
+
+"scan.safety.items" = "%d items";
+
+"scan.safeSelection.title" = "Safe cleanup selection";
+"scan.safeSelection.summary" = "%d safe items · %@";
+"scan.safeSelection.select" = "Select all safe";
+"scan.safeSelection.clear" = "Clear safe selection";
+
+"scan.preparing.title" = "Preparing cleanup results…";
+"scan.preparing.detail" = "Classifying findings and applying safety rules.";
