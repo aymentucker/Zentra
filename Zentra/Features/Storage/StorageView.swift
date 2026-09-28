@@ -11,11 +11,19 @@ struct StorageView: View {
     @State private var displayMode: DisplayMode = .visual
     @State private var pendingTrash: [StorageItem] = []
     @State private var showTrashConfirmation = false
+    @State private var visualPath: [URL] = []
 
     private var displayedItems: [StorageItem] {
         guard let analysis = model.analysis else { return [] }
         let threshold = Int64(minimumSizeMB * 1_024 * 1_024)
         return analysis.items.filter { $0.size >= threshold && (selectedCategory == nil || $0.category == selectedCategory) }.sorted { $0.size > $1.size }
+    }
+    private var visualDirectory: URL {
+        visualPath.last ?? FileManager.default.homeDirectoryForCurrentUser
+    }
+    private var visualNodes: [StorageNode] {
+        guard let analysis = model.analysis else { return [] }
+        return StorageTreeBuilder().children(of: visualDirectory, from: analysis.items)
     }
     private var selectedItems: [StorageItem] { displayedItems.filter { selection.selected.contains($0.id) } }
     private var selectedBytes: Int64 { selectedItems.reduce(0) { $0 + $1.size } }
@@ -121,10 +129,39 @@ struct StorageView: View {
             }
             if displayedItems.isEmpty { Text("storage.noLargeFiles").zentraFont(11).foregroundStyle(Color.zentraTextTertiary).padding(.vertical, 18) }
             else if displayMode == .visual {
-                StorageBubbleMap(items: displayedItems, selected: selection.selected, onToggle: selection.toggle, onReveal: { selection.reveal([$0.url]) }, onOpen: { selection.open($0.url) }, onTrash: { requestTrash([$0]) })
+                visualExplorer
             } else {
                 LazyVStack(spacing: 8) { ForEach(displayedItems.prefix(300)) { item in fileRow(item) } }
             }
+        }
+    }
+
+    private var visualExplorer: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 7) {
+                Button { visualPath.removeAll() } label: { Image(systemName: "house.fill") }.buttonStyle(.plain).foregroundStyle(Color.zentraTextSecondary)
+                ForEach(Array(visualPath.enumerated()), id: \.offset) { index, url in
+                    Image(systemName: "chevron.right").font(.system(size: 8)).foregroundStyle(Color.zentraTextTertiary)
+                    Button(url.lastPathComponent) { visualPath = Array(visualPath.prefix(index + 1)) }.buttonStyle(.plain).zentraFont(9.5).foregroundStyle(index == visualPath.count - 1 ? Color.zentraAccent : Color.zentraTextSecondary)
+                }
+                Spacer()
+                if !visualPath.isEmpty { Button("storage.visual.up") { visualPath.removeLast() }.buttonStyle(.plain).zentraFont(10).foregroundStyle(Color.zentraTextSecondary) }
+            }
+            StorageBubbleMap(
+                nodes: visualNodes,
+                selected: selection.selected,
+                onSelect: { node in
+                    guard let item = model.analysis?.items.first(where: { $0.url == node.url }) else { return }
+                    selection.toggle(item)
+                },
+                onOpenDirectory: { visualPath.append($0.url) },
+                onReveal: { selection.reveal([$0.url]) },
+                onOpen: { selection.open($0.url) },
+                onTrash: { node in
+                    guard let item = model.analysis?.items.first(where: { $0.url == node.url }) else { return }
+                    requestTrash([item])
+                }
+            )
         }
     }
 
