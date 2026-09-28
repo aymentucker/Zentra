@@ -18,28 +18,46 @@ protocol DiskVolumeProviding: Sendable {
 
 struct DiskVolumeService: DiskVolumeProviding {
     func systemVolume() throws -> DiskVolumeSnapshot {
-        let url = URL(fileURLWithPath: "/")
-        let values = try url.resourceValues(forKeys: [
+        let home = FileManager.default.homeDirectoryForCurrentUser
+        let resourceValues = try? home.resourceValues(forKeys: [
             .volumeNameKey,
             .volumeTotalCapacityKey,
             .volumeAvailableCapacityForImportantUsageKey
         ])
 
-        let total = Int64(values.volumeTotalCapacity ?? 0)
-        let available = values.volumeAvailableCapacityForImportantUsage ?? 0
+        let attributes = try FileManager.default.attributesOfFileSystem(forPath: home.path)
+
+        let resourceTotal = Int64(resourceValues?.volumeTotalCapacity ?? 0)
+        let resourceAvailable = resourceValues?.volumeAvailableCapacityForImportantUsage ?? 0
+        let attributeTotal = (attributes[.systemSize] as? NSNumber)?.int64Value ?? 0
+        let attributeFree = (attributes[.systemFreeSize] as? NSNumber)?.int64Value ?? 0
+
+        let total = resourceTotal > 0 ? resourceTotal : attributeTotal
+        let available = resourceAvailable > 0 ? resourceAvailable : attributeFree
+
+        guard total > 0 else {
+            throw DiskVolumeError.capacityUnavailable
+        }
 
         return DiskVolumeSnapshot(
-            name: values.volumeName ?? "Macintosh HD",
+            name: resourceValues?.volumeName ?? "Macintosh HD",
             totalBytes: total,
-            availableBytes: max(0, available)
+            availableBytes: min(max(0, available), total)
         )
     }
+}
+
+enum DiskVolumeError: LocalizedError {
+    case capacityUnavailable
+
+    var errorDescription: String? { "Unable to read disk capacity." }
 }
 
 @MainActor
 final class DiskVolumeModel: ObservableObject {
     @Published private(set) var snapshot: DiskVolumeSnapshot?
     @Published private(set) var error: String?
+    @Published private(set) var isLoading = false
 
     private let service: any DiskVolumeProviding
 
@@ -48,6 +66,9 @@ final class DiskVolumeModel: ObservableObject {
     }
 
     func refresh() {
+        isLoading = true
+        defer { isLoading = false }
+
         do {
             snapshot = try service.systemVolume()
             error = nil
