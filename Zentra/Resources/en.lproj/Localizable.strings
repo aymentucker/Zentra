@@ -29,3 +29,5 @@
 "settings.menuBar" = "Menu bar status";
 "settings.menuBar.description" = "Allow Zentra to show status in the macOS menu bar when the feature is available.";
 "common.retry" = "Retry";
+
+"disk.usage.format" = "%@ used of %@";
