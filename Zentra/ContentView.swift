@@ -49,6 +49,7 @@ struct ContentView: View {
         case .smartCare: SmartCareView()
         case .cleanup: CleanupView()
         case .storage: StorageView()
+        case .developer: DeveloperCleanerView()
         case .settings: SettingsView()
         default: FeaturePlaceholderView(destination: selection)
         }
