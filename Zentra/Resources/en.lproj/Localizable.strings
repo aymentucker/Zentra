@@ -84,3 +84,9 @@
 "cleanup.logs.detail" = "Old ordinary logs can be reviewed; diagnostics stay protected from automatic selection.";
 "cleanup.safePolicy" = "Safety first";
 "cleanup.safePolicy.detail" = "Only approved safe items can enter a cleanup plan.";
+
+"cleanup.developer" = "Developer caches";
+"cleanup.developer.detail" = "Xcode, Gradle and Dart build/cache locations. Items still require safety review.";
+"cleanup.creator" = "Creator caches";
+"cleanup.creator.detail" = "Known Adobe and DaVinci cache locations when present.";
+"cleanup.locations.count" = "%d locations available";
