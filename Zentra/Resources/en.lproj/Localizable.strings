@@ -142,3 +142,9 @@
 "storage.action.explore" = "Explore folder";
 "storage.visual.up" = "Up one level";
 "storage.visual.empty" = "No analyzed files in this folder.";
+
+"storage.search" = "Search files";
+"storage.sort.size" = "Size";
+"storage.sort.name" = "Name";
+"storage.sort.modified" = "Modified";
+"storage.selection.selectVisible" = "Select visible";
