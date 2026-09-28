@@ -1,4 +1,5 @@
 import Foundation
+import AppKit
 
 struct ApplicationRemovalResult: Sendable {
     let moved: [URL]
@@ -18,7 +19,19 @@ actor ApplicationRemovalExecutor {
 
         for url in urls {
             do {
-                _ = try FileManager.default.trashItem(at: url, resultingItemURL: nil)
+                if url == preview.application.url.standardizedFileURL {
+                    var tag = 0
+                    let success = NSWorkspace.shared.performFileOperation(
+                        .recycleOperation,
+                        source: url.deletingLastPathComponent().path,
+                        destination: "",
+                        files: [url.lastPathComponent],
+                        tag: &tag
+                    )
+                    guard success else { throw CocoaError(.fileWriteNoPermission) }
+                } else {
+                    _ = try FileManager.default.trashItem(at: url, resultingItemURL: nil)
+                }
                 guard !FileManager.default.fileExists(atPath: url.path) else { throw CocoaError(.fileWriteUnknown) }
                 moved.append(url)
             } catch {
