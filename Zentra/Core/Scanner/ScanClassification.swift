@@ -39,8 +39,10 @@ struct ScanClassifier: Sendable {
         var safety = safetyPolicy.assess(file.url)
         if safety.level != .protected {
             switch category {
-            case .cache, .logs:
-                safety = ScanSafetyAssessment(level: .safe, reason: "Known user cache or log location")
+            case .cache:
+                safety = cacheAssessment(file)
+            case .logs:
+                safety = logAssessment(file)
             case .temporary, .developer:
                 safety = ScanSafetyAssessment(level: .review, reason: "Potentially disposable data that requires review")
             case .userData:
@@ -51,6 +53,35 @@ struct ScanClassifier: Sendable {
         }
 
         return ClassifiedScanItem(file: file, category: category, safety: safety)
+    }
+
+    private func cacheAssessment(_ file: ScannedFile) -> ScanSafetyAssessment {
+        guard !file.isDirectory else {
+            return ScanSafetyAssessment(level: .review, reason: "Cache container; review contents instead")
+        }
+        guard isOldEnough(file.modifiedAt, days: 7) else {
+            return ScanSafetyAssessment(level: .review, reason: "Recently used cache")
+        }
+        return ScanSafetyAssessment(level: .safe, reason: "User cache older than 7 days")
+    }
+
+    private func logAssessment(_ file: ScannedFile) -> ScanSafetyAssessment {
+        guard !file.isDirectory else {
+            return ScanSafetyAssessment(level: .review, reason: "Log container; review contents instead")
+        }
+        let name = file.url.lastPathComponent.lowercased()
+        if name.contains("crash") || name.contains("diagnostic") || name.contains("panic") {
+            return ScanSafetyAssessment(level: .review, reason: "Diagnostic log may help troubleshoot problems")
+        }
+        guard isOldEnough(file.modifiedAt, days: 14) else {
+            return ScanSafetyAssessment(level: .review, reason: "Recent log may still be useful")
+        }
+        return ScanSafetyAssessment(level: .safe, reason: "Ordinary user log older than 14 days")
+    }
+
+    private func isOldEnough(_ date: Date?, days: Int) -> Bool {
+        guard let date else { return false }
+        return date <= Date().addingTimeInterval(-Double(days) * 86_400)
     }
 
     func classify(_ summary: ScanSummary) -> [ClassifiedScanItem] {
