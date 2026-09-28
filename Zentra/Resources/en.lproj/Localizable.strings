@@ -101,3 +101,6 @@
 "scan.safeSelection.summary" = "%d safe items · %@";
 "scan.safeSelection.select" = "Select all safe";
 "scan.safeSelection.clear" = "Clear safe selection";
+
+"scan.preparing.title" = "Preparing cleanup results…";
+"scan.preparing.detail" = "Classifying findings and applying safety rules.";
