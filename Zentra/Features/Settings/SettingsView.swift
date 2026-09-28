@@ -49,6 +49,7 @@ private struct LanguageOption: View {
     let isSelected: Bool
     let action: () -> Void
     @State private var hovering = false
+    @FocusState private var focused: Bool
 
     var body: some View {
         Button(action: action) {
@@ -78,6 +79,9 @@ private struct LanguageOption: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .focused($focused)
+        .zentraFocusRing(focused)
         .onHover { hovering = $0 }
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
