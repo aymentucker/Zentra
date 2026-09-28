@@ -1,43 +1,48 @@
 import SwiftUI
 
+/// Root application shell.
+///
+/// Important: the physical window shell always uses LTR coordinates so SwiftUI
+/// cannot mirror the sidebar placement behind our back. Locale direction is
+/// applied only inside the sidebar and content regions.
 struct ContentView: View {
     @State private var selection: AppDestination = .smartCare
-    @AppStorage("zentra.language") private var languageCode = AppLanguage.english.rawValue
+    @AppStorage(AppPreferenceKey.language) private var languageCode = AppPreferences.defaultLanguage
 
     private var language: AppLanguage {
         AppLanguage(rawValue: languageCode) ?? .english
     }
 
     var body: some View {
-        GeometryReader { proxy in
-            ZStack(alignment: .topLeading) {
-                detail
-                    .frame(
-                        width: max(0, proxy.size.width - AppShellMetrics.sidebarWidth),
-                        height: proxy.size.height
-                    )
-                    .offset(x: language == .arabic ? 0 : AppShellMetrics.sidebarWidth)
-
-                sidebar
-                    .frame(width: AppShellMetrics.sidebarWidth, height: proxy.size.height)
-                    .offset(x: language == .arabic ? proxy.size.width - AppShellMetrics.sidebarWidth : 0)
+        HStack(spacing: 0) {
+            if language == .arabic {
+                contentRegion
+                sidebarRegion
+            } else {
+                sidebarRegion
+                contentRegion
             }
-            .clipped()
         }
+        // Keep physical window placement deterministic.
+        .environment(\.layoutDirection, .leftToRight)
         .background(Color.zentraBackground)
-        .environment(\.locale, Locale(identifier: language.localeIdentifier))
-        .environment(\.layoutDirection, language.layoutDirection)
         .preferredColorScheme(.dark)
-        .id(language.rawValue)
+        .id("shell-\(language.rawValue)")
     }
 
-    private var sidebar: some View {
+    private var sidebarRegion: some View {
         SidebarView(selection: $selection)
+            .frame(width: AppShellMetrics.sidebarWidth)
+            .frame(maxHeight: .infinity)
+            .environment(\.locale, Locale(identifier: language.localeIdentifier))
+            .environment(\.layoutDirection, language.layoutDirection)
     }
 
-    private var detail: some View {
+    private var contentRegion: some View {
         destinationView
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .environment(\.locale, Locale(identifier: language.localeIdentifier))
+            .environment(\.layoutDirection, language.layoutDirection)
     }
 
     @ViewBuilder
@@ -57,7 +62,7 @@ enum AppShellMetrics {
     static let sidebarWidth: CGFloat = 246
 }
 
-#Preview {
+#Preview("English") {
     ContentView()
         .frame(width: 1180, height: 760)
 }
