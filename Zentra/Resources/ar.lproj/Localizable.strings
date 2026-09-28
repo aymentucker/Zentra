@@ -92,3 +92,5 @@
 "cleanup.locations.count" = "%d موقع متاح";
 
 "cleanup.analyzing" = "جارٍ حساب الحجم…";
+
+"scan.category.creator" = "كاش صناع المحتوى";
