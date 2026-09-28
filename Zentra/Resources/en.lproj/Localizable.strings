@@ -34,3 +34,19 @@
 
 "disk.loading" = "Reading disk usage…";
 "disk.unavailable" = "Disk usage unavailable";
+
+"scan.scanning" = "Scanning safe targets…";
+"scan.cancel" = "Cancel scan";
+"scan.review.title" = "Scan review";
+"scan.review.readonly" = "Read-only results. Nothing will be removed.";
+"scan.error.title" = "Scan failed";
+"scan.error.message" = "Zentra could not finish this scan. No files were changed.";
+"scan.category.cache" = "Caches";
+"scan.category.logs" = "Logs";
+"scan.category.temporary" = "Temporary";
+"scan.category.developer" = "Developer data";
+"scan.category.userData" = "Personal data";
+"scan.category.other" = "Other";
+"scan.safety.safe" = "Safe";
+"scan.safety.review" = "Review";
+"scan.safety.protected" = "Protected";
