@@ -19,8 +19,10 @@ struct CleanupView: View {
                 VStack(alignment: .leading, spacing: 24) {
                     header
 
-                    if scanSession.state == .scanning || scanSession.state == .preparingResults {
+                    if scanSession.state == .scanning {
                         ScanProgressCard(progress: scanSession.progress)
+                    } else if scanSession.state == .preparingResults {
+                        preparingResultsCard
                     }
 
                     if let review = scanSession.review {
@@ -37,6 +39,19 @@ struct CleanupView: View {
         .task {
             if sourceAnalysis.summaries.isEmpty {
                 sourceAnalysis.start(sources: sourceCatalog.availableSources())
+            }
+        }
+    }
+
+    private var preparingResultsCard: some View {
+        ZentraCard {
+            HStack(spacing: 12) {
+                ProgressView().controlSize(.small)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("scan.preparing.title").zentraFont(12, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
+                    Text("scan.preparing.detail").zentraFont(10.5).foregroundStyle(Color.zentraTextTertiary)
+                }
+                Spacer()
             }
         }
     }
