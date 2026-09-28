@@ -252,3 +252,23 @@
 "applications.artifact.logs" = "Logs";
 "applications.artifact.containers" = "Container";
 "applications.artifact.groupContainers" = "Group Container";
+
+"performance.title" = "Performance";
+"performance.subtitle" = "Monitor CPU, memory pressure, active processes and startup services without unsafe one-click tweaks.";
+"performance.refresh" = "Refresh";
+"performance.loading" = "Reading system performance…";
+"performance.cpu" = "CPU usage";
+"performance.memory" = "Memory pressure";
+"performance.uptime" = "Uptime";
+"performance.memory.title" = "Memory";
+"performance.memory.note" = "Zentra reports memory usage without forcing macOS memory purges.";
+"performance.available" = "available";
+"performance.processes" = "Top CPU processes";
+"performance.startup" = "Startup services";
+"performance.startup.note" = "Read-only inspection of LaunchAgents and LaunchDaemons. Zentra does not disable system services automatically.";
+"performance.startup.count" = "%d items";
+"performance.startup.empty" = "No startup service files were found in the inspected locations.";
+"performance.startup.user" = "User LaunchAgent";
+"performance.startup.system" = "System service";
+"performance.uptime.days" = "%d days";
+"performance.uptime.hours" = "%d hours";
