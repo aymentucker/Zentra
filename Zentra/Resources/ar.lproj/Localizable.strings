@@ -50,3 +50,6 @@
 "scan.safety.safe" = "آمن";
 "scan.safety.review" = "للمراجعة";
 "scan.safety.protected" = "محمي";
+
+"scan.items" = "العناصر المكتشفة";
+"scan.discovered" = "الحجم المكتشف";
