@@ -24,7 +24,7 @@ actor DuplicateFinder {
             var byHash:[String:[DuplicateFile]] = [:]
             for file in candidates {
                 try Task.checkCancellation()
-                if let hash=try hash(file.url) { byHash[hash,default:[]].append(file) }
+                let fingerprint = try hash(file.url)\n                byHash[fingerprint, default: []].append(file)
             }
             groups += byHash.compactMap { hash, files in files.count > 1 ? DuplicateGroup(fingerprint:hash,files:files.sorted{$0.url.path<$1.url.path}) : nil }
         }
