@@ -152,3 +152,5 @@
 "storage.category.system" = "النظام";
 "storage.category.library" = "المكتبة وملفات الدعم";
 "storage.fullDisk.note" = "تحلل Zentra قرص بدء التشغيل. قد تمنع حماية الخصوصية في macOS الوصول إلى بعض المواقع ما لم يتم منح التطبيق صلاحية الوصول الكامل للقرص.";
+
+"storage.visual.files" = "%d ملف";
