@@ -29,3 +29,48 @@
 "settings.menuBar" = "Menu bar status";
 "settings.menuBar.description" = "Allow Zentra to show status in the macOS menu bar when the feature is available.";
 "common.retry" = "Retry";
+
+"disk.usage.format" = "%@ used of %@";
+
+"disk.loading" = "Reading disk usage…";
+"disk.unavailable" = "Disk usage unavailable";
+
+"scan.scanning" = "Scanning safe targets…";
+"scan.cancel" = "Cancel scan";
+"scan.review.title" = "Scan review";
+"scan.review.readonly" = "Read-only results. Nothing will be removed.";
+"scan.error.title" = "Scan failed";
+"scan.error.message" = "Zentra could not finish this scan. No files were changed.";
+"scan.category.cache" = "Caches";
+"scan.category.logs" = "Logs";
+"scan.category.temporary" = "Temporary";
+"scan.category.developer" = "Developer data";
+"scan.category.userData" = "Personal data";
+"scan.category.other" = "Other";
+"scan.safety.safe" = "Safe";
+"scan.safety.review" = "Review";
+"scan.safety.protected" = "Protected";
+
+"scan.items" = "Items found";
+"scan.discovered" = "Discovered";
+
+"scan.review.selectHint" = "Review and select safe items. Protected data stays locked.";
+"scan.review.found" = "Found";
+"scan.selected.count" = "%d items selected";
+"scan.plan.preview" = "Review only — no deletion";
+
+"scan.plan.create" = "Create safe plan";
+"scan.plan.ready" = "Safety plan ready";
+"scan.plan.summary" = "%d items · %@";
+"scan.plan.noAction" = "No files changed";
+
+"cleanup.review.action" = "Continue";
+"cleanup.confirm.title" = "Move selected items to Trash?";
+"cleanup.confirm.message" = "%d safe items (%@) will be moved to the macOS Trash. They are not permanently deleted and can be restored.";
+"cleanup.confirm.action" = "Move to Trash";
+"cleanup.cancel" = "Cancel";
+"cleanup.executing" = "Cleaning safely…";
+"cleanup.executing.detail" = "Moving approved items to Trash and verifying each operation.";
+"cleanup.result.success" = "Cleanup completed";
+"cleanup.result.partial" = "Cleanup completed with some issues";
+"cleanup.result.summary" = "%d succeeded · %d failed · %@ processed";

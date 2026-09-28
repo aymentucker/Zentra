@@ -29,3 +29,48 @@
 "settings.menuBar" = "الحالة في شريط القوائم";
 "settings.menuBar.description" = "السماح لـ Zentra بإظهار الحالة في شريط قوائم macOS عند توفر الميزة.";
 "common.retry" = "إعادة المحاولة";
+
+"disk.usage.format" = "%@ مستخدم من %@";
+
+"disk.loading" = "جارٍ قراءة مساحة القرص…";
+"disk.unavailable" = "تعذر قراءة مساحة القرص";
+
+"scan.scanning" = "جارٍ فحص المسارات الآمنة…";
+"scan.cancel" = "إلغاء الفحص";
+"scan.review.title" = "مراجعة الفحص";
+"scan.review.readonly" = "نتائج للقراءة فقط. لن يتم حذف أي شيء.";
+"scan.error.title" = "تعذر إكمال الفحص";
+"scan.error.message" = "لم يتمكن Zentra من إكمال الفحص. لم يتم تغيير أي ملف.";
+"scan.category.cache" = "ملفات التخزين المؤقت";
+"scan.category.logs" = "السجلات";
+"scan.category.temporary" = "الملفات المؤقتة";
+"scan.category.developer" = "بيانات المطور";
+"scan.category.userData" = "البيانات الشخصية";
+"scan.category.other" = "أخرى";
+"scan.safety.safe" = "آمن";
+"scan.safety.review" = "للمراجعة";
+"scan.safety.protected" = "محمي";
+
+"scan.items" = "العناصر المكتشفة";
+"scan.discovered" = "الحجم المكتشف";
+
+"scan.review.selectHint" = "راجع وحدد العناصر الآمنة. تبقى البيانات المحمية مقفلة.";
+"scan.review.found" = "تم العثور عليها";
+"scan.selected.count" = "تم تحديد %d عنصر";
+"scan.plan.preview" = "مراجعة فقط — بدون حذف";
+
+"scan.plan.create" = "إنشاء خطة آمنة";
+"scan.plan.ready" = "خطة الأمان جاهزة";
+"scan.plan.summary" = "%d عنصر · %@";
+"scan.plan.noAction" = "لم يتم تغيير أي ملف";
+
+"cleanup.review.action" = "متابعة";
+"cleanup.confirm.title" = "نقل العناصر المحددة إلى سلة المهملات؟";
+"cleanup.confirm.message" = "سيتم نقل %d عنصر آمن (%@) إلى سلة مهملات macOS. لن تُحذف نهائيًا ويمكن استعادتها.";
+"cleanup.confirm.action" = "نقل إلى سلة المهملات";
+"cleanup.cancel" = "إلغاء";
+"cleanup.executing" = "جارٍ التنظيف بأمان…";
+"cleanup.executing.detail" = "يتم نقل العناصر المعتمدة إلى سلة المهملات والتحقق من كل عملية.";
+"cleanup.result.success" = "اكتمل التنظيف";
+"cleanup.result.partial" = "اكتمل التنظيف مع بعض المشاكل";
+"cleanup.result.summary" = "نجح %d · فشل %d · تمت معالجة %@";

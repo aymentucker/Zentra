@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SidebarView: View {
     @Binding var selection: AppDestination
+    @StateObject private var diskVolume = DiskVolumeModel()
 
     var body: some View {
         ZStack {
@@ -25,6 +26,7 @@ struct SidebarView: View {
                 }
 
                 Spacer(minLength: 20)
+                diskUsage
                 SidebarItem(destination: .settings, selection: $selection)
             }
             .padding(.horizontal, 14)
@@ -41,6 +43,41 @@ struct SidebarView: View {
                 .foregroundStyle(Color.zentraTextPrimary)
         }
         .padding(.horizontal, 8)
+    }
+
+    private var diskUsage: some View {
+        Group {
+            if diskVolume.isLoading {
+                HStack(spacing: 8) {
+                    ProgressView().controlSize(.small)
+                    Text("disk.loading").zentraFont(11).foregroundStyle(Color.zentraTextTertiary)
+                }
+                .padding(12)
+            } else if let snapshot = diskVolume.snapshot {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text(snapshot.name).zentraFont(12, weight: .medium).foregroundStyle(Color.zentraTextSecondary)
+                        Spacer()
+                        Text(snapshot.usedFraction, format: .percent.precision(.fractionLength(0)))
+                            .zentraFont(11, weight: .medium).foregroundStyle(Color.zentraTextTertiary)
+                    }
+                    ProgressView(value: snapshot.usedFraction).tint(Color.zentraAccent)
+                    Text(String(format: NSLocalizedString("disk.usage.format", comment: ""), ByteCountFormatter.string(fromByteCount: snapshot.usedBytes, countStyle: .file), ByteCountFormatter.string(fromByteCount: snapshot.totalBytes, countStyle: .file)))
+                        .zentraFont(11).foregroundStyle(Color.zentraTextTertiary)
+                }
+                .padding(12)
+                .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color.white.opacity(0.025)))
+            } else {
+                HStack(spacing: 8) {
+                    Image(systemName: "internaldrive")
+                    Text("disk.unavailable").zentraFont(11).foregroundStyle(Color.zentraTextTertiary)
+                }
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color.white.opacity(0.025)))
+            }
+        }
+        .task { diskVolume.refresh() }
     }
 
     private func section<Content: View>(_ title: LocalizedStringKey, @ViewBuilder content: () -> Content) -> some View {

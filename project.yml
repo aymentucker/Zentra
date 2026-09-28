@@ -24,5 +24,24 @@ targets:
         CODE_SIGN_STYLE: Automatic
         ENABLE_HARDENED_RUNTIME: YES
         SWIFT_EMIT_LOC_STRINGS: YES
-    scheme:
-      testTargets: []
+  ZentraTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - ZentraTests
+    dependencies:
+      - target: Zentra
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.zentra.tests
+    scheme: {}
+schemes:
+  Zentra:
+    build:
+      targets:
+        Zentra: all
+        ZentraTests: [test]
+    test:
+      targets:
+        - ZentraTests
