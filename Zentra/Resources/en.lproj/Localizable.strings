@@ -104,3 +104,23 @@
 
 "scan.preparing.title" = "Preparing cleanup results…";
 "scan.preparing.detail" = "Classifying findings and applying safety rules.";
+
+"storage.title" = "Storage";
+"storage.subtitle" = "Understand what uses space in your personal folders and inspect large files safely.";
+"storage.scan" = "Analyze storage";
+"storage.scanning" = "Analyzing storage…";
+"storage.analyzed" = "Data analyzed";
+"storage.files" = "Files found";
+"storage.largeFiles" = "Large files";
+"storage.categories" = "Categories";
+"storage.noLargeFiles" = "No files match the current size and category filters.";
+"storage.empty.title" = "See what is using your space";
+"storage.empty.detail" = "Analyze Desktop, Documents, Downloads, Movies, Music and Pictures. Nothing is deleted automatically.";
+"storage.category.documents" = "Documents";
+"storage.category.images" = "Images";
+"storage.category.video" = "Video";
+"storage.category.audio" = "Audio";
+"storage.category.archives" = "Archives";
+"storage.category.applications" = "Applications";
+"storage.category.developer" = "Developer";
+"storage.category.other" = "Other";
