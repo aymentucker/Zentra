@@ -154,3 +154,8 @@
 "storage.fullDisk.note" = "Zentra analyzes the startup disk. macOS privacy protections may prevent access to some locations unless Full Disk Access is granted.";
 
 "storage.visual.files" = "%d files";
+
+"storage.scanChart.title" = "Mapping your storage";
+"storage.scanChart.subtitle" = "Building a live picture of files across your Mac";
+"storage.scanChart.files" = "%d files discovered";
+"storage.scanChart.preparing" = "Preparing disk scan…";
