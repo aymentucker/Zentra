@@ -48,6 +48,7 @@ struct StorageView: View {
                     if model.state == .scanning { progressCard }
                     if let analysis = model.analysis {
                         overview(analysis)
+                        fullDiskNotice(analysis)
                         categoryGrid(analysis)
                         explorer
                     } else if model.state != .scanning { emptyState }
@@ -101,6 +102,19 @@ struct StorageView: View {
             Text(value).zentraFont(18, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
             Text(title).zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
         }.frame(maxWidth: .infinity, alignment: .leading) }
+    }
+
+    private func fullDiskNotice(_ analysis: StorageAnalysis) -> some View {
+        HStack(spacing: 9) {
+            Image(systemName: analysis.skippedItems > 0 ? "lock.shield" : "checkmark.shield")
+                .foregroundStyle(analysis.skippedItems > 0 ? Color.zentraAccent : Color.zentraTextSecondary)
+            Text("storage.fullDisk.note").zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary)
+            Spacer()
+            if analysis.skippedItems > 0 {
+                Text("\(analysis.skippedItems)")
+                    .zentraFont(9, weight: .semibold).foregroundStyle(Color.zentraAccent)
+            }
+        }.padding(10).background(RoundedRectangle(cornerRadius: 10).fill(Color.zentraSurface))
     }
 
     private func categoryGrid(_ analysis: StorageAnalysis) -> some View {
