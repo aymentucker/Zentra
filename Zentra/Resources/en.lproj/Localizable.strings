@@ -53,3 +53,8 @@
 
 "scan.items" = "Items found";
 "scan.discovered" = "Discovered";
+
+"scan.review.selectHint" = "Review and select safe items. Protected data stays locked.";
+"scan.review.found" = "Found";
+"scan.selected.count" = "%d items selected";
+"scan.plan.preview" = "Review only — no deletion";
