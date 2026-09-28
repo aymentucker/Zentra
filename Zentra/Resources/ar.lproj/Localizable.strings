@@ -10,8 +10,6 @@
 "nav.performance" = "الأداء";
 "nav.developer" = "المطور";
 "nav.settings" = "الإعدادات";
-"disk.title" = "Macintosh HD";
-"disk.usage.placeholder" = "327 GB مستخدم من 512 GB";
 "smart.title" = "العناية الذكية";
 "smart.subtitle" = "نظّف وحسّن وراجع جهازك من خلال فحص واحد.";
 "smart.scan" = "فحص";
