@@ -1,82 +1,127 @@
 import SwiftUI
 
 struct SidebarView: View {
+    @Binding var selection: AppDestination
+
     var body: some View {
         ZStack {
-            Color.zentraSidebar
-                .ignoresSafeArea()
+            Color.zentraSidebar.ignoresSafeArea()
 
-            VStack(alignment: .leading, spacing: 18) {
-                HStack(spacing: 10) {
-                    ZentraMark()
-                        .frame(width: 30, height: 30)
+            VStack(alignment: .leading, spacing: 14) {
+                brand
+                    .padding(.bottom, 6)
 
-                    Text("Zentra")
-                        .font(.system(size: 19, weight: .semibold, design: .rounded))
-                        .foregroundStyle(Color.zentraTextPrimary)
-                }
-                .padding(.top, 10)
-
-                VStack(spacing: 8) {
-                    SidebarItem(title: "Smart Care", icon: "sparkles", isSelected: true)
-                    SidebarItem(title: "Cleanup", icon: "trash")
-                    SidebarItem(title: "Storage", icon: "externaldrive")
-                    SidebarItem(title: "Duplicates", icon: "doc.on.doc")
-                    SidebarItem(title: "Tidy Up", icon: "square.grid.2x2")
-                    SidebarItem(title: "Applications", icon: "app")
-                    SidebarItem(title: "Performance", icon: "bolt")
-                    SidebarItem(title: "Developer", icon: "chevron.left.forwardslash.chevron.right")
+                section("nav.section.care") {
+                    SidebarItem(destination: .smartCare, selection: $selection)
+                    SidebarItem(destination: .cleanup, selection: $selection)
+                    SidebarItem(destination: .storage, selection: $selection)
+                    SidebarItem(destination: .duplicates, selection: $selection)
+                    SidebarItem(destination: .tidyUp, selection: $selection)
                 }
 
-                Spacer()
-
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Macintosh HD")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.zentraTextSecondary)
-
-                    ProgressView(value: 0.64)
-                        .tint(Color.zentraAccent)
-
-                    Text("327 GB of 512 GB used")
-                        .font(.system(size: 11))
-                        .foregroundStyle(Color.zentraTextTertiary)
-
-                    SidebarItem(title: "Settings", icon: "gearshape")
+                section("nav.section.system") {
+                    SidebarItem(destination: .applications, selection: $selection)
+                    SidebarItem(destination: .performance, selection: $selection)
+                    SidebarItem(destination: .developer, selection: $selection)
                 }
+
+                Spacer(minLength: 20)
+
+                diskUsage
+
+                SidebarItem(destination: .settings, selection: $selection)
             }
-            .padding(18)
+            .padding(.horizontal, 14)
+            .padding(.top, 12)
+            .padding(.bottom, 14)
         }
+    }
+
+    private var brand: some View {
+        HStack(spacing: 10) {
+            ZentraMark()
+                .frame(width: 30, height: 30)
+
+            Text("app.name")
+                .font(.system(size: 19, weight: .semibold, design: .rounded))
+                .foregroundStyle(Color.zentraTextPrimary)
+        }
+        .padding(.horizontal, 8)
+    }
+
+    private func section<Content: View>(_ title: LocalizedStringKey, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(title)
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(Color.zentraTextTertiary)
+                .textCase(.uppercase)
+                .padding(.horizontal, 10)
+                .padding(.bottom, 2)
+
+            content()
+        }
+    }
+
+    private var diskUsage: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("disk.title")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.zentraTextSecondary)
+                Spacer()
+                Text("64%")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(Color.zentraTextTertiary)
+            }
+
+            ProgressView(value: 0.64)
+                .tint(Color.zentraAccent)
+
+            Text("disk.usage.placeholder")
+                .font(.system(size: 11))
+                .foregroundStyle(Color.zentraTextTertiary)
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.white.opacity(0.025))
+        )
     }
 }
 
 private struct SidebarItem: View {
-    let title: String
-    let icon: String
-    var isSelected: Bool = false
+    let destination: AppDestination
+    @Binding var selection: AppDestination
+
+    private var selected: Bool { selection == destination }
 
     var body: some View {
-        HStack(spacing: 11) {
-            Image(systemName: icon)
-                .font(.system(size: 14, weight: .medium))
-                .frame(width: 18)
-                .foregroundStyle(isSelected ? Color.zentraAccent : Color.zentraTextSecondary)
+        Button {
+            selection = destination
+        } label: {
+            HStack(spacing: 11) {
+                ZentraIcon(name: destination.iconName)
+                    .frame(width: 18, height: 18)
+                    .foregroundStyle(selected ? Color.zentraAccent : Color.zentraTextSecondary)
 
-            Text(title)
-                .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(isSelected ? Color.zentraTextPrimary : Color.zentraTextSecondary)
+                Text(destination.titleKey)
+                    .font(.system(size: 13.5, weight: .medium))
+                    .foregroundStyle(selected ? Color.zentraTextPrimary : Color.zentraTextSecondary)
 
-            Spacer()
+                Spacer()
+            }
+            .padding(.horizontal, 11)
+            .frame(height: 38)
+            .contentShape(Rectangle())
+            .background(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(selected ? Color.zentraSurfaceSelected : .clear)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(selected ? Color.white.opacity(0.055) : .clear, lineWidth: 1)
+            )
         }
-        .padding(.horizontal, 12)
-        .frame(height: 38)
-        .background(
-            RoundedRectangle(cornerRadius: 11, style: .continuous)
-                .fill(isSelected ? Color.zentraSurfaceSelected : .clear)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 11, style: .continuous)
-                .stroke(isSelected ? Color.white.opacity(0.06) : .clear, lineWidth: 1)
-        )
+        .buttonStyle(.plain)
     }
 }
