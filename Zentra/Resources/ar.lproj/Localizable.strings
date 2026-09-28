@@ -34,3 +34,19 @@
 
 "disk.loading" = "جارٍ قراءة مساحة القرص…";
 "disk.unavailable" = "تعذر قراءة مساحة القرص";
+
+"scan.scanning" = "جارٍ فحص المسارات الآمنة…";
+"scan.cancel" = "إلغاء الفحص";
+"scan.review.title" = "مراجعة الفحص";
+"scan.review.readonly" = "نتائج للقراءة فقط. لن يتم حذف أي شيء.";
+"scan.error.title" = "تعذر إكمال الفحص";
+"scan.error.message" = "لم يتمكن Zentra من إكمال الفحص. لم يتم تغيير أي ملف.";
+"scan.category.cache" = "ملفات التخزين المؤقت";
+"scan.category.logs" = "السجلات";
+"scan.category.temporary" = "الملفات المؤقتة";
+"scan.category.developer" = "بيانات المطور";
+"scan.category.userData" = "البيانات الشخصية";
+"scan.category.other" = "أخرى";
+"scan.safety.safe" = "آمن";
+"scan.safety.review" = "للمراجعة";
+"scan.safety.protected" = "محمي";
