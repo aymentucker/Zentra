@@ -17,9 +17,12 @@ targets:
     sources:
       - path: Zentra
         excludes:
-          - Resources/Fonts
+          - Resources
+          - Assets.xcassets
     resources:
-      - path: Zentra/Resources/Fonts
+      - path: Zentra/Resources
+      - path: Zentra/Assets.xcassets
+        buildPhase: resources
     settings:
       base:
         PRODUCT_NAME: Zentra
