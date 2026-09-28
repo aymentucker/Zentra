@@ -13,11 +13,16 @@ struct ZentraSection<Content: View>: View {
 
     var body: some View {
         ZentraCard {
-            VStack(alignment: .leading, spacing: 16) {
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(title).zentraFont(17, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 9) {
+                    Text(title)
+                        .zentraFont(17, weight: .semibold)
+                        .foregroundStyle(Color.zentraTextPrimary)
                     if let subtitle {
-                        Text(subtitle).zentraFont(13).foregroundStyle(Color.zentraTextSecondary)
+                        Text(subtitle)
+                            .zentraFont(13)
+                            .foregroundStyle(Color.zentraTextSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
                 content
