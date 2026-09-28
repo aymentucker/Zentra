@@ -66,17 +66,16 @@ final class ApplicationManagerModel: ObservableObject {
     func reveal(_ url: URL) { NSWorkspace.shared.activateFileViewerSelecting([url]) }
     func open(_ url: URL) { NSWorkspace.shared.open(url) }
 
-    func uninstall() {
-        guard let preview, preview.application.safety != .protected else { return }
+    func uninstall(_ request: ApplicationRemovalPreview) {
+        guard request.application.safety != .protected else { return }
         isRemoving = true
         let selected = selectedArtifacts
         Task {
-            let result = await executor.execute(preview: preview, includeArtifacts: selected)
+            let result = await executor.execute(preview: request, includeArtifacts: selected)
             isRemoving = false
             if !result.failed.isEmpty {
                 errorMessage = "applications.error.partial"
             }
-            closePreview()
             scan()
         }
     }
