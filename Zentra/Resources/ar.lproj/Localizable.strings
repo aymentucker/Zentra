@@ -124,3 +124,17 @@
 "storage.category.applications" = "التطبيقات";
 "storage.category.developer" = "المطور";
 "storage.category.other" = "أخرى";
+
+"storage.explorer" = "مستكشف المساحة";
+"storage.view.visual" = "مرئي";
+"storage.view.list" = "قائمة";
+"storage.minimumSize" = "أقل حجم";
+"storage.results.count" = "%d نتيجة";
+"storage.action.open" = "فتح";
+"storage.action.reveal" = "عرض في Finder";
+"storage.action.trash" = "نقل إلى سلة المهملات";
+"storage.action.cancel" = "إلغاء";
+"storage.selection.clear" = "إلغاء التحديد";
+"storage.selected.summary" = "%d محدد · %@";
+"storage.trash.confirm.title" = "نقل الملفات المحددة إلى سلة المهملات؟";
+"storage.trash.confirm.detail" = "سيتم نقل %d عنصر إلى سلة مهملات macOS، ولن تقوم Zentra بإفراغ السلة تلقائيًا.";
