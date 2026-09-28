@@ -9,24 +9,30 @@ struct ContentView: View {
     }
 
     var body: some View {
-        HStack(spacing: 0) {
-            if language == .arabic {
+        GeometryReader { proxy in
+            ZStack(alignment: .topLeading) {
                 detail
+                    .frame(
+                        width: max(0, proxy.size.width - AppShellMetrics.sidebarWidth),
+                        height: proxy.size.height
+                    )
+                    .offset(x: language == .arabic ? 0 : AppShellMetrics.sidebarWidth)
+
                 sidebar
-            } else {
-                sidebar
-                detail
+                    .frame(width: AppShellMetrics.sidebarWidth, height: proxy.size.height)
+                    .offset(x: language == .arabic ? proxy.size.width - AppShellMetrics.sidebarWidth : 0)
             }
+            .clipped()
         }
         .background(Color.zentraBackground)
         .environment(\.locale, Locale(identifier: language.localeIdentifier))
         .environment(\.layoutDirection, language.layoutDirection)
         .preferredColorScheme(.dark)
+        .id(language.rawValue)
     }
 
     private var sidebar: some View {
         SidebarView(selection: $selection)
-            .frame(width: 246)
     }
 
     private var detail: some View {
@@ -45,6 +51,10 @@ struct ContentView: View {
             FeaturePlaceholderView(destination: selection)
         }
     }
+}
+
+enum AppShellMetrics {
+    static let sidebarWidth: CGFloat = 246
 }
 
 #Preview {
