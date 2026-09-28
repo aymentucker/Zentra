@@ -94,3 +94,5 @@
 "cleanup.analyzing" = "Calculating size…";
 
 "scan.category.creator" = "Creator caches";
+
+"scan.safety.items" = "%d items";
