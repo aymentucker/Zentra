@@ -272,3 +272,26 @@
 "performance.startup.system" = "System service";
 "performance.uptime.days" = "%d days";
 "performance.uptime.hours" = "%d hours";
+
+"smart.subtitle.integrated" = "One safe overview of cleanup opportunities, developer and creator caches, installed apps and system performance.";
+"smart.scan.again" = "Scan again";
+"smart.scan.safety" = "Smart Care only analyzes. Nothing is deleted or changed during this scan.";
+"smart.scanning.cleanup" = "Scanning cleanup opportunities";
+"smart.scanning.workspace" = "Inspecting developer & creator caches";
+"smart.scanning.applications" = "Reading installed applications";
+"smart.scanning.performance" = "Checking system performance";
+"smart.health" = "Health score";
+"smart.safe" = "Safe";
+"smart.review" = "Review";
+"smart.protected" = "Protected";
+"smart.overview" = "Smart Care overview";
+"smart.cleanup.detail" = "System and user cleanup candidates classified by safety.";
+"smart.workspace.detail" = "Developer and creator caches, with risky data protected.";
+"smart.applications.detail" = "Installed applications available for detailed review.";
+"smart.performance.detail" = "Current CPU and memory snapshot.";
+"smart.recommendation" = "Recommendation";
+"smart.recommendation.review" = "Review flagged items in their dedicated tools before making changes.";
+"smart.recommendation.ready" = "No review items were detected. Safe candidates can be handled in their dedicated tools.";
+"smart.noAutoDelete" = "No automatic deletion";
+"smart.ready.title" = "Ready for a unified Smart Scan";
+"smart.deepTools" = "Duplicates and Tidy Up remain dedicated deep tools so Smart Care stays fast and predictable.";
