@@ -22,16 +22,16 @@ struct ScanClassifier: Sendable {
         let lower = relative.lowercased()
 
         let category: ScanCategory
-        if lower.hasPrefix("/library/caches/") || lower == "/library/caches" {
+        if isDeveloperDisposablePath(lower) {
+            category = .developer
+        } else if isCreatorCachePath(lower) {
+            category = .creator
+        } else if lower.hasPrefix("/library/caches/") || lower == "/library/caches" {
             category = .cache
         } else if lower.hasPrefix("/library/logs/") || lower == "/library/logs" {
             category = .logs
         } else if lower.hasPrefix("/.cache/") || lower == "/.cache" || lower.contains("/tmp/") {
             category = .temporary
-        } else if isDeveloperDisposablePath(lower) {
-            category = .developer
-        } else if isCreatorCachePath(lower) {
-            category = .creator
         } else if lower.hasPrefix("/documents/") || lower.hasPrefix("/desktop/") || lower.hasPrefix("/pictures/") || lower.hasPrefix("/movies/") || lower.hasPrefix("/music/") {
             category = .userData
         } else {
