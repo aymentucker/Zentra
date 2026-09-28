@@ -90,3 +90,5 @@
 "cleanup.creator" = "كاش صناع المحتوى";
 "cleanup.creator.detail" = "مواقع كاش Adobe وDaVinci المعروفة عند توفرها.";
 "cleanup.locations.count" = "%d موقع متاح";
+
+"cleanup.analyzing" = "جارٍ حساب الحجم…";
