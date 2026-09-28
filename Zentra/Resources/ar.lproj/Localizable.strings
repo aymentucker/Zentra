@@ -177,3 +177,18 @@
 "developer.safety.safe" = "آمن";
 "developer.safety.review" = "مراجعة";
 "developer.safety.protected" = "محمي";
+
+"storage.location.title" = "اختر ما تريد تحليله";
+"storage.location.subtitle" = "افحص قرص بدء التشغيل بالكامل أو ركّز على مجلدات محددة، ويمكنك إضافة أي مجلد من Finder.";
+"storage.location.disk" = "قرص بدء التشغيل بالكامل";
+"storage.location.home" = "المجلد الرئيسي";
+"storage.location.desktop" = "سطح المكتب";
+"storage.location.documents" = "المستندات";
+"storage.location.downloads" = "التنزيلات";
+"storage.location.movies" = "الأفلام";
+"storage.location.pictures" = "الصور";
+"storage.location.library" = "المكتبة";
+"storage.location.custom" = "إضافة مجلد…";
+"storage.location.choose" = "اختيار";
+"storage.location.all" = "اختيار المجلدات الشائعة";
+"storage.location.analyze" = "تحليل المحدد";
