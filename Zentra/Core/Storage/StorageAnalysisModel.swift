@@ -10,7 +10,7 @@ final class StorageAnalysisModel: ObservableObject {
     @Published private(set) var currentURL: URL?
     @Published private(set) var analysis: StorageAnalysis?
     private let analyzer = StorageAnalyzer()
-    private var task: Task<Void, Never>?
+    private var task: Task<Void, Never>?\n    private var activeRoots: [URL] = []
 
     func start(roots: [URL]? = nil) {
         cancel()
