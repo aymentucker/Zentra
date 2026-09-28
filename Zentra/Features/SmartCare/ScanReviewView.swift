@@ -10,7 +10,7 @@ struct ScanReviewView: View {
     @Environment(\.layoutDirection) private var layoutDirection
 
     private var selectedItems: [ClassifiedScanItem] {
-        snapshot.groups.values.flatMap { $0 }.filter { selected.contains($0.id) }
+        snapshot.safeItems.filter { selected.contains($0.id) }
     }
     private var selectedBytes: Int64 { selectedItems.reduce(0) { $0 + $1.file.size } }
 
@@ -19,6 +19,7 @@ struct ScanReviewView: View {
         VStack(alignment: .leading, spacing: 18) {
             summaryHeader
             safetyOverview
+            selectAllSafeBar
 
             LazyVStack(spacing: 10) {
                 ForEach(ScanCategory.allCases, id: \.self) { category in
@@ -57,6 +58,37 @@ struct ScanReviewView: View {
                 Text("scan.review.found").zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
             }
         }
+    }
+
+    private var selectAllSafeBar: some View {
+        let allSafeIDs = Set(snapshot.safeItems.map(\.id))
+        let allSelected = !allSafeIDs.isEmpty && allSafeIDs.isSubset(of: selected)
+
+        return HStack(spacing: 12) {
+            Image(systemName: "checkmark.shield")
+                .foregroundStyle(Color.zentraAccent)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("scan.safeSelection.title")
+                    .zentraFont(11.5, weight: .semibold)
+                    .foregroundStyle(Color.zentraTextPrimary)
+                Text(String(format: NSLocalizedString("scan.safeSelection.summary", comment: ""), snapshot.count(for: .safe), ByteCountFormatter.string(fromByteCount: snapshot.bytes(for: .safe), countStyle: .file)))
+                    .zentraFont(10)
+                    .foregroundStyle(Color.zentraTextTertiary)
+            }
+            Spacer()
+            Button(allSelected ? "scan.safeSelection.clear" : "scan.safeSelection.select") {
+                plan = nil
+                planError = nil
+                if allSelected { selected.subtract(allSafeIDs) }
+                else { selected.formUnion(allSafeIDs) }
+            }
+            .buttonStyle(.plain)
+            .zentraFont(10.5, weight: .semibold)
+            .foregroundStyle(Color.zentraAccent)
+            .disabled(allSafeIDs.isEmpty)
+        }
+        .padding(12)
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color.zentraAccent.opacity(0.055)))
     }
 
     private var safetyOverview: some View {
