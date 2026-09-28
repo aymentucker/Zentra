@@ -159,3 +159,36 @@
 "storage.scanChart.subtitle" = "بناء صورة مباشرة للملفات على جهاز Mac";
 "storage.scanChart.files" = "تم اكتشاف %d ملف";
 "storage.scanChart.preparing" = "جارٍ تجهيز فحص القرص…";
+
+"developer.title" = "المطور وصانع المحتوى";
+"developer.subtitle" = "استعد مساحة بيانات العمل القابلة لإعادة البناء دون المساس بالمشاريع أو ملفات الوسائط الأصلية.";
+"developer.tab.developer" = "المطور";
+"developer.tab.creator" = "صانع المحتوى";
+"developer.rescan" = "إعادة الفحص";
+"developer.scanning" = "جارٍ فحص كاش بيئة العمل…";
+"developer.scanning.detail" = "يتم حساب مواقع المطور وصانع المحتوى المعروفة دون تغيير أي ملف أثناء التحليل.";
+"developer.empty" = "لم يتم العثور على كاش مدعوم";
+"developer.empty.detail" = "لم يعثر Zentra على مواقع كاش مدعومة في هذا القسم.";
+"developer.files" = "%d ملف";
+"developer.selected" = "تم اختيار %d موقع";
+"developer.clean" = "نقل إلى سلة المهملات";
+"developer.confirm.title" = "نقل بيانات بيئة العمل المحددة إلى سلة المهملات؟";
+"developer.confirm.detail" = "سيتم نقل %d موقع (%@) إلى سلة مهملات macOS. لا يمكن تضمين البيانات المحمية.";
+"developer.safety.safe" = "آمن";
+"developer.safety.review" = "مراجعة";
+"developer.safety.protected" = "محمي";
+
+"storage.location.title" = "اختر ما تريد تحليله";
+"storage.location.subtitle" = "افحص قرص بدء التشغيل بالكامل أو ركّز على مجلدات محددة، ويمكنك إضافة أي مجلد من Finder.";
+"storage.location.disk" = "قرص بدء التشغيل بالكامل";
+"storage.location.home" = "المجلد الرئيسي";
+"storage.location.desktop" = "سطح المكتب";
+"storage.location.documents" = "المستندات";
+"storage.location.downloads" = "التنزيلات";
+"storage.location.movies" = "الأفلام";
+"storage.location.pictures" = "الصور";
+"storage.location.library" = "المكتبة";
+"storage.location.custom" = "إضافة مجلد…";
+"storage.location.choose" = "اختيار";
+"storage.location.all" = "اختيار المجلدات الشائعة";
+"storage.location.analyze" = "تحليل المحدد";

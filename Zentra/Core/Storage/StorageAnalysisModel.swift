@@ -12,12 +12,12 @@ final class StorageAnalysisModel: ObservableObject {
     private let analyzer = StorageAnalyzer()
     private var task: Task<Void, Never>?
 
-    func start() {
+    func start(roots: [URL]? = nil) {
         cancel()
         state = .scanning
         analysis = nil
         fileCount = 0; scannedBytes = 0; currentURL = nil
-        let roots = StorageTargetPolicy().defaultRoots()
+        let roots = roots ?? StorageTargetPolicy().defaultRoots()
         task = Task {
             do {
                 let result = try await analyzer.analyze(roots: roots) { [weak self] count, bytes, url in

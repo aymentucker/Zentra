@@ -14,6 +14,9 @@ struct StorageView: View {
     @State private var visualPath: [URL] = []
     @State private var sortMode: StorageSortMode = .size
     @State private var searchText = ""
+    @State private var showLocationPicker = false
+    @State private var selectedScanLocations: Set<String> = ["disk"]
+    @State private var customScanLocations: [URL] = []
 
     private var displayedItems: [StorageItem] {
         guard let analysis = model.analysis else { return [] }
@@ -52,9 +55,17 @@ struct StorageView: View {
                         categoryGrid(analysis)
                         explorer
                     } else if model.state != .scanning { emptyState }
-                }.frame(maxWidth: 1040).frame(maxWidth: .infinity).padding(36)
+                }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 48).padding(.vertical, 36)
             }
             if !selection.selected.isEmpty { selectionBar }
+        }
+        .sheet(isPresented: $showLocationPicker) {
+            StorageLocationPicker(
+                presets: StorageScanLocationCatalog().presets(),
+                selected: $selectedScanLocations,
+                customURLs: $customScanLocations,
+                onAnalyze: { model.start(roots: $0) }
+            )
         }
         .alert("storage.trash.confirm.title", isPresented: $showTrashConfirmation) {
             Button("storage.action.cancel", role: .cancel) { pendingTrash = [] }
@@ -73,7 +84,7 @@ struct StorageView: View {
             Spacer()
             if model.state == .scanning {
                 Button("scan.cancel") { model.cancel() }.buttonStyle(.plain).foregroundStyle(Color.zentraTextSecondary)
-            } else { ZentraPrimaryButton("storage.scan", action: model.start) }
+            } else { ZentraPrimaryButton("storage.scan") { showLocationPicker = true } }
         }
     }
 
