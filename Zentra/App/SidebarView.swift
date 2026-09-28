@@ -74,6 +74,7 @@ private struct SidebarItem: View {
     let destination: AppDestination
     @Binding var selection: AppDestination
     @State private var hovering = false
+    @FocusState private var keyboardFocused: Bool
 
     private var selected: Bool { selection == destination }
 
@@ -101,6 +102,9 @@ private struct SidebarItem: View {
             )
         }
         .buttonStyle(.plain)
+        .focused($keyboardFocused)
+        .zentraFocusRing(keyboardFocused)
         .onHover { hovering = $0 }
+        .accessibilityLabel(destination.titleKey)
     }
 }
