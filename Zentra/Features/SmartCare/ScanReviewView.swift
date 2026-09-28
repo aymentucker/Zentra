@@ -4,6 +4,8 @@ struct ScanReviewView: View {
     let snapshot: ScanReviewSnapshot
     @State private var expanded: Set<ScanCategory> = []
     @State private var selected = Set<URL>()
+    @State private var plan: CleanupPlan?
+    @State private var planError: String?
     @Environment(\.layoutDirection) private var layoutDirection
 
     private var selectedItems: [ClassifiedScanItem] {
@@ -24,6 +26,11 @@ struct ScanReviewView: View {
             }
 
             if !selected.isEmpty { selectionBar }
+            if let plan { planPreview(plan) }
+            if let planError {
+                Text(planError).zentraFont(11).foregroundStyle(Color.zentraTextSecondary)
+                    .padding(.horizontal, 4)
+            }
         }
     }
 
@@ -108,15 +115,43 @@ struct ScanReviewView: View {
                     .zentraFont(10.5).foregroundStyle(Color.zentraTextTertiary)
             }
             Spacer()
-            Text("scan.plan.preview")
-                .zentraFont(11, weight: .medium)
-                .foregroundStyle(Color.zentraTextSecondary)
-                .padding(.horizontal, 12).frame(height: 30)
-                .background(Capsule().fill(Color.white.opacity(0.055)))
+            Button("scan.plan.create", action: buildPlan)
+                .buttonStyle(.plain)
+                .zentraFont(11, weight: .semibold)
+                .foregroundStyle(Color.zentraAccent)
+                .padding(.horizontal, 13).frame(height: 30)
+                .background(Capsule().fill(Color.zentraAccent.opacity(0.10)))
         }
         .padding(14)
         .background(RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Color.zentraAccent.opacity(0.07)))
         .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(Color.zentraAccent.opacity(0.16), lineWidth: 1))
+    }
+
+    private func planPreview(_ plan: CleanupPlan) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: "shield.checkered")
+                .foregroundStyle(Color.zentraAccent)
+            VStack(alignment: .leading, spacing: 3) {
+                Text("scan.plan.ready").zentraFont(12, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
+                Text(String(format: NSLocalizedString("scan.plan.summary", comment: ""), plan.itemCount, ByteCountFormatter.string(fromByteCount: plan.totalBytes, countStyle: .file)))
+                    .zentraFont(10.5).foregroundStyle(Color.zentraTextTertiary)
+            }
+            Spacer()
+            Text("scan.plan.noAction").zentraFont(10.5).foregroundStyle(Color.zentraTextTertiary)
+        }
+        .padding(14)
+        .background(RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Color.zentraSurface))
+        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(Color.zentraAccent.opacity(0.14), lineWidth: 1))
+    }
+
+    private func buildPlan() {
+        do {
+            plan = try CleanupPlanBuilder().build(from: selectedItems)
+            planError = nil
+        } catch {
+            plan = nil
+            planError = error.localizedDescription
+        }
     }
 
     @ViewBuilder
@@ -134,11 +169,15 @@ struct ScanReviewView: View {
 
     private func toggleCategory(_ items: [ClassifiedScanItem]) {
         let ids = Set(items.map(\.id))
+        plan = nil
+        planError = nil
         if ids.isSubset(of: selected) { selected.subtract(ids) } else { selected.formUnion(ids) }
     }
 
     private func toggle(_ item: ClassifiedScanItem) {
         guard item.safety.level == .safe else { return }
+        plan = nil
+        planError = nil
         if selected.contains(item.id) { selected.remove(item.id) } else { selected.insert(item.id) }
     }
 
