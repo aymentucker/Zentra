@@ -154,3 +154,8 @@
 "storage.fullDisk.note" = "تحلل Zentra قرص بدء التشغيل. قد تمنع حماية الخصوصية في macOS الوصول إلى بعض المواقع ما لم يتم منح التطبيق صلاحية الوصول الكامل للقرص.";
 
 "storage.visual.files" = "%d ملف";
+
+"storage.scanChart.title" = "رسم خريطة التخزين";
+"storage.scanChart.subtitle" = "بناء صورة مباشرة للملفات على جهاز Mac";
+"storage.scanChart.files" = "تم اكتشاف %d ملف";
+"storage.scanChart.preparing" = "جارٍ تجهيز فحص القرص…";
