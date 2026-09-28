@@ -26,7 +26,7 @@ final class CleanupPlanTests: XCTestCase {
     }
 
     func testBuildRejectsEmptySelection() {
-        XCTAssertThrowsError(try CleanupPlanBuilder().build(from: []))
+        XCTAssertThrowsError(try CleanupPlanBuilder().build(from: [ClassifiedScanItem]()))
     }
 
     func testBuildDeduplicatesURLs() throws {
