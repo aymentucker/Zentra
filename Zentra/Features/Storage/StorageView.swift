@@ -153,7 +153,7 @@ struct StorageView: View {
             } else {
                 HStack {
                     Button("storage.selection.selectVisible") {
-                        selection.selected.formUnion(displayedItems.prefix(300).map(\.id))
+                        selection.select(Array(displayedItems.prefix(300).map(\.id)))
                     }.buttonStyle(.plain).zentraFont(10).foregroundStyle(Color.zentraAccent)
                     Spacer()
                 }
