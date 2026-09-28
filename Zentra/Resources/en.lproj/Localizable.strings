@@ -1,4 +1,6 @@
 "app.name" = "Zentra";
+"nav.section.care" = "Care & Organize";
+"nav.section.system" = "Apps & System";
 "nav.smartCare" = "Smart Care";
 "nav.cleanup" = "Cleanup";
 "nav.storage" = "Storage";
@@ -8,3 +10,16 @@
 "nav.performance" = "Performance";
 "nav.developer" = "Developer";
 "nav.settings" = "Settings";
+"disk.title" = "Macintosh HD";
+"disk.usage.placeholder" = "327 GB of 512 GB used";
+"smart.title" = "Smart Care";
+"smart.subtitle" = "Clean, optimize and review your Mac in a single scan.";
+"smart.scan" = "Scan";
+"status.ready" = "Ready";
+"feature.coming.title" = "Foundation ready";
+"feature.coming.subtitle" = "This module will be connected to its real system engine in the next milestone.";
+"settings.title" = "Settings";
+"settings.language" = "Language";
+"settings.language.description" = "Choose the interface language. Layout direction changes automatically.";
+"language.english" = "English";
+"language.arabic" = "Arabic";
