@@ -94,3 +94,5 @@
 "cleanup.analyzing" = "جارٍ حساب الحجم…";
 
 "scan.category.creator" = "كاش صناع المحتوى";
+
+"scan.safety.items" = "%d عنصر";
