@@ -84,3 +84,9 @@
 "cleanup.logs.detail" = "يمكن مراجعة السجلات القديمة العادية، بينما لا يتم تحديد سجلات التشخيص تلقائيًا.";
 "cleanup.safePolicy" = "الأمان أولًا";
 "cleanup.safePolicy.detail" = "فقط العناصر الآمنة المعتمدة يمكن إضافتها إلى خطة التنظيف.";
+
+"cleanup.developer" = "كاش المطورين";
+"cleanup.developer.detail" = "مواقع Xcode وGradle وDart للبناء والكاش، مع استمرار مراجعة الأمان.";
+"cleanup.creator" = "كاش صناع المحتوى";
+"cleanup.creator.detail" = "مواقع كاش Adobe وDaVinci المعروفة عند توفرها.";
+"cleanup.locations.count" = "%d موقع متاح";
