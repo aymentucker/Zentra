@@ -58,3 +58,8 @@
 "scan.review.found" = "Found";
 "scan.selected.count" = "%d items selected";
 "scan.plan.preview" = "Review only — no deletion";
+
+"scan.plan.create" = "Create safe plan";
+"scan.plan.ready" = "Safety plan ready";
+"scan.plan.summary" = "%d items · %@";
+"scan.plan.noAction" = "No files changed";
