@@ -1,7 +1,7 @@
 import Foundation
 
 enum StorageCategory: String, CaseIterable, Hashable, Sendable {
-    case documents, images, video, audio, archives, applications, developer, other
+    case documents, images, video, audio, archives, applications, developer, system, library, other
 }
 
 struct StorageItem: Identifiable, Hashable, Sendable {
@@ -28,6 +28,8 @@ struct StorageClassifier: Sendable {
         let ext = url.pathExtension.lowercased()
         let path = url.path.lowercased()
         if path.contains("/library/developer/") || path.contains("/.gradle/") || path.contains("/.pub-cache/") { return .developer }
+        if path.hasPrefix("/system/") || path.hasPrefix("/usr/") || path.hasPrefix("/bin/") || path.hasPrefix("/sbin/") || path.hasPrefix("/private/") { return .system }
+        if path.hasPrefix("/library/") || path.contains("/library/") { return .library }
         if ["jpg","jpeg","png","gif","heic","webp","tiff","bmp","raw"].contains(ext) { return .images }
         if ["mov","mp4","m4v","avi","mkv","webm"].contains(ext) { return .video }
         if ["mp3","m4a","wav","aac","flac","aiff"].contains(ext) { return .audio }
