@@ -295,3 +295,5 @@
 "smart.noAutoDelete" = "No automatic deletion";
 "smart.ready.title" = "Ready for a unified Smart Scan";
 "smart.deepTools" = "Duplicates and Tidy Up remain dedicated deep tools so Smart Care stays fast and predictable.";
+
+"applications.error.partial.detail" = "macOS could not move these items to Trash: %@. Check that the app is closed and that Zentra has permission to modify Applications.";
