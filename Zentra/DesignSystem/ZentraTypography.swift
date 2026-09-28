@@ -3,12 +3,12 @@ import SwiftUI
 enum ZentraFontWeight {
     case regular, medium, semibold, bold
 
-    var swiftUIWeight: Font.Weight {
+    var variableAxisValue: Double {
         switch self {
-        case .regular: .regular
-        case .medium: .medium
-        case .semibold: .semibold
-        case .bold: .bold
+        case .regular: 400
+        case .medium: 500
+        case .semibold: 600
+        case .bold: 700
         }
     }
 }
@@ -23,7 +23,9 @@ private struct ZentraTypographyModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .font(.custom(family, size: size).weight(weight.swiftUIWeight))
+            // The bundled fonts are variable fonts. Configure their native wght
+            // axis instead of asking SwiftUI to synthesize a Font.Weight.
+            .font(.custom(family, size: size).variation("wght", weight.variableAxisValue))
             .lineSpacing(isArabic ? max(2, size * 0.16) : max(1, size * 0.06))
     }
 }
