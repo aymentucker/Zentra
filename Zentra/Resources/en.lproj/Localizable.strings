@@ -90,3 +90,5 @@
 "cleanup.creator" = "Creator caches";
 "cleanup.creator.detail" = "Known Adobe and DaVinci cache locations when present.";
 "cleanup.locations.count" = "%d locations available";
+
+"cleanup.analyzing" = "Calculating size…";
