@@ -31,3 +31,6 @@
 "common.retry" = "إعادة المحاولة";
 
 "disk.usage.format" = "%@ مستخدم من %@";
+
+"disk.loading" = "جارٍ قراءة مساحة القرص…";
+"disk.unavailable" = "تعذر قراءة مساحة القرص";
