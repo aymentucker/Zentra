@@ -9,16 +9,29 @@ struct ContentView: View {
     }
 
     var body: some View {
-        NavigationSplitView {
-            SidebarView(selection: $selection)
-                .navigationSplitViewColumnWidth(min: 228, ideal: 246, max: 278)
-        } detail: {
-            destinationView
+        HStack(spacing: 0) {
+            if language == .arabic {
+                detail
+                sidebar
+            } else {
+                sidebar
+                detail
+            }
         }
-        .navigationSplitViewStyle(.balanced)
+        .background(Color.zentraBackground)
         .environment(\.locale, Locale(identifier: language.localeIdentifier))
         .environment(\.layoutDirection, language.layoutDirection)
         .preferredColorScheme(.dark)
+    }
+
+    private var sidebar: some View {
+        SidebarView(selection: $selection)
+            .frame(width: 246)
+    }
+
+    private var detail: some View {
+        destinationView
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     @ViewBuilder
