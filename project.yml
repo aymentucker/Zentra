@@ -16,7 +16,6 @@ targets:
       - Zentra
     resources:
       - Zentra/Resources
-      - Zentra/Assets.xcassets
     settings:
       base:
         PRODUCT_NAME: Zentra
