@@ -104,3 +104,58 @@
 
 "scan.preparing.title" = "جارٍ تجهيز نتائج التنظيف…";
 "scan.preparing.detail" = "يتم تصنيف النتائج وتطبيق قواعد الأمان.";
+
+"storage.title" = "التخزين";
+"storage.subtitle" = "اعرف ما الذي يستهلك المساحة في مجلداتك الشخصية وافحص الملفات الكبيرة بأمان.";
+"storage.scan" = "تحليل التخزين";
+"storage.scanning" = "جارٍ تحليل التخزين…";
+"storage.analyzed" = "البيانات المحللة";
+"storage.files" = "الملفات الموجودة";
+"storage.largeFiles" = "الملفات الكبيرة";
+"storage.categories" = "التصنيفات";
+"storage.noLargeFiles" = "لا توجد ملفات تطابق فلتر الحجم والتصنيف الحالي.";
+"storage.empty.title" = "اعرف أين تُستخدم مساحتك";
+"storage.empty.detail" = "حلّل سطح المكتب والمستندات والتنزيلات والفيديو والموسيقى والصور. لا يتم حذف أي شيء تلقائيًا.";
+"storage.category.documents" = "المستندات";
+"storage.category.images" = "الصور";
+"storage.category.video" = "الفيديو";
+"storage.category.audio" = "الصوت";
+"storage.category.archives" = "الأرشيفات";
+"storage.category.applications" = "التطبيقات";
+"storage.category.developer" = "المطور";
+"storage.category.other" = "أخرى";
+
+"storage.explorer" = "مستكشف المساحة";
+"storage.view.visual" = "مرئي";
+"storage.view.list" = "قائمة";
+"storage.minimumSize" = "أقل حجم";
+"storage.results.count" = "%d نتيجة";
+"storage.action.open" = "فتح";
+"storage.action.reveal" = "عرض في Finder";
+"storage.action.trash" = "نقل إلى سلة المهملات";
+"storage.action.cancel" = "إلغاء";
+"storage.selection.clear" = "إلغاء التحديد";
+"storage.selected.summary" = "%d محدد · %@";
+"storage.trash.confirm.title" = "نقل الملفات المحددة إلى سلة المهملات؟";
+"storage.trash.confirm.detail" = "سيتم نقل %d عنصر إلى سلة مهملات macOS، ولن تقوم Zentra بإفراغ السلة تلقائيًا.";
+
+"storage.action.explore" = "استكشاف المجلد";
+"storage.visual.up" = "مستوى للأعلى";
+"storage.visual.empty" = "لا توجد ملفات محللة في هذا المجلد.";
+
+"storage.search" = "بحث في الملفات";
+"storage.sort.size" = "الحجم";
+"storage.sort.name" = "الاسم";
+"storage.sort.modified" = "التعديل";
+"storage.selection.selectVisible" = "تحديد الظاهر";
+
+"storage.category.system" = "النظام";
+"storage.category.library" = "المكتبة وملفات الدعم";
+"storage.fullDisk.note" = "تحلل Zentra قرص بدء التشغيل. قد تمنع حماية الخصوصية في macOS الوصول إلى بعض المواقع ما لم يتم منح التطبيق صلاحية الوصول الكامل للقرص.";
+
+"storage.visual.files" = "%d ملف";
+
+"storage.scanChart.title" = "رسم خريطة التخزين";
+"storage.scanChart.subtitle" = "بناء صورة مباشرة للملفات على جهاز Mac";
+"storage.scanChart.files" = "تم اكتشاف %d ملف";
+"storage.scanChart.preparing" = "جارٍ تجهيز فحص القرص…";

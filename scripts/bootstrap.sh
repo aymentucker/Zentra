@@ -4,6 +4,9 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 chmod +x "$ROOT/scripts/fetch-fonts.sh"
+
+cd "$ROOT"
+swift "$ROOT/scripts/generate-app-icon.swift"
 "$ROOT/scripts/fetch-fonts.sh"
 
 if ! command -v xcodegen >/dev/null 2>&1; then

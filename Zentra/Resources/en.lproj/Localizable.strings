@@ -104,3 +104,58 @@
 
 "scan.preparing.title" = "Preparing cleanup results…";
 "scan.preparing.detail" = "Classifying findings and applying safety rules.";
+
+"storage.title" = "Storage";
+"storage.subtitle" = "Understand what uses space in your personal folders and inspect large files safely.";
+"storage.scan" = "Analyze storage";
+"storage.scanning" = "Analyzing storage…";
+"storage.analyzed" = "Data analyzed";
+"storage.files" = "Files found";
+"storage.largeFiles" = "Large files";
+"storage.categories" = "Categories";
+"storage.noLargeFiles" = "No files match the current size and category filters.";
+"storage.empty.title" = "See what is using your space";
+"storage.empty.detail" = "Analyze Desktop, Documents, Downloads, Movies, Music and Pictures. Nothing is deleted automatically.";
+"storage.category.documents" = "Documents";
+"storage.category.images" = "Images";
+"storage.category.video" = "Video";
+"storage.category.audio" = "Audio";
+"storage.category.archives" = "Archives";
+"storage.category.applications" = "Applications";
+"storage.category.developer" = "Developer";
+"storage.category.other" = "Other";
+
+"storage.explorer" = "Space Explorer";
+"storage.view.visual" = "Visualize";
+"storage.view.list" = "List";
+"storage.minimumSize" = "Minimum size";
+"storage.results.count" = "%d results";
+"storage.action.open" = "Open";
+"storage.action.reveal" = "Show in Finder";
+"storage.action.trash" = "Move to Trash";
+"storage.action.cancel" = "Cancel";
+"storage.selection.clear" = "Clear selection";
+"storage.selected.summary" = "%d selected · %@";
+"storage.trash.confirm.title" = "Move selected files to Trash?";
+"storage.trash.confirm.detail" = "%d item(s) will be moved to macOS Trash. Zentra will not empty Trash automatically.";
+
+"storage.action.explore" = "Explore folder";
+"storage.visual.up" = "Up one level";
+"storage.visual.empty" = "No analyzed files in this folder.";
+
+"storage.search" = "Search files";
+"storage.sort.size" = "Size";
+"storage.sort.name" = "Name";
+"storage.sort.modified" = "Modified";
+"storage.selection.selectVisible" = "Select visible";
+
+"storage.category.system" = "System";
+"storage.category.library" = "Library & Support";
+"storage.fullDisk.note" = "Zentra analyzes the startup disk. macOS privacy protections may prevent access to some locations unless Full Disk Access is granted.";
+
+"storage.visual.files" = "%d files";
+
+"storage.scanChart.title" = "Mapping your storage";
+"storage.scanChart.subtitle" = "Building a live picture of files across your Mac";
+"storage.scanChart.files" = "%d files discovered";
+"storage.scanChart.preparing" = "Preparing disk scan…";
