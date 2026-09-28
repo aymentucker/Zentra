@@ -11,13 +11,14 @@ actor StorageAnalyzer {
         var categoryBytes: [StorageCategory: Int64] = [:]
         var total: Int64 = 0
         var skipped = 0
+        let skippedCounter = LockedCounter()
         var seen = Set<URL>()
         var lastProgress = ContinuousClock.now
 
         for root in StorageTargetPolicy().normalized(roots) where fm.fileExists(atPath: root.path) {
             try Task.checkCancellation()
             guard let enumerator = fm.enumerator(at: root, includingPropertiesForKeys: Array(keys), options: [], errorHandler: { _, _ in
-                skipped += 1
+                skippedCounter.increment()
                 return true
             }) else { skipped += 1; continue }
 
@@ -46,6 +47,7 @@ actor StorageAnalyzer {
                 }
             }
         }
+        skipped += skippedCounter.value
         await progress?(items.count, total, nil)
         return StorageAnalysis(items: items, categoryBytes: categoryBytes, totalBytes: total, skippedItems: skipped)
     }
@@ -77,4 +79,12 @@ struct StorageTargetPolicy: Sendable {
         ]
         return excluded.contains { path == $0 || path.hasPrefix($0 + "/") }
     }
+}
+
+
+private final class LockedCounter: @unchecked Sendable {
+    private let lock = NSLock()
+    private var storage = 0
+    func increment() { lock.lock(); storage += 1; lock.unlock() }
+    var value: Int { lock.lock(); defer { lock.unlock() }; return storage }
 }
