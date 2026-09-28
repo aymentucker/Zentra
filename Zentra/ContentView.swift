@@ -53,6 +53,7 @@ struct ContentView: View {
             persistent(.storage) { StorageView() }
             persistent(.duplicates) { DuplicatesView() }
             persistent(.tidyUp) { TidyUpView() }
+            persistent(.applications) { ApplicationsView() }
             persistent(.developer) { DeveloperCleanerView() }
             persistent(.settings) { SettingsView() }
 
@@ -63,7 +64,7 @@ struct ContentView: View {
     }
 
     private var persistentDestinations: Set<AppDestination> {
-        [.smartCare, .cleanup, .storage, .duplicates, .tidyUp, .developer, .settings]
+        [.smartCare, .cleanup, .storage, .duplicates, .tidyUp, .applications, .developer, .settings]
     }
 
     @ViewBuilder
