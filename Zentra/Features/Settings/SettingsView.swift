@@ -35,9 +35,10 @@ struct SettingsView: View {
 
                     Spacer(minLength: 20)
                 }
-                .frame(maxWidth: 660, alignment: .leading)
+                .frame(maxWidth: 760, alignment: .leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(38)
+                .padding(.horizontal, 38)
+                .padding(.vertical, 34)
             }
         }
     }
