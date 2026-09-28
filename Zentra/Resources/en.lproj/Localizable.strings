@@ -23,3 +23,11 @@
 "settings.language.description" = "Choose the interface language. Layout direction changes automatically.";
 "language.english" = "English";
 "language.arabic" = "Arabic";
+
+"settings.experience" = "Experience";
+"settings.experience.description" = "Control interface behavior and lightweight system integrations.";
+"settings.reduceMotion" = "Reduce motion";
+"settings.reduceMotion.description" = "Use simpler interface transitions and animations.";
+"settings.menuBar" = "Menu bar status";
+"settings.menuBar.description" = "Allow Zentra to show status in the macOS menu bar when the feature is available.";
+"common.retry" = "Retry";
