@@ -2,7 +2,6 @@ import SwiftUI
 
 struct SmartCareView: View {
     @StateObject private var scanSession = ScanSession()
-    private let classifier = ScanClassifier()
     private let targetPolicy = ScanTargetPolicy()
 
     var body: some View {
@@ -20,14 +19,12 @@ struct SmartCareView: View {
 
                     scanAction
 
-                    if scanSession.state == .scanning {
+                    if scanSession.state == .scanning || scanSession.state == .preparingResults {
                         ScanProgressCard(progress: scanSession.progress)
                     }
 
-                    if let result = scanSession.result {
-                        ZentraCard {
-                            ScanReviewView(items: classifier.classify(result))
-                        }
+                    if let review = scanSession.review {
+                        ScanReviewView(snapshot: review)
                     }
 
                     if case .failed = scanSession.state {
@@ -39,7 +36,7 @@ struct SmartCareView: View {
                         )
                     }
 
-                    if scanSession.result == nil && scanSession.state != .scanning {
+                    if scanSession.result == nil && scanSession.state != .scanning && scanSession.state != .preparingResults {
                         HStack(spacing: 14) {
                             StatusCard(title: "nav.cleanup")
                             StatusCard(title: "nav.performance")
