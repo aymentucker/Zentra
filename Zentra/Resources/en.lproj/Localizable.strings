@@ -138,3 +138,7 @@
 "storage.selected.summary" = "%d selected · %@";
 "storage.trash.confirm.title" = "Move selected files to Trash?";
 "storage.trash.confirm.detail" = "%d item(s) will be moved to macOS Trash. Zentra will not empty Trash automatically.";
+
+"storage.action.explore" = "Explore folder";
+"storage.visual.up" = "Up one level";
+"storage.visual.empty" = "No analyzed files in this folder.";
