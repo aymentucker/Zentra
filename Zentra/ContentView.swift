@@ -1,13 +1,11 @@
 import SwiftUI
 
-/// Root application shell.
-///
-/// Important: the physical window shell always uses LTR coordinates so SwiftUI
-/// cannot mirror the sidebar placement behind our back. Locale direction is
-/// applied only inside the sidebar and content regions.
+/// Root application shell. Physical placement stays LTR; localized regions
+/// receive their own locale and layout direction.
 struct ContentView: View {
     @State private var selection: AppDestination = .smartCare
     @AppStorage(AppPreferenceKey.language) private var languageCode = AppPreferences.defaultLanguage
+    @AppStorage(AppPreferenceKey.reduceMotion) private var reduceMotion = AppPreferences.defaultReduceMotion
 
     private var language: AppLanguage {
         AppLanguage(rawValue: languageCode) ?? .english
@@ -23,11 +21,11 @@ struct ContentView: View {
                 contentRegion
             }
         }
-        // Keep physical window placement deterministic.
         .environment(\.layoutDirection, .leftToRight)
         .background(Color.zentraBackground)
         .preferredColorScheme(.dark)
         .id("shell-\(language.rawValue)")
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: selection)
     }
 
     private var sidebarRegion: some View {
@@ -48,12 +46,9 @@ struct ContentView: View {
     @ViewBuilder
     private var destinationView: some View {
         switch selection {
-        case .smartCare:
-            SmartCareView()
-        case .settings:
-            SettingsView()
-        default:
-            FeaturePlaceholderView(destination: selection)
+        case .smartCare: SmartCareView()
+        case .settings: SettingsView()
+        default: FeaturePlaceholderView(destination: selection)
         }
     }
 }
@@ -63,6 +58,5 @@ enum AppShellMetrics {
 }
 
 #Preview("English") {
-    ContentView()
-        .frame(width: 1180, height: 760)
+    ContentView().frame(width: 1180, height: 760)
 }
