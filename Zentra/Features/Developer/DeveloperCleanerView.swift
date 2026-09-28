@@ -14,10 +14,19 @@ struct DeveloperCleanerView: View {
             ScrollView {
                 VStack(alignment:.leading,spacing:22) {
                     header
-                    Picker("",selection:$tab) {
-                        Text("developer.tab.developer").tag(CleanerTab.developer)
-                        Text("developer.tab.creator").tag(CleanerTab.creator)
-                    }.pickerStyle(.segmented).frame(width: 300)
+                    HStack(spacing: 8) {
+                        cleanerTabButton(
+                            .developer,
+                            title: "developer.tab.developer",
+                            icon: "chevron.left.forwardslash.chevron.right"
+                        )
+                        cleanerTabButton(
+                            .creator,
+                            title: "developer.tab.creator",
+                            icon: "wand.and.stars"
+                        )
+                        Spacer()
+                    }
 
                     if model.isScanning { scanCard }
                     else if model.results.filter({ $0.location.group.isCreator == (tab == .creator) }).isEmpty { emptyCard }
