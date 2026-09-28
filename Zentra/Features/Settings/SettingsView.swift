@@ -59,9 +59,9 @@ private struct LanguageOption: View {
                     Text(language.badge).zentraFont(11, weight: .bold)
                         .foregroundStyle(isSelected ? Color.zentraAccent : Color.zentraTextSecondary)
                 }
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(language.titleKey).zentraFont(13.5, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
-                    Text(language.nativeTitle).zentraFont(11.5).foregroundStyle(Color.zentraTextTertiary)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(language.titleKey).zentraFont(13.5, weight: .semibold).foregroundStyle(Color.zentraTextPrimary).fixedSize(horizontal: false, vertical: true)
+                    Text(language.nativeTitle).zentraFont(11.5).foregroundStyle(Color.zentraTextTertiary).fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer(minLength: 12)
                 ZStack {
@@ -70,7 +70,7 @@ private struct LanguageOption: View {
                 }
             }
             .padding(.horizontal, 12)
-            .frame(height: 58)
+            .frame(minHeight: 66)
             .frame(maxWidth: .infinity)
             .background(RoundedRectangle(cornerRadius: 13, style: .continuous).fill(isSelected ? Color.zentraAccent.opacity(0.08) : Color.white.opacity(hovering ? 0.055 : 0.025)))
             .overlay(RoundedRectangle(cornerRadius: 13, style: .continuous).stroke(isSelected ? Color.zentraAccent.opacity(0.55) : Color.white.opacity(0.055), lineWidth: 1))
