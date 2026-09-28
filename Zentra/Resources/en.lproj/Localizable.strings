@@ -124,3 +124,17 @@
 "storage.category.applications" = "Applications";
 "storage.category.developer" = "Developer";
 "storage.category.other" = "Other";
+
+"storage.explorer" = "Space Explorer";
+"storage.view.visual" = "Visualize";
+"storage.view.list" = "List";
+"storage.minimumSize" = "Minimum size";
+"storage.results.count" = "%d results";
+"storage.action.open" = "Open";
+"storage.action.reveal" = "Show in Finder";
+"storage.action.trash" = "Move to Trash";
+"storage.action.cancel" = "Cancel";
+"storage.selection.clear" = "Clear selection";
+"storage.selected.summary" = "%d selected · %@";
+"storage.trash.confirm.title" = "Move selected files to Trash?";
+"storage.trash.confirm.detail" = "%d item(s) will be moved to macOS Trash. Zentra will not empty Trash automatically.";
