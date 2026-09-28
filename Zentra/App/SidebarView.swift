@@ -25,7 +25,6 @@ struct SidebarView: View {
                 }
 
                 Spacer(minLength: 20)
-                diskUsage
                 SidebarItem(destination: .settings, selection: $selection)
             }
             .padding(.horizontal, 14)
@@ -55,19 +54,6 @@ struct SidebarView: View {
         }
     }
 
-    private var diskUsage: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("disk.title").zentraFont(12, weight: .medium).foregroundStyle(Color.zentraTextSecondary)
-                Spacer()
-                Text("64%").zentraFont(11, weight: .medium).foregroundStyle(Color.zentraTextTertiary)
-            }
-            ProgressView(value: 0.64).tint(Color.zentraAccent)
-            Text("disk.usage.placeholder").zentraFont(11).foregroundStyle(Color.zentraTextTertiary)
-        }
-        .padding(12)
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color.white.opacity(0.025)))
-    }
 }
 
 private struct SidebarItem: View {
