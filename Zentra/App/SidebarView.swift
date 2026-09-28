@@ -47,7 +47,13 @@ struct SidebarView: View {
 
     private var diskUsage: some View {
         Group {
-            if let snapshot = diskVolume.snapshot {
+            if diskVolume.isLoading {
+                HStack(spacing: 8) {
+                    ProgressView().controlSize(.small)
+                    Text("disk.loading").zentraFont(11).foregroundStyle(Color.zentraTextTertiary)
+                }
+                .padding(12)
+            } else if let snapshot = diskVolume.snapshot {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Text(snapshot.name).zentraFont(12, weight: .medium).foregroundStyle(Color.zentraTextSecondary)
@@ -60,6 +66,14 @@ struct SidebarView: View {
                         .zentraFont(11).foregroundStyle(Color.zentraTextTertiary)
                 }
                 .padding(12)
+                .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color.white.opacity(0.025)))
+            } else {
+                HStack(spacing: 8) {
+                    Image(systemName: "internaldrive")
+                    Text("disk.unavailable").zentraFont(11).foregroundStyle(Color.zentraTextTertiary)
+                }
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color.white.opacity(0.025)))
             }
         }
