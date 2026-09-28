@@ -21,19 +21,7 @@ struct SmartCareView: View {
                     scanAction
 
                     if scanSession.state == .scanning {
-                        ZentraCard {
-                            VStack(alignment: .leading, spacing: 10) {
-                                HStack {
-                                    ProgressView().controlSize(.small)
-                                    Text("scan.scanning").zentraFont(13, weight: .medium).foregroundStyle(Color.zentraTextPrimary)
-                                    Spacer()
-                                    Text("\(scanSession.progress.discoveredItems)")
-                                        .zentraFont(12).foregroundStyle(Color.zentraTextSecondary)
-                                }
-                                Text(ByteCountFormatter.string(fromByteCount: scanSession.progress.discoveredBytes, countStyle: .file))
-                                    .zentraFont(11).foregroundStyle(Color.zentraTextTertiary)
-                            }
-                        }
+                        ScanProgressCard(progress: scanSession.progress)
                     }
 
                     if let result = scanSession.result {
