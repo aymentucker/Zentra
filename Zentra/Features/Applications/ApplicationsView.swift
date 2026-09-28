@@ -4,6 +4,7 @@ import AppKit
 struct ApplicationsView: View {
     @StateObject private var model = ApplicationManagerModel()
     @State private var pendingUninstall: ApplicationRemovalPreview?
+    @State private var pendingArtifacts = Set<URL>()
 
     var body: some View {
         ZStack {
@@ -34,7 +35,8 @@ struct ApplicationsView: View {
             Button("applications.uninstall", role: .destructive) {
                 guard let request = pendingUninstall else { return }
                 pendingUninstall = nil
-                model.uninstall(request)
+                model.uninstall(request, selectedArtifacts: pendingArtifacts)
+                pendingArtifacts = []
             }
         } message: { Text("applications.confirm.detail") }
         .alert("scan.error.title", isPresented: Binding(get: { model.errorMessage != nil }, set: { if !$0 { model.errorMessage = nil } })) {
@@ -169,6 +171,7 @@ struct ApplicationsView: View {
                     Label("applications.protected.detail", systemImage: "lock.fill").zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
                 } else {
                     Button("applications.uninstall", role: .destructive) {
+                        pendingArtifacts = model.selectedArtifacts
                         pendingUninstall = preview
                         model.closePreview()
                     }.disabled(model.isRemoving)
