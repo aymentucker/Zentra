@@ -37,3 +37,47 @@ struct StorageClassifier: Sendable {
         return .other
     }
 }
+
+
+struct StorageNode: Identifiable, Hashable, Sendable {
+    let url: URL
+    let name: String
+    let directBytes: Int64
+    let totalBytes: Int64
+    let fileCount: Int
+    let isDirectory: Bool
+    let category: StorageCategory
+    let children: [StorageNode]
+    var id: URL { url }
+}
+
+struct StorageTreeBuilder: Sendable {
+    func children(of directory: URL, from items: [StorageItem]) -> [StorageNode] {
+        let base = directory.standardizedFileURL.path
+        var directFiles: [StorageItem] = []
+        var folders: [String: [StorageItem]] = [:]
+
+        for item in items {
+            let path = item.url.standardizedFileURL.path
+            guard path.hasPrefix(base + "/") else { continue }
+            let relative = String(path.dropFirst(base.count + 1))
+            let parts = relative.split(separator: "/", maxSplits: 1).map(String.init)
+            if parts.count == 1 { directFiles.append(item) }
+            else { folders[parts[0], default: []].append(item) }
+        }
+
+        var nodes = directFiles.map {
+            StorageNode(url: $0.url, name: $0.url.lastPathComponent, directBytes: $0.size, totalBytes: $0.size, fileCount: 1, isDirectory: false, category: $0.category, children: [])
+        }
+
+        for (name, values) in folders {
+            let url = directory.appendingPathComponent(name)
+            let bytes = values.reduce(Int64(0)) { $0 + $1.size }
+            let dominant = Dictionary(grouping: values, by: \.category).max { a, b in
+                a.value.reduce(Int64(0)) { $0 + $1.size } < b.value.reduce(Int64(0)) { $0 + $1.size }
+            }?.key ?? .other
+            nodes.append(StorageNode(url: url, name: name, directBytes: 0, totalBytes: bytes, fileCount: values.count, isDirectory: true, category: dominant, children: []))
+        }
+        return nodes.sorted { $0.totalBytes > $1.totalBytes }
+    }
+}
