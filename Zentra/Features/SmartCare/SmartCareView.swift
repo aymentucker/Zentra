@@ -7,48 +7,46 @@ struct SmartCareView: View {
                 colors: [
                     Color.zentraBackground,
                     Color.zentraBackground,
-                    Color.zentraAccent.opacity(0.08)
+                    Color.zentraAccent.opacity(0.07)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
 
-            VStack(spacing: 28) {
+            VStack(spacing: 26) {
                 Spacer()
 
                 ZentraMark()
-                    .frame(width: 110, height: 110)
-                    .shadow(color: Color.zentraAccent.opacity(0.28), radius: 28, x: 0, y: 12)
+                    .frame(width: 104, height: 104)
+                    .shadow(color: Color.zentraAccent.opacity(0.24), radius: 26, x: 0, y: 10)
 
-                VStack(spacing: 10) {
-                    Text("Smart Care")
+                VStack(spacing: 9) {
+                    Text("smart.title")
                         .font(.system(size: 34, weight: .bold, design: .rounded))
                         .foregroundStyle(Color.zentraTextPrimary)
 
-                    Text("Clean, optimize and review your Mac in a single scan.")
+                    Text("smart.subtitle")
                         .font(.system(size: 15))
                         .foregroundStyle(Color.zentraTextSecondary)
+                        .multilineTextAlignment(.center)
                 }
 
                 Button(action: {}) {
-                    Text("Scan")
+                    Text("smart.scan")
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(.black)
                         .padding(.horizontal, 30)
                         .frame(height: 44)
-                        .background(
-                            Capsule()
-                                .fill(Color.zentraAccent)
-                        )
-                        .shadow(color: Color.zentraAccent.opacity(0.35), radius: 16, x: 0, y: 8)
+                        .background(Capsule().fill(Color.zentraAccent))
+                        .shadow(color: Color.zentraAccent.opacity(0.30), radius: 14, x: 0, y: 7)
                 }
                 .buttonStyle(.plain)
 
                 HStack(spacing: 14) {
-                    StatusCard(title: "Cleanup", value: "Ready")
-                    StatusCard(title: "Performance", value: "Ready")
-                    StatusCard(title: "Apps", value: "Ready")
+                    StatusCard(title: "nav.cleanup")
+                    StatusCard(title: "nav.performance")
+                    StatusCard(title: "nav.applications")
                 }
                 .frame(maxWidth: 720)
 
@@ -60,8 +58,7 @@ struct SmartCareView: View {
 }
 
 private struct StatusCard: View {
-    let title: String
-    let value: String
+    let title: LocalizedStringKey
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -69,7 +66,7 @@ private struct StatusCard: View {
                 .font(.system(size: 13, weight: .medium))
                 .foregroundStyle(Color.zentraTextSecondary)
 
-            Text(value)
+            Text("status.ready")
                 .font(.system(size: 17, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.zentraTextPrimary)
         }
