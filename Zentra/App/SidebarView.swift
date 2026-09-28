@@ -8,8 +8,7 @@ struct SidebarView: View {
             Color.zentraSidebar.ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 14) {
-                brand
-                    .padding(.bottom, 6)
+                brand.padding(.bottom, 6)
 
                 section("nav.section.care") {
                     SidebarItem(destination: .smartCare, selection: $selection)
@@ -26,9 +25,7 @@ struct SidebarView: View {
                 }
 
                 Spacer(minLength: 20)
-
                 diskUsage
-
                 SidebarItem(destination: .settings, selection: $selection)
             }
             .padding(.horizontal, 14)
@@ -39,11 +36,9 @@ struct SidebarView: View {
 
     private var brand: some View {
         HStack(spacing: 10) {
-            ZentraMark()
-                .frame(width: 30, height: 30)
-
+            ZentraMark().frame(width: 30, height: 30)
             Text("app.name")
-                .font(.system(size: 19, weight: .semibold, design: .rounded))
+                .zentraFont(19, weight: .semibold)
                 .foregroundStyle(Color.zentraTextPrimary)
         }
         .padding(.horizontal, 8)
@@ -52,12 +47,10 @@ struct SidebarView: View {
     private func section<Content: View>(_ title: LocalizedStringKey, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 5) {
             Text(title)
-                .font(.system(size: 10, weight: .semibold))
+                .zentraFont(10, weight: .semibold)
                 .foregroundStyle(Color.zentraTextTertiary)
-                .textCase(.uppercase)
                 .padding(.horizontal, 10)
                 .padding(.bottom, 2)
-
             content()
         }
     }
@@ -65,49 +58,34 @@ struct SidebarView: View {
     private var diskUsage: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("disk.title")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.zentraTextSecondary)
+                Text("disk.title").zentraFont(12, weight: .medium).foregroundStyle(Color.zentraTextSecondary)
                 Spacer()
-                Text("64%")
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundStyle(Color.zentraTextTertiary)
+                Text("64%").zentraFont(11, weight: .medium).foregroundStyle(Color.zentraTextTertiary)
             }
-
-            ProgressView(value: 0.64)
-                .tint(Color.zentraAccent)
-
-            Text("disk.usage.placeholder")
-                .font(.system(size: 11))
-                .foregroundStyle(Color.zentraTextTertiary)
+            ProgressView(value: 0.64).tint(Color.zentraAccent)
+            Text("disk.usage.placeholder").zentraFont(11).foregroundStyle(Color.zentraTextTertiary)
         }
         .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Color.white.opacity(0.025))
-        )
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color.white.opacity(0.025)))
     }
 }
 
 private struct SidebarItem: View {
     let destination: AppDestination
     @Binding var selection: AppDestination
+    @State private var hovering = false
 
     private var selected: Bool { selection == destination }
 
     var body: some View {
-        Button {
-            selection = destination
-        } label: {
+        Button { selection = destination } label: {
             HStack(spacing: 11) {
                 ZentraIcon(name: destination.iconName)
                     .frame(width: 18, height: 18)
                     .foregroundStyle(selected ? Color.zentraAccent : Color.zentraTextSecondary)
-
                 Text(destination.titleKey)
-                    .font(.system(size: 13.5, weight: .medium))
+                    .zentraFont(13.5, weight: .medium)
                     .foregroundStyle(selected ? Color.zentraTextPrimary : Color.zentraTextSecondary)
-
                 Spacer()
             }
             .padding(.horizontal, 11)
@@ -115,7 +93,7 @@ private struct SidebarItem: View {
             .contentShape(Rectangle())
             .background(
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(selected ? Color.zentraSurfaceSelected : .clear)
+                    .fill(selected ? Color.zentraSurfaceSelected : (hovering ? Color.white.opacity(0.035) : .clear))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -123,5 +101,6 @@ private struct SidebarItem: View {
             )
         }
         .buttonStyle(.plain)
+        .onHover { hovering = $0 }
     }
 }
