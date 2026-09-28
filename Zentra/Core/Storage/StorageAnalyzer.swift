@@ -6,7 +6,7 @@ actor StorageAnalyzer {
     func analyze(roots: [URL], progress: ProgressHandler? = nil) async throws -> StorageAnalysis {
         let fm = FileManager.default
         let classifier = StorageClassifier()
-        let keys: Set<URLResourceKey> = [.isRegularFileKey, .isDirectoryKey, .isSymbolicLinkKey, .fileSizeKey, .contentModificationDateKey]
+        let keys: Set<URLResourceKey> = [.isRegularFileKey, .isDirectoryKey, .isSymbolicLinkKey, .fileSizeKey, .fileAllocatedSizeKey, .totalFileAllocatedSizeKey, .contentModificationDateKey]
         var items: [StorageItem] = []
         var categoryBytes: [StorageCategory: Int64] = [:]
         var total: Int64 = 0
@@ -33,7 +33,9 @@ actor StorageAnalyzer {
                 guard let values = try? canonical.resourceValues(forKeys: keys) else { skipped += 1; continue }
                 guard values.isSymbolicLink != true, values.isDirectory != true, values.isRegularFile == true else { continue }
                 seen.insert(canonical)
-                let size = Int64(values.fileSize ?? 0)
+                let logicalSize = Int64(values.fileSize ?? 0)
+                let allocatedSize = Int64(values.totalFileAllocatedSize ?? values.fileAllocatedSize ?? values.fileSize ?? 0)
+                let size = max(0, min(logicalSize, allocatedSize))
                 let category = classifier.category(for: canonical)
                 items.append(StorageItem(url: canonical, size: size, modifiedAt: values.contentModificationDate, category: category))
                 categoryBytes[category, default: 0] += size
@@ -56,9 +58,11 @@ actor StorageAnalyzer {
 struct StorageTargetPolicy: Sendable {
     func defaultRoots() -> [URL] {
         let fm = FileManager.default
-        let volume = URL(fileURLWithPath: "/", isDirectory: true)
+        // Scan the writable APFS Data volume once. Scanning "/" on modern macOS also
+        // traverses firmlinks into Data and can count the same physical content twice.
         let data = URL(fileURLWithPath: "/System/Volumes/Data", isDirectory: true)
-        return [volume, data].filter { fm.fileExists(atPath: $0.path) }
+        if fm.fileExists(atPath: data.path) { return [data] }
+        return [URL(fileURLWithPath: "/", isDirectory: true)]
     }
 
     func normalized(_ roots: [URL]) -> [URL] {
