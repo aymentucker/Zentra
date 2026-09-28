@@ -14,6 +14,8 @@ final class StorageSelectionModel: ObservableObject {
 
     func clear() { selected.removeAll() }
 
+    func select(_ urls: [URL]) { selected.formUnion(urls) }
+
     func reveal(_ urls: [URL]) {
         guard !urls.isEmpty else { return }
         NSWorkspace.shared.activateFileViewerSelecting(urls)
