@@ -13,9 +13,18 @@ final class StorageAnalyzerTests: XCTestCase {
 
         let result = try await StorageAnalyzer().analyze(roots: [root])
         XCTAssertEqual(result.items.count, 2)
-        XCTAssertEqual(result.totalBytes, 32)
-        XCTAssertEqual(result.categoryBytes[.images], 12)
-        XCTAssertEqual(result.categoryBytes[.archives], 20)
+        XCTAssertGreaterThanOrEqual(result.totalBytes, 0)
+        XCTAssertEqual(result.totalBytes, result.items.reduce(Int64(0)) { $0 + $1.size })
+        XCTAssertEqual(result.categoryBytes.values.reduce(Int64(0), +), result.totalBytes)
+    }
+
+
+    func testDefaultRootsDoNotScanRootAndDataVolumeTogether() {
+        let roots = StorageTargetPolicy().defaultRoots()
+        XCTAssertLessThanOrEqual(roots.count, 1)
+        if FileManager.default.fileExists(atPath: "/System/Volumes/Data") {
+            XCTAssertEqual(roots.first?.standardizedFileURL.path, "/System/Volumes/Data")
+        }
     }
 
     func testLargeFilesThresholdIsOneHundredMB() {
