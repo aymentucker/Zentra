@@ -10,8 +10,6 @@
 "nav.performance" = "Performance";
 "nav.developer" = "Developer";
 "nav.settings" = "Settings";
-"disk.title" = "Macintosh HD";
-"disk.usage.placeholder" = "327 GB of 512 GB used";
 "smart.title" = "Smart Care";
 "smart.subtitle" = "Clean, optimize and review your Mac in a single scan.";
 "smart.scan" = "Scan";
