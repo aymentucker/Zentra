@@ -8,7 +8,11 @@ M3 adds a read-only storage analysis workflow for personal folders.
 - Show analyzed bytes, file count and files >= 100 MB.
 - Filter large files by category and adjustable size threshold.
 - Reveal a result in Finder.
-- No automatic deletion from Storage Analyzer.
+- Visualize/List switch with hierarchical bubble drill-down and breadcrumbs.
+- Search, sort by size/name/modified date, category and size filtering.
+- Multi-selection and bulk selection in list mode.
+- Context menus: Open, Show in Finder, Explore folder, Move to Trash.
+- Destructive actions require confirmation and use recoverable macOS Trash; Trash is never emptied automatically.
 
 ## Safety
 Storage is intentionally inspection-first. Personal files are not classified as cleanup-safe and this module does not delete them. A future explicit removal action must go through review/confirmation and Trash semantics.
