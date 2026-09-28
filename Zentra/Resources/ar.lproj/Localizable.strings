@@ -74,3 +74,13 @@
 "cleanup.result.success" = "اكتمل التنظيف";
 "cleanup.result.partial" = "اكتمل التنظيف مع بعض المشاكل";
 "cleanup.result.summary" = "نجح %d · فشل %d · تمت معالجة %@";
+
+"cleanup.title" = "التنظيف";
+"cleanup.subtitle" = "اعثر على البيانات القابلة للتنظيف باستخدام قواعد أمان محافظة قبل إجراء أي تغيير.";
+"cleanup.scan" = "فحص للتنظيف";
+"cleanup.userCaches" = "ملفات الكاش";
+"cleanup.userCaches.detail" = "تتم مراجعة ملفات الكاش القديمة القابلة لإعادة الإنشاء قبل التنظيف.";
+"cleanup.logs" = "سجلات التطبيقات";
+"cleanup.logs.detail" = "يمكن مراجعة السجلات القديمة العادية، بينما لا يتم تحديد سجلات التشخيص تلقائيًا.";
+"cleanup.safePolicy" = "الأمان أولًا";
+"cleanup.safePolicy.detail" = "فقط العناصر الآمنة المعتمدة يمكن إضافتها إلى خطة التنظيف.";
