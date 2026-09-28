@@ -29,3 +29,5 @@
 "settings.menuBar" = "الحالة في شريط القوائم";
 "settings.menuBar.description" = "السماح لـ Zentra بإظهار الحالة في شريط قوائم macOS عند توفر الميزة.";
 "common.retry" = "إعادة المحاولة";
+
+"disk.usage.format" = "%@ مستخدم من %@";
