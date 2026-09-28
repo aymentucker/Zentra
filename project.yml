@@ -19,8 +19,8 @@ targets:
         excludes:
           - Resources
           - Assets.xcassets
-    resources:
       - path: Zentra/Resources
+        buildPhase: resources
       - path: Zentra/Assets.xcassets
         buildPhase: resources
     settings:
