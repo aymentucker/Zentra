@@ -31,3 +31,6 @@
 "common.retry" = "Retry";
 
 "disk.usage.format" = "%@ used of %@";
+
+"disk.loading" = "Reading disk usage…";
+"disk.unavailable" = "Disk usage unavailable";
