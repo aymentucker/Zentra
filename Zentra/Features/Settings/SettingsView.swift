@@ -7,38 +7,121 @@ struct SettingsView: View {
         ZStack {
             Color.zentraBackground.ignoresSafeArea()
 
-            VStack(alignment: .leading, spacing: 28) {
-                Text("settings.title")
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color.zentraTextPrimary)
-
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("settings.language")
-                        .font(.system(size: 16, weight: .semibold))
+            ScrollView {
+                VStack(alignment: .leading, spacing: 28) {
+                    Text("settings.title")
+                        .font(.system(size: 32, weight: .bold, design: .rounded))
                         .foregroundStyle(Color.zentraTextPrimary)
 
-                    Text("settings.language.description")
-                        .font(.system(size: 13))
-                        .foregroundStyle(Color.zentraTextSecondary)
+                    VStack(alignment: .leading, spacing: 16) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("settings.language")
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundStyle(Color.zentraTextPrimary)
 
-                    Picker("settings.language", selection: $languageCode) {
-                        ForEach(AppLanguage.allCases) { language in
-                            Text(language.titleKey).tag(language.rawValue)
+                            Text("settings.language.description")
+                                .font(.system(size: 13))
+                                .foregroundStyle(Color.zentraTextSecondary)
+                        }
+
+                        HStack(spacing: 10) {
+                            ForEach(AppLanguage.allCases) { language in
+                                LanguageOption(
+                                    language: language,
+                                    isSelected: languageCode == language.rawValue
+                                ) {
+                                    withAnimation(.easeInOut(duration: 0.18)) {
+                                        languageCode = language.rawValue
+                                    }
+                                }
+                            }
                         }
                     }
-                    .labelsHidden()
-                    .frame(width: 220)
-                }
-                .padding(20)
-                .background(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(Color.zentraSurface)
-                )
+                    .padding(20)
+                    .frame(maxWidth: 620, alignment: .leading)
+                    .background(
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .fill(Color.zentraSurface)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .stroke(Color.white.opacity(0.055), lineWidth: 1)
+                    )
 
-                Spacer()
+                    Spacer(minLength: 20)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(38)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(38)
         }
+    }
+}
+
+private struct LanguageOption: View {
+    let language: AppLanguage
+    let isSelected: Bool
+    let action: () -> Void
+
+    @State private var hovering = false
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 11) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .fill(isSelected ? Color.zentraAccent.opacity(0.16) : Color.white.opacity(0.045))
+                        .frame(width: 34, height: 34)
+
+                    Text(language.badge)
+                        .font(.system(size: 11, weight: .bold, design: .rounded))
+                        .foregroundStyle(isSelected ? Color.zentraAccent : Color.zentraTextSecondary)
+                }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(language.titleKey)
+                        .font(.system(size: 13.5, weight: .semibold))
+                        .foregroundStyle(Color.zentraTextPrimary)
+
+                    Text(language.nativeTitle)
+                        .font(.system(size: 11.5))
+                        .foregroundStyle(Color.zentraTextTertiary)
+                }
+
+                Spacer(minLength: 12)
+
+                ZStack {
+                    Circle()
+                        .stroke(isSelected ? Color.zentraAccent : Color.white.opacity(0.18), lineWidth: 1.5)
+                        .frame(width: 17, height: 17)
+
+                    if isSelected {
+                        Circle()
+                            .fill(Color.zentraAccent)
+                            .frame(width: 9, height: 9)
+                    }
+                }
+            }
+            .padding(.horizontal, 12)
+            .frame(height: 58)
+            .frame(maxWidth: .infinity)
+            .background(
+                RoundedRectangle(cornerRadius: 13, style: .continuous)
+                    .fill(
+                        isSelected
+                        ? Color.zentraAccent.opacity(0.08)
+                        : Color.white.opacity(hovering ? 0.055 : 0.025)
+                    )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 13, style: .continuous)
+                    .stroke(
+                        isSelected ? Color.zentraAccent.opacity(0.55) : Color.white.opacity(0.055),
+                        lineWidth: 1
+                    )
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .onHover { hovering = $0 }
     }
 }
