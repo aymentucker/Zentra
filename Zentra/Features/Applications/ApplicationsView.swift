@@ -3,7 +3,7 @@ import AppKit
 
 struct ApplicationsView: View {
     @StateObject private var model = ApplicationManagerModel()
-    @State private var pendingUninstall = false
+    @State private var pendingUninstall: ApplicationRemovalPreview?
 
     var body: some View {
         ZStack {
@@ -26,9 +26,16 @@ struct ApplicationsView: View {
         .sheet(item: Binding(get: { model.preview.map(PreviewBox.init) }, set: { if $0 == nil { model.closePreview() } })) { box in
             removalPreview(box.value)
         }
-        .alert("applications.confirm.title", isPresented: $pendingUninstall) {
-            Button("cleanup.cancel", role: .cancel) {}
-            Button("applications.uninstall", role: .destructive) { model.uninstall() }
+        .alert("applications.confirm.title", isPresented: Binding(
+            get: { pendingUninstall != nil },
+            set: { if !$0 { pendingUninstall = nil } }
+        )) {
+            Button("cleanup.cancel", role: .cancel) { pendingUninstall = nil }
+            Button("applications.uninstall", role: .destructive) {
+                guard let request = pendingUninstall else { return }
+                pendingUninstall = nil
+                model.uninstall(request)
+            }
         } message: { Text("applications.confirm.detail") }
         .alert("scan.error.title", isPresented: Binding(get: { model.errorMessage != nil }, set: { if !$0 { model.errorMessage = nil } })) {
             Button("common.retry") { model.errorMessage = nil; model.scan() }
@@ -161,7 +168,10 @@ struct ApplicationsView: View {
                 if preview.application.safety == .protected {
                     Label("applications.protected.detail", systemImage: "lock.fill").zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
                 } else {
-                    Button("applications.uninstall", role: .destructive) { pendingUninstall = true }.disabled(model.isRemoving)
+                    Button("applications.uninstall", role: .destructive) {
+                        pendingUninstall = preview
+                        model.closePreview()
+                    }.disabled(model.isRemoving)
                 }
             }
         }.padding(24).frame(width: 620, height: 600).background(Color.zentraBackground)
