@@ -24,6 +24,7 @@ targets:
         CODE_SIGN_STYLE: Automatic
         ENABLE_HARDENED_RUNTIME: YES
         SWIFT_EMIT_LOC_STRINGS: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
   ZentraTests:
     type: bundle.unit-test
     platform: macOS
