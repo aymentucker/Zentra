@@ -20,7 +20,13 @@ final class TidyModel:ObservableObject {
             switch item.category {case .images:name="Images";case .video:name="Videos";case .audio:name="Audio";case .documents:name="Documents";case .archives:name="Archives";case .installers:name="Installers";case .other:name="Other"}
             let destinationFolder=folder.appendingPathComponent("Zentra Organized").appendingPathComponent(name)
             do {try FileManager.default.createDirectory(at:destinationFolder,withIntermediateDirectories:true);var destination=destinationFolder.appendingPathComponent(item.url.lastPathComponent);var n=2
-                while FileManager.default.fileExists(atPath:destination.path){destination=destinationFolder.appendingPathComponent("\(item.url.deletingPathExtension().lastPathComponent) \(n).\(item.url.pathExtension)");n += 1}
+                while FileManager.default.fileExists(atPath: destination.path) {
+                    let base = item.url.deletingPathExtension().lastPathComponent
+                    let ext = item.url.pathExtension
+                    let collisionName = ext.isEmpty ? "\(base) \(n)" : "\(base) \(n).\(ext)"
+                    destination = destinationFolder.appendingPathComponent(collisionName)
+                    n += 1
+                }
                 try FileManager.default.moveItem(at:item.url,to:destination);selected.remove(item.url)
             } catch {errorMessage=error.localizedDescription}
         }
