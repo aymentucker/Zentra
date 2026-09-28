@@ -4,6 +4,7 @@ struct ZentraToggle: View {
     let title: LocalizedStringKey
     var subtitle: LocalizedStringKey?
     @Binding var isOn: Bool
+    @FocusState private var focused: Bool
 
     var body: some View {
         Button {
@@ -31,6 +32,8 @@ struct ZentraToggle: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .focused($focused)
+        .zentraFocusRing(focused)
         .accessibilityValue(isOn ? "On" : "Off")
     }
 }
