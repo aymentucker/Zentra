@@ -1,6 +1,6 @@
 import Foundation
 
-enum ScanCategory: String, CaseIterable, Sendable {
+enum ScanCategory: String, CaseIterable, Hashable, Sendable {
     case cache, logs, temporary, developer, userData, other
 }
 
