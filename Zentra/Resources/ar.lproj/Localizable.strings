@@ -138,3 +138,7 @@
 "storage.selected.summary" = "%d محدد · %@";
 "storage.trash.confirm.title" = "نقل الملفات المحددة إلى سلة المهملات؟";
 "storage.trash.confirm.detail" = "سيتم نقل %d عنصر إلى سلة مهملات macOS، ولن تقوم Zentra بإفراغ السلة تلقائيًا.";
+
+"storage.action.explore" = "استكشاف المجلد";
+"storage.visual.up" = "مستوى للأعلى";
+"storage.visual.empty" = "لا توجد ملفات محللة في هذا المجلد.";
