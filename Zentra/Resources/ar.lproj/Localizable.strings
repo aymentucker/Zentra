@@ -101,3 +101,6 @@
 "scan.safeSelection.summary" = "%d عنصر آمن · %@";
 "scan.safeSelection.select" = "تحديد كل العناصر الآمنة";
 "scan.safeSelection.clear" = "إلغاء تحديد العناصر الآمنة";
+
+"scan.preparing.title" = "جارٍ تجهيز نتائج التنظيف…";
+"scan.preparing.detail" = "يتم تصنيف النتائج وتطبيق قواعد الأمان.";
