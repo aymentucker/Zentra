@@ -2,10 +2,12 @@ import Foundation
 
 enum AppPreferenceKey {
     static let language = "zentra.language"
+    static let reduceMotion = "zentra.accessibility.reduceMotion"
+    static let showMenuBarStatus = "zentra.menuBar.showStatus"
 }
 
-/// Central namespace for preferences shared by the application shell.
-/// Feature-specific preferences should live with their feature.
 enum AppPreferences {
     static let defaultLanguage = AppLanguage.english.rawValue
+    static let defaultReduceMotion = false
+    static let defaultShowMenuBarStatus = true
 }
