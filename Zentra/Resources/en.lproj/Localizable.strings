@@ -63,3 +63,14 @@
 "scan.plan.ready" = "Safety plan ready";
 "scan.plan.summary" = "%d items · %@";
 "scan.plan.noAction" = "No files changed";
+
+"cleanup.review.action" = "Continue";
+"cleanup.confirm.title" = "Move selected items to Trash?";
+"cleanup.confirm.message" = "%d safe items (%@) will be moved to the macOS Trash. They are not permanently deleted and can be restored.";
+"cleanup.confirm.action" = "Move to Trash";
+"cleanup.cancel" = "Cancel";
+"cleanup.executing" = "Cleaning safely…";
+"cleanup.executing.detail" = "Moving approved items to Trash and verifying each operation.";
+"cleanup.result.success" = "Cleanup completed";
+"cleanup.result.partial" = "Cleanup completed with some issues";
+"cleanup.result.summary" = "%d succeeded · %d failed · %@ processed";
