@@ -142,3 +142,9 @@
 "storage.action.explore" = "استكشاف المجلد";
 "storage.visual.up" = "مستوى للأعلى";
 "storage.visual.empty" = "لا توجد ملفات محللة في هذا المجلد.";
+
+"storage.search" = "بحث في الملفات";
+"storage.sort.size" = "الحجم";
+"storage.sort.name" = "الاسم";
+"storage.sort.modified" = "التعديل";
+"storage.selection.selectVisible" = "تحديد الظاهر";
