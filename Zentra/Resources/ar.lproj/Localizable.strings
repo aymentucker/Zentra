@@ -96,3 +96,8 @@
 "scan.category.creator" = "كاش صناع المحتوى";
 
 "scan.safety.items" = "%d عنصر";
+
+"scan.safeSelection.title" = "تحديد التنظيف الآمن";
+"scan.safeSelection.summary" = "%d عنصر آمن · %@";
+"scan.safeSelection.select" = "تحديد كل العناصر الآمنة";
+"scan.safeSelection.clear" = "إلغاء تحديد العناصر الآمنة";
