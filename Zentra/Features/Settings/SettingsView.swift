@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("zentra.language") private var languageCode = AppLanguage.english.rawValue
+    @AppStorage(AppPreferenceKey.language) private var languageCode = AppPreferences.defaultLanguage
 
     var body: some View {
         ZStack {
@@ -10,17 +10,17 @@ struct SettingsView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 28) {
                     Text("settings.title")
-                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .zentraFont(32, weight: .bold)
                         .foregroundStyle(Color.zentraTextPrimary)
 
                     VStack(alignment: .leading, spacing: 16) {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("settings.language")
-                                .font(.system(size: 17, weight: .semibold))
+                                .zentraFont(17, weight: .semibold)
                                 .foregroundStyle(Color.zentraTextPrimary)
 
                             Text("settings.language.description")
-                                .font(.system(size: 13))
+                                .zentraFont(13)
                                 .foregroundStyle(Color.zentraTextSecondary)
                         }
 
@@ -73,17 +73,17 @@ private struct LanguageOption: View {
                         .frame(width: 34, height: 34)
 
                     Text(language.badge)
-                        .font(.system(size: 11, weight: .bold, design: .rounded))
+                        .zentraFont(11, weight: .bold)
                         .foregroundStyle(isSelected ? Color.zentraAccent : Color.zentraTextSecondary)
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(language.titleKey)
-                        .font(.system(size: 13.5, weight: .semibold))
+                        .zentraFont(13.5, weight: .semibold)
                         .foregroundStyle(Color.zentraTextPrimary)
 
                     Text(language.nativeTitle)
-                        .font(.system(size: 11.5))
+                        .zentraFont(11.5)
                         .foregroundStyle(Color.zentraTextTertiary)
                 }
 
