@@ -73,7 +73,8 @@ final class ApplicationManagerModel: ObservableObject {
             let result = await executor.execute(preview: request, includeArtifacts: selected)
             isRemoving = false
             if !result.failed.isEmpty {
-                errorMessage = "applications.error.partial"
+                let failedNames = result.failed.map(\.lastPathComponent).joined(separator: ", ")
+                errorMessage = String(format: NSLocalizedString("applications.error.partial.detail", comment: ""), failedNames)
             }
             scan()
         }
