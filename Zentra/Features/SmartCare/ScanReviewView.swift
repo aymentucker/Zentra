@@ -34,18 +34,17 @@ struct ScanReviewView: View {
                 else { expanded.insert(category) }
             } label: {
                 HStack(spacing: 12) {
-                    Image(systemName: chevronName(for: category))
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(Color.zentraTextTertiary)
-                        .frame(width: 14)
-
                     VStack(alignment: .leading, spacing: 4) {
                         Text(category.titleKey).zentraFont(13, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
                         Text("\(count) · \(ByteCountFormatter.string(fromByteCount: bytes, countStyle: .file))")
                             .zentraFont(11).foregroundStyle(Color.zentraTextTertiary)
                     }
                     Spacer()
-                    SafetyBadge(level: items.map(\.safety.level).max() ?? .review)
+                    Image(systemName: chevronName(for: category))
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(Color.zentraTextSecondary)
+                        .frame(width: 28, height: 28)
+                        .background(Circle().fill(Color.white.opacity(0.055)))
                 }
                 .padding(.vertical, 10)
                 .contentShape(Rectangle())
