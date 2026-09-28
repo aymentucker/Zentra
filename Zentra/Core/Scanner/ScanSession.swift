@@ -6,6 +6,11 @@ struct ScanReviewSnapshot: Sendable {
     let counts: [ScanCategory: Int]
     let bytes: [ScanCategory: Int64]
     let totalBytes: Int64
+    let safetyCounts: [ScanSafetyLevel: Int]
+    let safetyBytes: [ScanSafetyLevel: Int64]
+
+    func count(for level: ScanSafetyLevel) -> Int { safetyCounts[level, default: 0] }
+    func bytes(for level: ScanSafetyLevel) -> Int64 { safetyBytes[level, default: 0] }
 }
 
 @MainActor
@@ -65,6 +70,8 @@ final class ScanSession: ObservableObject {
         var displayGroups: [ScanCategory: [ClassifiedScanItem]] = [:]
         var counts: [ScanCategory: Int] = [:]
         var bytes: [ScanCategory: Int64] = [:]
+        var safetyCounts: [ScanSafetyLevel: Int] = [:]
+        var safetyBytes: [ScanSafetyLevel: Int64] = [:]
 
         var totalBytes: Int64 = 0
 
@@ -73,6 +80,8 @@ final class ScanSession: ObservableObject {
             counts[item.category, default: 0] += 1
             bytes[item.category, default: 0] += item.file.size
             totalBytes += item.file.size
+            safetyCounts[item.safety.level, default: 0] += 1
+            safetyBytes[item.safety.level, default: 0] += item.file.size
 
             var visible = displayGroups[item.category, default: []]
             if visible.count < 30 {
@@ -89,7 +98,9 @@ final class ScanSession: ObservableObject {
             groups: displayGroups,
             counts: counts,
             bytes: bytes,
-            totalBytes: totalBytes
+            totalBytes: totalBytes,
+            safetyCounts: safetyCounts,
+            safetyBytes: safetyBytes
         )
     }
 
