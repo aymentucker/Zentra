@@ -92,3 +92,5 @@
 "cleanup.locations.count" = "%d locations available";
 
 "cleanup.analyzing" = "Calculating size…";
+
+"scan.category.creator" = "Creator caches";
