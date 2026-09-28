@@ -13,7 +13,7 @@ actor StorageAnalyzer {
         var skipped = 0
         let skippedCounter = LockedCounter()
         var seen = Set<URL>()
-        var lastProgress = ContinuousClock.now
+        var lastProgress = ContinuousClock.now\n        var visitedEntries = 0
 
         for root in StorageTargetPolicy().normalized(roots) where fm.fileExists(atPath: root.path) {
             try Task.checkCancellation()
