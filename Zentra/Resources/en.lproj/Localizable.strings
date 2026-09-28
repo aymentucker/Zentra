@@ -152,3 +152,5 @@
 "storage.category.system" = "System";
 "storage.category.library" = "Library & Support";
 "storage.fullDisk.note" = "Zentra analyzes the startup disk. macOS privacy protections may prevent access to some locations unless Full Disk Access is granted.";
+
+"storage.visual.files" = "%d files";
