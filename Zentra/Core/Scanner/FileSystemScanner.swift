@@ -23,6 +23,7 @@ actor FileSystemScanner {
             if !isDirectory.boolValue {
                 if let item = readItem(target.url, keys: keys) {
                     files.append(item)
+                    discoveredCount += 1
                     totalBytes += item.size
                 }
                 continue
