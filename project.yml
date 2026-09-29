@@ -11,6 +11,22 @@ settings:
     PRODUCT_BUNDLE_IDENTIFIER: com.zentra.app
 
 targets:
+  ZentraRemovalService:
+    type: tool
+    platform: macOS
+    sources:
+      - path: ZentraRemovalService
+        excludes:
+          - com.zentra.app.removal-service.plist
+    settings:
+      base:
+        PRODUCT_NAME: ZentraRemovalService
+        PRODUCT_BUNDLE_IDENTIFIER: com.zentra.app.removal-service
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_HARDENED_RUNTIME: YES
+        ENABLE_APP_SANDBOX: NO
+        SKIP_INSTALL: YES
+
   Zentra:
     type: application
     platform: macOS
@@ -23,6 +39,18 @@ targets:
         buildPhase: resources
       - path: Zentra/Assets.xcassets
         buildPhase: resources
+    dependencies:
+      - target: ZentraRemovalService
+        embed: false
+    postBuildScripts:
+      - name: Embed Removal Service
+        script: |
+          set -euo pipefail
+          APP_CONTENTS="$BUILT_PRODUCTS_DIR/$WRAPPER_NAME/Contents"
+          mkdir -p "$APP_CONTENTS/MacOS" "$APP_CONTENTS/Library/LaunchDaemons"
+          cp "$BUILT_PRODUCTS_DIR/ZentraRemovalService" "$APP_CONTENTS/MacOS/ZentraRemovalService"
+          codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY" --options runtime --timestamp=none "$APP_CONTENTS/MacOS/ZentraRemovalService"
+          cp "$SRCROOT/ZentraRemovalService/com.zentra.app.removal-service.plist" "$APP_CONTENTS/Library/LaunchDaemons/com.zentra.app.removal-service.plist"
     settings:
       base:
         PRODUCT_NAME: Zentra
@@ -56,6 +84,7 @@ schemes:
     build:
       targets:
         Zentra: all
+        ZentraRemovalService: all
         ZentraTests: [test]
     test:
       targets:
