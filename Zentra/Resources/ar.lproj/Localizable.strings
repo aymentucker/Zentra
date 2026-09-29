@@ -311,3 +311,10 @@
 
 "applications.scan" = "فحص التطبيقات";
 "developer.scan" = "فحص بيئة العمل";
+
+"applications.authorization.title" = "مطلوب تفويض";
+"applications.authorization.detail" = "منع macOS الإزالة المباشرة من مجلد Applications. يمكن لـ Zentra طلب خدمة الإزالة المحدودة، أو يمكنك عرض التطبيق في Finder.";
+"applications.authorization.approval" = "وافق على خدمة الإزالة الخلفية الخاصة بـ Zentra من إعدادات النظام، ثم اختر التفويض وإعادة المحاولة مرة أخرى.";
+"applications.authorization.authorize" = "تفويض وإعادة المحاولة";
+"applications.authorization.serviceUnavailable" = "خدمة الإزالة المصرح بها في Zentra غير متاحة حتى الآن.";
+"applications.authorization.invalidRequest" = "هذا التطبيق غير مؤهل للإزالة المصرح بها.";
