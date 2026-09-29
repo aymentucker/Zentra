@@ -45,6 +45,15 @@ struct DeveloperCleanerView: View {
         } message: {
             Text(ZentraLocalization.format("developer.confirm.detail", model.selectedResults.count, ZentraLocalization.bytes(model.selectedBytes)))
         }
+        .alert("scan.error.title", isPresented: Binding(
+            get: { model.errorMessage != nil },
+            set: { if !$0 { model.errorMessage = nil } }
+        )) {
+            Button("cleanup.cancel", role: .cancel) { model.errorMessage = nil }
+            Button("developer.rescan") { model.errorMessage = nil; model.scan() }
+        } message: {
+            Text(model.errorMessage ?? ZentraLocalization.string("developer.error.detail"))
+        }
     }
 
     private var header: some View {
