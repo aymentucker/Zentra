@@ -1,43 +1,59 @@
 import Foundation
 import AppKit
 
+enum ApplicationRemovalFailureKind: Sendable { case permission, other }
+
+struct ApplicationRemovalFailure: Sendable {
+    let url: URL
+    let kind: ApplicationRemovalFailureKind
+}
+
 struct ApplicationRemovalResult: Sendable {
     let moved: [URL]
-    let failed: [URL]
+    let failures: [ApplicationRemovalFailure]
+    var failed: [URL] { failures.map(\.url) }
+    var applicationNeedsManualRemoval: Bool {
+        failures.contains { $0.kind == .permission && $0.url.pathExtension.lowercased() == "app" }
+    }
 }
 
 actor ApplicationRemovalExecutor {
     func execute(preview: ApplicationRemovalPreview, includeArtifacts: Set<URL>) async -> ApplicationRemovalResult {
         guard preview.application.safety != .protected else {
-            return ApplicationRemovalResult(moved: [], failed: [preview.application.url])
+            return .init(moved: [], failures: [.init(url: preview.application.url, kind: .other)])
         }
-        var moved: [URL] = []
-        var failed: [URL] = []
-        let allowedArtifacts = Set(preview.artifacts.map { $0.url.standardizedFileURL })
-        let requested = includeArtifacts.map { $0.standardizedFileURL }.filter { allowedArtifacts.contains($0) }
-        let urls = requested + [preview.application.url.standardizedFileURL]
 
-        for url in urls {
+        let appURL = preview.application.url.standardizedFileURL
+        var tag = 0
+        let recycled = NSWorkspace.shared.performFileOperation(
+            .recycleOperation,
+            source: appURL.deletingLastPathComponent().path,
+            destination: "",
+            files: [appURL.lastPathComponent],
+            tag: &tag
+        )
+
+        // Never remove leftovers if the app bundle itself could not be removed.
+        guard recycled, !FileManager.default.fileExists(atPath: appURL.path) else {
+            return .init(moved: [], failures: [.init(url: appURL, kind: .permission)])
+        }
+
+        var moved: [URL] = [appURL]
+        var failures: [ApplicationRemovalFailure] = []
+        let allowed = Set(preview.artifacts.map { $0.url.standardizedFileURL })
+        let requested = includeArtifacts.map { $0.standardizedFileURL }.filter { allowed.contains($0) }
+
+        for url in requested where FileManager.default.fileExists(atPath: url.path) {
             do {
-                if url == preview.application.url.standardizedFileURL {
-                    var tag = 0
-                    let success = NSWorkspace.shared.performFileOperation(
-                        .recycleOperation,
-                        source: url.deletingLastPathComponent().path,
-                        destination: "",
-                        files: [url.lastPathComponent],
-                        tag: &tag
-                    )
-                    guard success else { throw CocoaError(.fileWriteNoPermission) }
-                } else {
-                    _ = try FileManager.default.trashItem(at: url, resultingItemURL: nil)
-                }
+                _ = try FileManager.default.trashItem(at: url, resultingItemURL: nil)
                 guard !FileManager.default.fileExists(atPath: url.path) else { throw CocoaError(.fileWriteUnknown) }
                 moved.append(url)
             } catch {
-                failed.append(url)
+                let ns = error as NSError
+                let permission = ns.code == NSFileWriteNoPermissionError || ns.code == NSFileReadNoPermissionError
+                failures.append(.init(url: url, kind: permission ? .permission : .other))
             }
         }
-        return ApplicationRemovalResult(moved: moved, failed: failed)
+        return .init(moved: moved, failures: failures)
     }
 }
