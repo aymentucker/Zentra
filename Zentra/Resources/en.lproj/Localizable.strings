@@ -301,3 +301,10 @@
 "applications.permission.title" = "macOS approval required";
 "applications.permission.detail" = "macOS did not allow Zentra to move this app from Applications. Zentra has not removed any of its support files. Reveal the app in Finder, move it to Trash there, then rescan.";
 "applications.permission.reveal" = "Reveal in Finder";
+
+"smart.scanning.storage" = "Checking storage capacity";
+"smart.storage.detail" = "Available disk space";
+"smart.status" = "Overall status";
+"smart.status.ready" = "Ready";
+"smart.status.review" = "Review recommended";
+"smart.status.attention" = "Attention needed";
