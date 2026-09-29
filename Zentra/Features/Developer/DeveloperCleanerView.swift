@@ -64,7 +64,7 @@ struct DeveloperCleanerView: View {
             }
             Spacer()
             if model.isScanning { Button("scan.cancel"){model.cancel()}.buttonStyle(.plain) }
-            else { Button { model.scan() } label:{ Label(model.results.isEmpty ? "developer.scan" : "developer.rescan",systemImage:"arrow.clockwise") }.buttonStyle(.plain).foregroundStyle(Color.zentraAccent) }
+            else { Button { model.scan() } label:{ Label(model.results.isEmpty ? "developer.scan" : "developer.rescan",systemImage:"arrow.clockwise") }.buttonStyle(.plain).foregroundStyle(Color.zentraAccent).disabled(model.isCleaning) }
         }
     }
 
@@ -225,6 +225,7 @@ struct DeveloperCleanerView: View {
                 Spacer()
                 if model.isCleaning { ProgressView().controlSize(.small) }
                 ZentraPrimaryButton("developer.clean"){ showingConfirmation = true }
+                    .disabled(model.isCleaning)
             }
         }
     }
