@@ -2,6 +2,11 @@ import SwiftUI
 
 struct PerformanceView: View {
     @StateObject private var model = PerformanceModel()
+    let isActive: Bool
+
+    init(isActive: Bool = true) {
+        self.isActive = isActive
+    }
 
     var body: some View {
         ZStack {
@@ -18,8 +23,14 @@ struct PerformanceView: View {
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 48).padding(.vertical, 36)
             }
         }
-        .task { model.startAutoRefresh() }
+        .task { updateRefreshState() }
+        .onChange(of: isActive) { _, _ in updateRefreshState() }
         .onDisappear { model.stopAutoRefresh() }
+    }
+
+    private func updateRefreshState() {
+        if isActive { model.startAutoRefresh() }
+        else { model.stopAutoRefresh() }
     }
 
     private var header: some View {
