@@ -3,9 +3,6 @@ import AppKit
 
 struct ApplicationsView: View {
     @StateObject private var model = ApplicationManagerModel()
-    let isActive: Bool
-
-    init(isActive: Bool = true) { self.isActive = isActive }
     @State private var pendingUninstall: ApplicationRemovalPreview?
     @State private var pendingArtifacts = Set<URL>()
 
