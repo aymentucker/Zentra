@@ -245,6 +245,7 @@ struct StorageView: View {
             state: .error,
             title: "storage.error.title",
             message: "storage.error.detail",
+            retryTitle: "storage.location.choose",
             retryAction: { showLocationPicker = true }
         )
     }
