@@ -79,7 +79,7 @@ struct ApplicationsView: View {
     private func metrics(_ inventory: ApplicationInventory) -> some View {
         HStack(spacing: 12) {
             metric("applications.installed", "\(inventory.applications.count)", "square.grid.2x2")
-            metric("applications.space", ByteCountFormatter.string(fromByteCount: inventory.totalBytes, countStyle: .file), "internaldrive")
+            metric("applications.space", ZentraLocalization.bytes(inventory.totalBytes), "internaldrive")
             metric("applications.reviewable", "\(inventory.applications.filter { $0.safety != .protected }.count)", "checkmark.shield")
         }
     }
@@ -110,7 +110,7 @@ struct ApplicationsView: View {
                             Text([app.version, app.bundleIdentifier].compactMap { $0 }.joined(separator: " · ")).lineLimit(1).zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary)
                         }
                         Spacer()
-                        Text(ByteCountFormatter.string(fromByteCount: app.appBytes, countStyle: .file)).zentraFont(10.5).foregroundStyle(Color.zentraTextSecondary)
+                        Text(ZentraLocalization.bytes(app.appBytes)).zentraFont(10.5).foregroundStyle(Color.zentraTextSecondary)
                         safetyBadge(app.safety)
                         Image(systemName: "chevron.right").font(.system(size: 9)).foregroundStyle(Color.zentraTextTertiary)
                     }.padding(12).background(RoundedRectangle(cornerRadius: 12).fill(Color.zentraSurface))
@@ -154,7 +154,7 @@ struct ApplicationsView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 3) {
                     Text("applications.preview.total").zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
-                    Text(ByteCountFormatter.string(fromByteCount: preview.totalBytes, countStyle: .file)).zentraFont(17, weight: .semibold)
+                    Text(ZentraLocalization.bytes(preview.totalBytes)).zentraFont(17, weight: .semibold)
                 }
                 Spacer()
                 Text("applications.preview.note").zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary)
@@ -196,7 +196,7 @@ struct ApplicationsView: View {
                 Text(url.path).lineLimit(1).zentraFont(8.5).foregroundStyle(Color.zentraTextTertiary)
             }
             Spacer()
-            Text(ByteCountFormatter.string(fromByteCount: bytes, countStyle: .file)).zentraFont(9.5).foregroundStyle(Color.zentraTextSecondary)
+            Text(ZentraLocalization.bytes(bytes)).zentraFont(9.5).foregroundStyle(Color.zentraTextSecondary)
         }.padding(10).background(RoundedRectangle(cornerRadius: 10).fill(Color.zentraSurface))
     }
 }
