@@ -26,11 +26,15 @@ targets:
     settings:
       base:
         PRODUCT_NAME: Zentra
+        MARKETING_VERSION: 1.0.0
+        CURRENT_PROJECT_VERSION: 1
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Zentra
         INFOPLIST_KEY_CFBundleIconName: AppIcon
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
         CODE_SIGN_STYLE: Automatic
         ENABLE_HARDENED_RUNTIME: YES
+        ENABLE_APP_SANDBOX: NO
         SWIFT_EMIT_LOC_STRINGS: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 
