@@ -311,3 +311,10 @@
 
 "applications.scan" = "Scan Applications";
 "developer.scan" = "Scan Workspace";
+
+"applications.authorization.title" = "Authorization required";
+"applications.authorization.detail" = "macOS blocked direct removal from Applications. Zentra can request its limited removal service, or you can reveal the app in Finder.";
+"applications.authorization.approval" = "Approve Zentra's background removal service in System Settings, then choose Authorize again.";
+"applications.authorization.authorize" = "Authorize & Retry";
+"applications.authorization.serviceUnavailable" = "Zentra's authorized removal service is not available yet.";
+"applications.authorization.invalidRequest" = "This application is not eligible for authorized removal.";
