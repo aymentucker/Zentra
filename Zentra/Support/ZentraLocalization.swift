@@ -30,13 +30,19 @@ enum ZentraLocalization {
     }
 
     static func bytes(_ value: Int64, style: ByteCountFormatter.CountStyle = .file) -> String {
-        let formatter = ByteCountFormatter()
-        formatter.countStyle = style
-        formatter.allowedUnits = [.useKB, .useMB, .useGB, .useTB]
-        formatter.isAdaptive = true
-        formatter.includesUnit = true
-        formatter.locale = locale
-        return formatter.string(fromByteCount: value)
+        let base = style == .memory ? 1024.0 : 1000.0
+        let magnitude = Double(max(0, value))
+        let units = ["B", "KB", "MB", "GB", "TB"]
+        var amount = magnitude
+        var unitIndex = 0
+
+        while amount >= base && unitIndex < units.count - 1 {
+            amount /= base
+            unitIndex += 1
+        }
+
+        let digits = unitIndex == 0 || amount >= 100 ? 0 : (amount >= 10 ? 1 : 2)
+        return "\(localizedNumber(amount, maximumFractionDigits: digits)) \(units[unitIndex])"
     }
 
     static func localizedNumber(_ value: Double, maximumFractionDigits: Int = 0) -> String {
