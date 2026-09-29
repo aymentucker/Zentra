@@ -8,6 +8,16 @@ final class ApplicationManagerTests: XCTestCase {
         let result = await ApplicationRemovalExecutor().execute(preview: preview, includeArtifacts: [])
         XCTAssertTrue(result.moved.isEmpty)
         XCTAssertEqual(result.failed, [app.url])
+        XCTAssertFalse(result.applicationNeedsManualRemoval)
+    }
+
+    func testPermissionFailureClassificationRequiresAppBundle() {
+        let app = URL(fileURLWithPath: "/Applications/Test.app")
+        let cache = URL(fileURLWithPath: "/Users/test/Library/Caches/com.test")
+        let appResult = ApplicationRemovalResult(moved: [], failures: [.init(url: app, kind: .permission)])
+        let cacheResult = ApplicationRemovalResult(moved: [], failures: [.init(url: cache, kind: .permission)])
+        XCTAssertTrue(appResult.applicationNeedsManualRemoval)
+        XCTAssertFalse(cacheResult.applicationNeedsManualRemoval)
     }
 
     func testRemovalPreviewTotalsApplicationAndArtifacts() {
