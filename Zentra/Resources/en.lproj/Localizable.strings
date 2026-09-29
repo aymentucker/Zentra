@@ -329,3 +329,10 @@
 
 "storage.error.title" = "Storage analysis failed";
 "storage.error.detail" = "Zentra could not finish analyzing the selected locations. No files were changed.";
+
+"duplicates.none" = "No exact duplicates found";
+"duplicates.none.detail" = "The selected folders were scanned successfully and no byte-for-byte duplicates were found.";
+"duplicates.error.detail" = "Zentra could not finish the duplicate scan. No files were changed.";
+"tidy.none" = "Nothing to organize";
+"tidy.none.detail" = "The selected folder was scanned successfully but contains no supported top-level files to organize.";
+"tidy.error.detail" = "Zentra could not complete this operation. Review the selected folder and try again.";
