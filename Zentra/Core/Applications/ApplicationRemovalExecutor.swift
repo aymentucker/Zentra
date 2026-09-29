@@ -38,7 +38,12 @@ actor ApplicationRemovalExecutor {
             return .init(moved: [], failures: [.init(url: appURL, kind: .permission)])
         }
 
-        var moved: [URL] = [appURL]
+        let artifactResult = await executeArtifactsOnly(preview: preview, includeArtifacts: includeArtifacts)
+        return .init(moved: [appURL] + artifactResult.moved, failures: artifactResult.failures)
+    }
+
+    func executeArtifactsOnly(preview: ApplicationRemovalPreview, includeArtifacts: Set<URL>) async -> ApplicationRemovalResult {
+        var moved: [URL] = []
         var failures: [ApplicationRemovalFailure] = []
         let allowed = Set(preview.artifacts.map { $0.url.standardizedFileURL })
         let requested = includeArtifacts.map { $0.standardizedFileURL }.filter { allowed.contains($0) }
