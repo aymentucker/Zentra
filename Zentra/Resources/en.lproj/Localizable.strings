@@ -318,3 +318,8 @@
 "applications.authorization.authorize" = "Authorize & Retry";
 "applications.authorization.serviceUnavailable" = "Zentra's authorized removal service is not available yet.";
 "applications.authorization.invalidRequest" = "This application is not eligible for authorized removal.";
+
+"settings.about" = "About";
+"settings.about.description" = "Release information for this copy of Zentra.";
+"settings.about.version" = "Version %@ · Build %@";
+"settings.about.macOS" = "Requires macOS 14 or later";
