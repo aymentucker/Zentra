@@ -38,4 +38,13 @@ enum ZentraLocalization {
         formatter.locale = locale
         return formatter.string(fromByteCount: value)
     }
+
+    static func localizedNumber(_ value: Double, maximumFractionDigits: Int = 0) -> String {
+        let formatter = NumberFormatter()
+        formatter.locale = locale
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = maximumFractionDigits
+        formatter.minimumFractionDigits = 0
+        return formatter.string(from: NSNumber(value: value)) ?? "\(value)"
+    }
 }
