@@ -46,8 +46,8 @@ struct PerformanceView: View {
 
     private func metrics(_ s: PerformanceSnapshot) -> some View {
         HStack(spacing: 12) {
-            metric("performance.cpu", String(format: "%.0f%%", s.cpuPercent), "cpu")
-            metric("performance.memory", String(format: "%.0f%%", s.memory.pressure * 100), "memorychip")
+            metric("performance.cpu", ZentraLocalization.localizedNumber(s.cpuPercent) + "%", "cpu")
+            metric("performance.memory", ZentraLocalization.localizedNumber(s.memory.pressure * 100) + "%", "memorychip")
             metric("performance.uptime", uptime(s.uptime), "clock")
         }
     }
@@ -89,7 +89,7 @@ struct PerformanceView: View {
                             Text(process.name).lineLimit(1).zentraFont(10.5, weight: .medium)
                             Spacer()
                             Text("PID \(process.pid)").zentraFont(8.5).foregroundStyle(Color.zentraTextTertiary)
-                            Text(String(format: "%.1f%%", process.cpuPercent)).frame(width: 58, alignment: .trailing).zentraFont(10, weight: .semibold)
+                            Text(ZentraLocalization.localizedNumber(process.cpuPercent, maximumFractionDigits: 1) + "%").frame(width: 58, alignment: .trailing).zentraFont(10, weight: .semibold)
                         }.padding(.vertical, 8)
                         if process.id != items.last?.id { Divider().opacity(0.3) }
                     }
