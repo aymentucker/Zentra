@@ -43,7 +43,7 @@ struct DeveloperCleanerView: View {
             Button("cleanup.cancel",role:.cancel){}
             Button("cleanup.confirm.action",role:.destructive){ model.moveSelectedToTrash() }
         } message: {
-            Text(String(format:NSLocalizedString("developer.confirm.detail",comment:""),model.selectedResults.count,ByteCountFormatter.string(fromByteCount:model.selectedBytes,countStyle:.file)))
+            Text(ZentraLocalization.format("developer.confirm.detail", model.selectedResults.count, ZentraLocalization.bytes(model.selectedBytes)))
         }
     }
 
@@ -211,7 +211,7 @@ struct DeveloperCleanerView: View {
             HStack {
                 VStack(alignment:.leading,spacing:3) {
                     Text(String(format:NSLocalizedString("developer.selected",comment:""),model.selectedResults.count)).zentraFont(12,weight:.semibold)
-                    Text(ByteCountFormatter.string(fromByteCount:model.selectedBytes,countStyle:.file)).zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
+                    Text(ZentraLocalization.bytes(model.selectedBytes)).zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
                 }
                 Spacer()
                 if model.isCleaning { ProgressView().controlSize(.small) }
