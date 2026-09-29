@@ -326,3 +326,6 @@
 
 "applications.search.empty" = "No matching applications";
 "applications.search.empty.detail" = "Try another application name or bundle identifier.";
+
+"storage.error.title" = "Storage analysis failed";
+"storage.error.detail" = "Zentra could not finish analyzing the selected locations. No files were changed.";
