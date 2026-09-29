@@ -46,6 +46,11 @@ final class ApplicationManagerModel: ObservableObject {
         }
     }
 
+    func dismissAuthorizationPrompt() {
+        pendingAuthorizedRemoval = nil
+        pendingAuthorizedArtifacts = []
+    }
+
     func scan() {
         task?.cancel()
         state = .scanning
