@@ -336,3 +336,7 @@
 "tidy.none" = "Nothing to organize";
 "tidy.none.detail" = "The selected folder was scanned successfully but contains no supported top-level files to organize.";
 "tidy.error.detail" = "Zentra could not complete this operation. Review the selected folder and try again.";
+
+"cleanup.none" = "No cleanup candidates found";
+"cleanup.none.detail" = "The selected cleanup locations were scanned successfully and no matching candidates were found.";
+"developer.error.detail" = "Zentra could not complete the workspace operation. No protected locations were intentionally changed.";
