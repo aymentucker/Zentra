@@ -111,9 +111,21 @@ struct ApplicationsView: View {
         }.padding(.horizontal, 12).frame(height: 34).background(RoundedRectangle(cornerRadius: 10).fill(Color.zentraSurface))
     }
 
+    @ViewBuilder
     private var appList: some View {
-        LazyVStack(spacing: 8) {
-            ForEach(model.filteredApplications) { app in
+        if !model.searchText.isEmpty && model.filteredApplications.isEmpty {
+            ZentraCard {
+                VStack(spacing: 9) {
+                    Image(systemName: "magnifyingglass").font(.system(size: 24)).foregroundStyle(Color.zentraAccent)
+                    Text("applications.search.empty").zentraFont(13, weight: .semibold)
+                    Text("applications.search.empty.detail").zentraFont(10.5).foregroundStyle(Color.zentraTextSecondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 22)
+            }
+        } else {
+            LazyVStack(spacing: 8) {
+                ForEach(model.filteredApplications) { app in
                 Button { model.inspect(app) } label: {
                     HStack(spacing: 12) {
                         Image(nsImage: NSWorkspace.shared.icon(forFile: app.url.path)).resizable().frame(width: 38, height: 38)
