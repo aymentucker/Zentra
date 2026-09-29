@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SmartCareView: View {
+    @Binding var selection: AppDestination
     @StateObject private var model = SmartCareCoordinator()
 
     var body: some View {
@@ -52,11 +53,11 @@ struct SmartCareView: View {
             }
             Text("smart.overview").zentraFont(15, weight: .semibold)
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 240), spacing: 12)], spacing: 12) {
-                moduleCard("nav.cleanup", "smart.cleanup.detail", ZentraLocalization.bytes(s.cleanup.totalBytes), "sparkles")
-                moduleCard("nav.storage", "smart.storage.detail", ZentraLocalization.bytes(s.storage.availableBytes), "internaldrive")
-                moduleCard("nav.developer", "smart.workspace.detail", ZentraLocalization.bytes(s.workspace.safeBytes + s.workspace.reviewBytes + s.workspace.protectedBytes), "hammer")
-                moduleCard("nav.applications", "smart.applications.detail", "\(s.applications.applications.count)", "square.grid.2x2")
-                moduleCard("nav.performance", "smart.performance.detail", String(format: "CPU %.0f%% · RAM %.0f%%", s.performance.cpuPercent, s.performance.memory.pressure * 100), "gauge.with.dots.needle.67percent")
+                moduleCard("nav.cleanup", "smart.cleanup.detail", ZentraLocalization.bytes(s.cleanup.totalBytes), "sparkles", .cleanup)
+                moduleCard("nav.storage", "smart.storage.detail", ZentraLocalization.bytes(s.storage.availableBytes), "internaldrive", .storage)
+                moduleCard("nav.developer", "smart.workspace.detail", ZentraLocalization.bytes(s.workspace.safeBytes + s.workspace.reviewBytes + s.workspace.protectedBytes), "hammer", .developer)
+                moduleCard("nav.applications", "smart.applications.detail", "\(s.applications.applications.count)", "square.grid.2x2", .applications)
+                moduleCard("nav.performance", "smart.performance.detail", String(format: "CPU %.0f%% · RAM %.0f%%", s.performance.cpuPercent, s.performance.memory.pressure * 100), "gauge.with.dots.needle.67percent", .performance)
             }
             recommendation(s)
         }
@@ -74,8 +75,29 @@ struct SmartCareView: View {
         ZentraCard { VStack(alignment: .leading, spacing: 6) { Image(systemName: icon).foregroundStyle(color); Text("\(count)").zentraFont(17, weight: .semibold); Text(title).zentraFont(9.5).foregroundStyle(Color.zentraTextSecondary); Text(ZentraLocalization.bytes(bytes)).zentraFont(8.5).foregroundStyle(Color.zentraTextTertiary) }.frame(maxWidth: .infinity, alignment: .leading) }
     }
 
-    private func moduleCard(_ title: LocalizedStringKey, _ detail: LocalizedStringKey, _ value: String, _ icon: String) -> some View {
-        ZentraCard { VStack(alignment: .leading, spacing: 8) { Image(systemName: icon).foregroundStyle(Color.zentraAccent); HStack { Text(title).zentraFont(12, weight: .semibold); Spacer(); Text(value).zentraFont(11, weight: .semibold).foregroundStyle(Color.zentraAccent) }; Text(detail).zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary) }.frame(maxWidth: .infinity, alignment: .leading) }
+    private func moduleCard(_ title: LocalizedStringKey, _ detail: LocalizedStringKey, _ value: String, _ icon: String, _ destination: AppDestination) -> some View {
+        Button {
+            selection = destination
+        } label: {
+            ZentraCard {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: icon).foregroundStyle(Color.zentraAccent)
+                        Spacer()
+                        Image(systemName: "chevron.forward").zentraFont(9, weight: .semibold).foregroundStyle(Color.zentraTextTertiary)
+                    }
+                    HStack {
+                        Text(title).zentraFont(12, weight: .semibold)
+                        Spacer()
+                        Text(value).zentraFont(11, weight: .semibold).foregroundStyle(Color.zentraAccent)
+                    }
+                    Text(detail).zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(title)
     }
 
     private func recommendation(_ s: SmartCareSummary) -> some View {
