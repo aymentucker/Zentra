@@ -83,7 +83,7 @@ final class ApplicationManagerModel: ObservableObject {
                 manualRemovalURL = request.application.url
             } else if !result.failed.isEmpty {
                 let failedNames = result.failed.map(\.lastPathComponent).joined(separator: ", ")
-                errorMessage = String(format: NSLocalizedString("applications.error.partial.detail", comment: ""), failedNames)
+                errorMessage = ZentraLocalization.format("applications.error.partial.detail", failedNames)
             }
             scan()
         }
