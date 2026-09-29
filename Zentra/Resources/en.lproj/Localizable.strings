@@ -297,3 +297,7 @@
 "smart.deepTools" = "Duplicates and Tidy Up remain dedicated deep tools so Smart Care stays fast and predictable.";
 
 "applications.error.partial.detail" = "macOS could not move these items to Trash: %@. Check that the app is closed and that Zentra has permission to modify Applications.";
+
+"applications.permission.title" = "macOS approval required";
+"applications.permission.detail" = "macOS did not allow Zentra to move this app from Applications. Zentra has not removed any of its support files. Reveal the app in Finder, move it to Trash there, then rescan.";
+"applications.permission.reveal" = "Reveal in Finder";
