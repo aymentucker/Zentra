@@ -44,6 +44,7 @@ targets:
         embed: false
     preBuildScripts:
       - name: Embed Removal Service
+        basedOnDependencyAnalysis: false
         script: |
           set -euo pipefail
           APP_CONTENTS="$BUILT_PRODUCTS_DIR/$WRAPPER_NAME/Contents"
