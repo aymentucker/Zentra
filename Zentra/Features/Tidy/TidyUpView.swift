@@ -145,6 +145,7 @@ struct TidyUpView: View {
             Button("storage.selection.clear") { model.selected = [] }
                 .buttonStyle(.plain)
             ZentraPrimaryButton("tidy.organize") { confirm = true }
+                .disabled(model.isOrganizing || model.selected.isEmpty)
         }
     }
 
