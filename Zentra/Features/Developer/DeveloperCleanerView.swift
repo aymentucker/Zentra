@@ -42,8 +42,6 @@ struct DeveloperCleanerView: View {
                 .padding(.vertical, 36)
             }
         }
-        .task { if isActive && model.results.isEmpty { model.scan() } }
-        .onChange(of: isActive) { _, active in if active && model.results.isEmpty && !model.isScanning { model.scan() } }
         .alert("developer.confirm.title",isPresented:$showingConfirmation) {
             Button("cleanup.cancel",role:.cancel){}
             Button("cleanup.confirm.action",role:.destructive){ model.moveSelectedToTrash() }
