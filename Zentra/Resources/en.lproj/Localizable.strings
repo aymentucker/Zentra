@@ -308,3 +308,6 @@
 "smart.status.ready" = "Ready";
 "smart.status.review" = "Review recommended";
 "smart.status.attention" = "Attention needed";
+
+"applications.scan" = "Scan Applications";
+"developer.scan" = "Scan Workspace";
