@@ -21,6 +21,10 @@ struct TidyUpView: View {
                     if let analysis = model.analysis, let folder {
                         summary(analysis, folder: folder)
 
+                        if analysis.items.isEmpty {
+                            noResultsState
+                        }
+
                         ForEach(TidyCategory.allCases) { category in
                             let values = analysis.items.filter { $0.category == category }
                             if !values.isEmpty {
@@ -28,7 +32,7 @@ struct TidyUpView: View {
                             }
                         }
 
-                        actionBar
+                        if !analysis.items.isEmpty { actionBar }
                     } else if !model.isScanning {
                         emptyState
                     }
@@ -47,6 +51,15 @@ struct TidyUpView: View {
             }
         } message: {
             Text("tidy.confirm.detail")
+        }
+        .alert("scan.error.title", isPresented: Binding(
+            get: { model.errorMessage != nil },
+            set: { if !$0 { model.errorMessage = nil } }
+        )) {
+            Button("cleanup.cancel", role: .cancel) { model.errorMessage = nil }
+            Button("tidy.choose") { model.errorMessage = nil; chooseFolder() }
+        } message: {
+            Text(model.errorMessage ?? ZentraLocalization.string("tidy.error.detail"))
         }
     }
 
@@ -130,6 +143,16 @@ struct TidyUpView: View {
             Button("storage.selection.clear") { model.selected = [] }
                 .buttonStyle(.plain)
             ZentraPrimaryButton("tidy.organize") { confirm = true }
+        }
+    }
+
+    private var noResultsState: some View {
+        ZentraCard {
+            VStack(spacing: 10) {
+                Image(systemName: "checkmark.circle.fill").font(.system(size: 28)).foregroundStyle(Color.zentraAccent)
+                Text("tidy.none").zentraFont(14, weight: .semibold)
+                Text("tidy.none.detail").zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
+            }.frame(maxWidth: .infinity).padding(24)
         }
     }
 
