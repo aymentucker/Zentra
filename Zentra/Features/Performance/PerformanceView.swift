@@ -66,13 +66,13 @@ struct PerformanceView: View {
                 HStack {
                     Text("performance.memory.title").zentraFont(14, weight: .semibold)
                     Spacer()
-                    Text(ByteCountFormatter.string(fromByteCount: Int64(memory.used), countStyle: .memory) + " / " + ByteCountFormatter.string(fromByteCount: Int64(memory.total), countStyle: .memory)).zentraFont(10).foregroundStyle(Color.zentraTextSecondary)
+                    Text(ZentraLocalization.bytes(Int64(memory.used), style: .memory) + " / " + ZentraLocalization.bytes(Int64(memory.total), style: .memory)).zentraFont(10).foregroundStyle(Color.zentraTextSecondary)
                 }
                 ProgressView(value: memory.pressure).tint(Color.zentraAccent)
                 HStack {
                     Text("performance.memory.note").zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary)
                     Spacer()
-                    Text(ByteCountFormatter.string(fromByteCount: Int64(memory.available), countStyle: .memory) + " " + String(localized: "performance.available")).zentraFont(9.5).foregroundStyle(Color.zentraTextSecondary)
+                    Text(ZentraLocalization.bytes(Int64(memory.available), style: .memory) + " " + ZentraLocalization.string("performance.available")).zentraFont(9.5).foregroundStyle(Color.zentraTextSecondary)
                 }
             }
         }
@@ -103,7 +103,7 @@ struct PerformanceView: View {
             HStack {
                 Text("performance.startup").zentraFont(15, weight: .semibold)
                 Spacer()
-                Text(String(format: String(localized: "performance.startup.count"), items.count)).zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary)
+                Text(ZentraLocalization.format("performance.startup.count", items.count)).zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary)
             }
             Text("performance.startup.note").zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary)
             ZentraCard {
@@ -135,6 +135,6 @@ struct PerformanceView: View {
     private func uptime(_ interval: TimeInterval) -> String {
         let hours = Int(interval) / 3600
         let days = hours / 24
-        return days > 0 ? String(format: String(localized: "performance.uptime.days"), days) : String(format: String(localized: "performance.uptime.hours"), hours)
+        return days > 0 ? ZentraLocalization.format("performance.uptime.days", days) : ZentraLocalization.format("performance.uptime.hours", hours)
     }
 }
