@@ -177,7 +177,7 @@ struct DuplicatesView: View {
     }
 
     private var errorState: some View {
-        ZentraStateView(state: .error, title: "scan.error.title", message: "duplicates.error.detail", retryAction: { chooseFolders() })
+        ZentraStateView(state: .error, title: "scan.error.title", message: "duplicates.error.detail", retryTitle: "duplicates.choose", retryAction: { chooseFolders() })
     }
 
     private var emptyState: some View {
