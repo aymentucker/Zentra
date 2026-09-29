@@ -81,7 +81,7 @@ struct TidyUpView: View {
                 .truncationMode(.middle)
                 .zentraFont(10)
             Spacer()
-            Text(ByteCountFormatter.string(fromByteCount: analysis.bytes, countStyle: .file))
+            Text(ZentraLocalization.bytes(analysis.bytes))
                 .zentraFont(11, weight: .semibold)
         }
     }
@@ -113,7 +113,7 @@ struct TidyUpView: View {
 
                         Spacer()
 
-                        Text(ByteCountFormatter.string(fromByteCount: item.size, countStyle: .file))
+                        Text(ZentraLocalization.bytes(item.size))
                             .zentraFont(9)
                             .foregroundStyle(Color.zentraTextTertiary)
                     }
@@ -124,7 +124,7 @@ struct TidyUpView: View {
 
     private var actionBar: some View {
         HStack {
-            Text(String(format: NSLocalizedString("tidy.selected", comment: ""), model.selected.count))
+            Text(ZentraLocalization.format("tidy.selected", model.selected.count))
                 .zentraFont(11, weight: .semibold)
             Spacer()
             Button("storage.selection.clear") { model.selected = [] }
@@ -166,7 +166,7 @@ struct TidyUpView: View {
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = false
-        panel.prompt = String(localized: "tidy.choose")
+        panel.prompt = ZentraLocalization.string("tidy.choose")
 
         guard panel.runModal() == .OK, let selectedFolder = panel.url else { return }
         folder = selectedFolder
