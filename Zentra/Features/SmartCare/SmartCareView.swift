@@ -45,7 +45,7 @@ struct SmartCareView: View {
     private func results(_ s: SmartCareSummary) -> some View {
         VStack(alignment: .leading, spacing: 18) {
             HStack(spacing: 12) {
-                healthCard(s)
+                statusCard(s)
                 safetyMetric("smart.safe", s.safeCount, s.safeBytes, "checkmark.shield.fill", Color.zentraAccent)
                 safetyMetric("smart.review", s.reviewCount, s.reviewBytes, "eye.fill", Color.zentraTextSecondary)
                 safetyMetric("smart.protected", s.protectedCount, s.protectedBytes, "lock.fill", Color.zentraTextTertiary)
@@ -53,6 +53,7 @@ struct SmartCareView: View {
             Text("smart.overview").zentraFont(15, weight: .semibold)
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 240), spacing: 12)], spacing: 12) {
                 moduleCard("nav.cleanup", "smart.cleanup.detail", ByteCountFormatter.string(fromByteCount: s.cleanup.totalBytes, countStyle: .file), "sparkles")
+                moduleCard("nav.storage", "smart.storage.detail", ByteCountFormatter.string(fromByteCount: s.storage.availableBytes, countStyle: .file), "internaldrive")
                 moduleCard("nav.developer", "smart.workspace.detail", ByteCountFormatter.string(fromByteCount: s.workspace.safeBytes + s.workspace.reviewBytes + s.workspace.protectedBytes, countStyle: .file), "hammer")
                 moduleCard("nav.applications", "smart.applications.detail", "\(s.applications.applications.count)", "square.grid.2x2")
                 moduleCard("nav.performance", "smart.performance.detail", String(format: "CPU %.0f%% · RAM %.0f%%", s.performance.cpuPercent, s.performance.memory.pressure * 100), "gauge.with.dots.needle.67percent")
@@ -61,8 +62,12 @@ struct SmartCareView: View {
         }
     }
 
-    private func healthCard(_ s: SmartCareSummary) -> some View {
-        ZentraCard { VStack(alignment: .leading, spacing: 7) { Text("\(s.healthScore)").zentraFont(24, weight: .bold).foregroundStyle(Color.zentraAccent); Text("smart.health").zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary) }.frame(maxWidth: .infinity, alignment: .leading) }
+    private func statusCard(_ s: SmartCareSummary) -> some View {
+        ZentraCard { VStack(alignment: .leading, spacing: 7) {
+            Image(systemName: s.status == .ready ? "checkmark.circle.fill" : (s.status == .attention ? "exclamationmark.triangle.fill" : "eye.circle.fill")).foregroundStyle(Color.zentraAccent)
+            Text(s.status.titleKey).zentraFont(13, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
+            Text("smart.status").zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary)
+        }.frame(maxWidth: .infinity, alignment: .leading) }
     }
 
     private func safetyMetric(_ title: LocalizedStringKey, _ count: Int, _ bytes: Int64, _ icon: String, _ color: Color) -> some View {
@@ -80,7 +85,7 @@ struct SmartCareView: View {
     private var readiness: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("smart.ready.title").zentraFont(15, weight: .semibold)
-            HStack(spacing: 12) { readyCard("nav.cleanup", "sparkles"); readyCard("nav.developer", "hammer"); readyCard("nav.applications", "square.grid.2x2"); readyCard("nav.performance", "gauge.with.dots.needle.67percent") }
+            HStack(spacing: 12) { readyCard("nav.cleanup", "sparkles"); readyCard("nav.storage", "internaldrive"); readyCard("nav.developer", "hammer"); readyCard("nav.applications", "square.grid.2x2"); readyCard("nav.performance", "gauge.with.dots.needle.67percent") }
             ZentraCard { HStack { Image(systemName: "doc.on.doc").foregroundStyle(Color.zentraAccent); Text("smart.deepTools").zentraFont(10.5).foregroundStyle(Color.zentraTextSecondary); Spacer() } }
         }
     }
@@ -94,6 +99,17 @@ struct SmartCareView: View {
 
 private extension SmartCareModule {
     var titleKey: LocalizedStringKey {
-        switch self { case .cleanup: "smart.scanning.cleanup"; case .workspace: "smart.scanning.workspace"; case .applications: "smart.scanning.applications"; case .performance: "smart.scanning.performance" }
+        switch self { case .cleanup: "smart.scanning.cleanup"; case .storage: "smart.scanning.storage"; case .workspace: "smart.scanning.workspace"; case .applications: "smart.scanning.applications"; case .performance: "smart.scanning.performance" }
+    }
+}
+
+
+private extension SmartCareStatus {
+    var titleKey: LocalizedStringKey {
+        switch self {
+        case .ready: "smart.status.ready"
+        case .reviewRecommended: "smart.status.review"
+        case .attention: "smart.status.attention"
+        }
     }
 }
