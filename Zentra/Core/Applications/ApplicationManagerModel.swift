@@ -13,10 +13,15 @@ final class ApplicationManagerModel: ObservableObject {
     @Published var errorMessage: String?
     @Published private(set) var isRemoving = false
     @Published var manualRemovalURL: URL?
+    @Published private(set) var pendingAuthorizedRemoval: ApplicationRemovalPreview?
+    @Published private(set) var pendingAuthorizedArtifacts = Set<URL>()
+    @Published private(set) var authorizationState: ApplicationRemovalAuthorizationState = .notRegistered
 
     private let scanner = ApplicationScanner()
     private let artifactFinder = ApplicationArtifactFinder()
     private let executor = ApplicationRemovalExecutor()
+    private let authorization = ApplicationRemovalAuthorization()
+    private let authorizedClient = AuthorizedApplicationRemovalClient()
     private var task: Task<Void, Never>?
 
     var filteredApplications: [InstalledApplication] {
@@ -25,6 +30,19 @@ final class ApplicationManagerModel: ObservableObject {
         return apps.filter {
             $0.name.localizedCaseInsensitiveContains(searchText)
             || ($0.bundleIdentifier?.localizedCaseInsensitiveContains(searchText) ?? false)
+        }
+    }
+
+    func refreshAuthorization() {
+        authorization.refresh()
+        authorizationState = authorization.state
+    }
+
+    func requestRemovalAuthorization() {
+        authorization.requestRegistration()
+        authorizationState = authorization.state
+        if authorization.state == .requiresApproval {
+            authorization.openApprovalSettings()
         }
     }
 
@@ -80,12 +98,56 @@ final class ApplicationManagerModel: ObservableObject {
             let result = await executor.execute(preview: request, includeArtifacts: selected)
             isRemoving = false
             if result.applicationNeedsManualRemoval {
-                manualRemovalURL = request.application.url
+                pendingAuthorizedRemoval = request
+                pendingAuthorizedArtifacts = selected
+                refreshAuthorization()
             } else if !result.failed.isEmpty {
                 let failedNames = result.failed.map(\.lastPathComponent).joined(separator: ", ")
                 errorMessage = ZentraLocalization.format("applications.error.partial.detail", failedNames)
             }
             scan()
         }
+    }
+
+    func retryWithAuthorization() {
+        guard let request = pendingAuthorizedRemoval else { return }
+        refreshAuthorization()
+        guard authorizationState == .enabled else {
+            requestRemovalAuthorization()
+            return
+        }
+
+        isRemoving = true
+        Task {
+            do {
+                try await authorizedClient.remove(request.application)
+                // The service is required to verify that the app bundle is gone.
+                guard !FileManager.default.fileExists(atPath: request.application.url.path) else {
+                    throw AuthorizedRemovalClientError.rejected("verification_failed")
+                }
+                // Privileged service removes only the app bundle. Leftovers stay
+                // in the normal user-context cleanup path.
+                let artifacts = pendingAuthorizedArtifacts
+                pendingAuthorizedRemoval = nil
+                pendingAuthorizedArtifacts = []
+                isRemoving = false
+                let followup = await executor.executeArtifactsOnly(preview: request, includeArtifacts: artifacts)
+                if !followup.failed.isEmpty {
+                    let names = followup.failed.map(\.lastPathComponent).joined(separator: ", ")
+                    errorMessage = ZentraLocalization.format("applications.error.partial.detail", names)
+                }
+                scan()
+            } catch {
+                isRemoving = false
+                errorMessage = error.localizedDescription
+            }
+        }
+    }
+
+    func useFinderFallback() {
+        guard let request = pendingAuthorizedRemoval else { return }
+        manualRemovalURL = request.application.url
+        pendingAuthorizedRemoval = nil
+        pendingAuthorizedArtifacts = []
     }
 }
