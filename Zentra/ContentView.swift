@@ -48,13 +48,13 @@ struct ContentView: View {
     private var persistentDestinationStack: some View {
         ZStack {
             persistent(.smartCare) { SmartCareView() }
-            persistent(.cleanup) { CleanupView(isActive: selection == .cleanup) }
+            persistent(.cleanup) { CleanupView() }
             persistent(.storage) { StorageView() }
             persistent(.duplicates) { DuplicatesView() }
             persistent(.tidyUp) { TidyUpView() }
-            persistent(.applications) { ApplicationsView(isActive: selection == .applications) }
+            persistent(.applications) { ApplicationsView() }
             persistent(.performance) { PerformanceView(isActive: selection == .performance) }
-            persistent(.developer) { DeveloperCleanerView(isActive: selection == .developer) }
+            persistent(.developer) { DeveloperCleanerView() }
             persistent(.settings) { SettingsView() }
 
             if !persistentDestinations.contains(selection) {
