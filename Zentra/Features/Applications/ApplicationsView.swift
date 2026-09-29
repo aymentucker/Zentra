@@ -126,22 +126,26 @@ struct ApplicationsView: View {
         } else {
             LazyVStack(spacing: 8) {
                 ForEach(model.filteredApplications) { app in
-                Button { model.inspect(app) } label: {
-                    HStack(spacing: 12) {
-                        Image(nsImage: NSWorkspace.shared.icon(forFile: app.url.path)).resizable().frame(width: 38, height: 38)
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text(app.name).zentraFont(12, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
-                            Text([app.version, app.bundleIdentifier].compactMap { $0 }.joined(separator: " · ")).lineLimit(1).zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary)
+                    Button { model.inspect(app) } label: {
+                        HStack(spacing: 12) {
+                            Image(nsImage: NSWorkspace.shared.icon(forFile: app.url.path)).resizable().frame(width: 38, height: 38)
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(app.name).zentraFont(12, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
+                                Text([app.version, app.bundleIdentifier].compactMap { $0 }.joined(separator: " · ")).lineLimit(1).zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary)
+                            }
+                            Spacer()
+                            Text(ZentraLocalization.bytes(app.appBytes)).zentraFont(10.5).foregroundStyle(Color.zentraTextSecondary)
+                            safetyBadge(app.safety)
+                            Image(systemName: "chevron.right").font(.system(size: 9)).foregroundStyle(Color.zentraTextTertiary)
                         }
-                        Spacer()
-                        Text(ZentraLocalization.bytes(app.appBytes)).zentraFont(10.5).foregroundStyle(Color.zentraTextSecondary)
-                        safetyBadge(app.safety)
-                        Image(systemName: "chevron.right").font(.system(size: 9)).foregroundStyle(Color.zentraTextTertiary)
-                    }.padding(12).background(RoundedRectangle(cornerRadius: 12).fill(Color.zentraSurface))
-                }.buttonStyle(.plain)
-                .contextMenu {
-                    Button("storage.action.open") { model.open(app.url) }
-                    Button("storage.action.reveal") { model.reveal(app.url) }
+                        .padding(12)
+                        .background(RoundedRectangle(cornerRadius: 12).fill(Color.zentraSurface))
+                    }
+                    .buttonStyle(.plain)
+                    .contextMenu {
+                        Button("storage.action.open") { model.open(app.url) }
+                        Button("storage.action.reveal") { model.reveal(app.url) }
+                    }
                 }
             }
         }
