@@ -47,7 +47,7 @@ struct ContentView: View {
     /// views preserves each feature's @StateObject, scan results and selections.
     private var persistentDestinationStack: some View {
         ZStack {
-            persistent(.smartCare) { SmartCareView() }
+            persistent(.smartCare) { SmartCareView(selection: $selection) }
             persistent(.cleanup) { CleanupView() }
             persistent(.storage) { StorageView() }
             persistent(.duplicates) { DuplicatesView() }
