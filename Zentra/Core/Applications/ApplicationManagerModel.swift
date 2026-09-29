@@ -41,6 +41,9 @@ final class ApplicationManagerModel: ObservableObject {
     func requestRemovalAuthorization() {
         authorization.requestRegistration()
         authorizationState = authorization.state
+        if let registrationError = authorization.errorMessage {
+            errorMessage = registrationError
+        }
         if authorization.state == .requiresApproval {
             authorization.openApprovalSettings()
         }
