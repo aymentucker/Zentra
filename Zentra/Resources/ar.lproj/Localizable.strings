@@ -301,3 +301,10 @@
 "applications.permission.title" = "مطلوب إذن من macOS";
 "applications.permission.detail" = "لم يسمح macOS لـ Zentra بنقل هذا التطبيق من مجلد Applications. لم يحذف Zentra أيًا من ملفات التطبيق المساعدة. اعرض التطبيق في Finder وانقله إلى سلة المهملات من هناك، ثم أعد الفحص.";
 "applications.permission.reveal" = "عرض في Finder";
+
+"smart.scanning.storage" = "جارٍ فحص سعة التخزين";
+"smart.storage.detail" = "المساحة المتاحة على القرص";
+"smart.status" = "الحالة العامة";
+"smart.status.ready" = "جاهز";
+"smart.status.review" = "يُنصح بالمراجعة";
+"smart.status.attention" = "يحتاج إلى انتباه";
