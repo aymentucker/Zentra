@@ -272,3 +272,39 @@
 "performance.startup.system" = "خدمة نظام";
 "performance.uptime.days" = "%d يوم";
 "performance.uptime.hours" = "%d ساعة";
+
+"smart.subtitle.integrated" = "نظرة آمنة موحدة على فرص التنظيف وكاش المطور والمبدع والتطبيقات المثبتة وأداء النظام.";
+"smart.scan.again" = "إعادة الفحص";
+"smart.scan.safety" = "يقوم Smart Care بالتحليل فقط، ولا يحذف أو يغيّر أي شيء أثناء الفحص.";
+"smart.scanning.cleanup" = "فحص فرص التنظيف";
+"smart.scanning.workspace" = "فحص كاش المطور والمبدع";
+"smart.scanning.applications" = "قراءة التطبيقات المثبتة";
+"smart.scanning.performance" = "فحص أداء النظام";
+"smart.health" = "مؤشر الحالة";
+"smart.safe" = "آمن";
+"smart.review" = "للمراجعة";
+"smart.protected" = "محمي";
+"smart.overview" = "نظرة Smart Care";
+"smart.cleanup.detail" = "عناصر تنظيف النظام والمستخدم مصنفة حسب مستوى الأمان.";
+"smart.workspace.detail" = "كاش أدوات التطوير والإبداع مع حماية البيانات الحساسة.";
+"smart.applications.detail" = "التطبيقات المثبتة المتاحة للمراجعة التفصيلية.";
+"smart.performance.detail" = "لقطة حالية لاستخدام المعالج والذاكرة.";
+"smart.recommendation" = "التوصية";
+"smart.recommendation.review" = "راجع العناصر المعلّمة داخل أدواتها المخصصة قبل إجراء أي تغيير.";
+"smart.recommendation.ready" = "لم تظهر عناصر تحتاج مراجعة. يمكن التعامل مع العناصر الآمنة من أدواتها المخصصة.";
+"smart.noAutoDelete" = "لا يوجد حذف تلقائي";
+"smart.ready.title" = "جاهز للفحص الذكي الموحد";
+"smart.deepTools" = "تبقى Duplicates وTidy Up أدوات متخصصة مستقلة حتى يظل Smart Care سريعًا ومتوقعًا.";
+
+"applications.error.partial.detail" = "تعذر على macOS نقل هذه العناصر إلى سلة المهملات: %@. تأكد من إغلاق التطبيق ومن أن Zentra لديه صلاحية تعديل مجلد Applications.";
+
+"applications.permission.title" = "مطلوب إذن من macOS";
+"applications.permission.detail" = "لم يسمح macOS لـ Zentra بنقل هذا التطبيق من مجلد Applications. لم يحذف Zentra أيًا من ملفات التطبيق المساعدة. اعرض التطبيق في Finder وانقله إلى سلة المهملات من هناك، ثم أعد الفحص.";
+"applications.permission.reveal" = "عرض في Finder";
+
+"smart.scanning.storage" = "جارٍ فحص سعة التخزين";
+"smart.storage.detail" = "المساحة المتاحة على القرص";
+"smart.status" = "الحالة العامة";
+"smart.status.ready" = "جاهز";
+"smart.status.review" = "يُنصح بالمراجعة";
+"smart.status.attention" = "يحتاج إلى انتباه";
