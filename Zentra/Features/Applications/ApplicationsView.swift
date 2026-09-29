@@ -40,11 +40,11 @@ struct ApplicationsView: View {
         } message: { Text("applications.confirm.detail") }
         .alert("applications.authorization.title", isPresented: Binding(
             get: { model.pendingAuthorizedRemoval != nil },
-            set: { _ in }
+            set: { if !$0 { model.dismissAuthorizationPrompt() } }
         )) {
             Button("applications.authorization.authorize") { model.retryWithAuthorization() }
             Button("applications.permission.reveal") { model.useFinderFallback() }
-            Button("cleanup.cancel", role: .cancel) { }
+            Button("cleanup.cancel", role: .cancel) { model.dismissAuthorizationPrompt() }
         } message: {
             Text(model.authorizationState == .requiresApproval
                  ? "applications.authorization.approval"
