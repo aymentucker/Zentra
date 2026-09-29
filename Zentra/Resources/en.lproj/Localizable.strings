@@ -323,3 +323,6 @@
 "settings.about.description" = "Release information for this copy of Zentra.";
 "settings.about.version" = "Version %@ · Build %@";
 "settings.about.macOS" = "Requires macOS 14 or later";
+
+"applications.search.empty" = "No matching applications";
+"applications.search.empty.detail" = "Try another application name or bundle identifier.";
