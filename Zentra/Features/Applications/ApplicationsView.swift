@@ -3,6 +3,9 @@ import AppKit
 
 struct ApplicationsView: View {
     @StateObject private var model = ApplicationManagerModel()
+    let isActive: Bool
+
+    init(isActive: Bool = true) { self.isActive = isActive }
     @State private var pendingUninstall: ApplicationRemovalPreview?
     @State private var pendingArtifacts = Set<URL>()
 
@@ -23,7 +26,8 @@ struct ApplicationsView: View {
                 .padding(.horizontal, 48).padding(.vertical, 36)
             }
         }
-        .task { if model.state == .idle { model.scan() } }
+        .task { if isActive && model.state == .idle { model.scan() } }
+        .onChange(of: isActive) { _, active in if active && model.state == .idle { model.scan() } }
         .sheet(item: Binding(get: { model.preview.map(PreviewBox.init) }, set: { if $0 == nil { model.closePreview() } })) { box in
             removalPreview(box.value)
         }
