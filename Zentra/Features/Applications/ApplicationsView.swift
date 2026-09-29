@@ -59,7 +59,7 @@ struct ApplicationsView: View {
                 Text("applications.subtitle").zentraFont(13).foregroundStyle(Color.zentraTextSecondary)
             }
             Spacer()
-            ZentraPrimaryButton("applications.rescan") { model.scan() }
+            ZentraPrimaryButton(model.inventory == nil ? "applications.scan" : "applications.rescan") { model.scan() }
         }
     }
 
