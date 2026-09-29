@@ -326,3 +326,6 @@
 
 "applications.search.empty" = "لا توجد تطبيقات مطابقة";
 "applications.search.empty.detail" = "جرّب اسم تطبيق آخر أو معرّف حزمة مختلفًا.";
+
+"storage.error.title" = "تعذر تحليل مساحة التخزين";
+"storage.error.detail" = "لم يتمكن Zentra من إكمال تحليل المواقع المحددة. لم يتم تغيير أي ملفات.";
