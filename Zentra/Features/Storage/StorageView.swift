@@ -71,7 +71,7 @@ struct StorageView: View {
             Button("storage.action.cancel", role: .cancel) { pendingTrash = [] }
             Button("storage.action.trash", role: .destructive) { performTrash() }
         } message: {
-            Text(String(format: NSLocalizedString("storage.trash.confirm.detail", comment: ""), pendingTrash.count))
+            Text(ZentraLocalization.format("storage.trash.confirm.detail", pendingTrash.count))
         }
     }
 
@@ -90,7 +90,7 @@ struct StorageView: View {
 
     private func overview(_ analysis: StorageAnalysis) -> some View {
         HStack(spacing: 12) {
-            metric("storage.analyzed", ByteCountFormatter.string(fromByteCount: analysis.totalBytes, countStyle: .file), "internaldrive")
+            metric("storage.analyzed", ZentraLocalization.bytes(analysis.totalBytes), "internaldrive")
             metric("storage.files", "\(analysis.items.count)", "doc.on.doc")
             metric("storage.largeFiles", "\(analysis.largeFiles.count)", "arrow.up.right.square")
         }
@@ -159,7 +159,7 @@ struct StorageView: View {
                 Text("≥ \(Int(minimumSizeMB)) MB").zentraFont(10, weight: .semibold).foregroundStyle(Color.zentraTextSecondary)
                 Slider(value: $minimumSizeMB, in: 50...1000, step: 50).frame(maxWidth: 220)
                 Spacer()
-                Text(String(format: NSLocalizedString("storage.results.count", comment: ""), displayedItems.count)).zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
+                Text(ZentraLocalization.format("storage.results.count", displayedItems.count)).zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
             }
             if displayedItems.isEmpty { Text("storage.noLargeFiles").zentraFont(11).foregroundStyle(Color.zentraTextTertiary).padding(.vertical, 18) }
             else if displayMode == .visual {
@@ -186,7 +186,7 @@ struct StorageView: View {
                     Button(url.lastPathComponent) { visualPath = Array(visualPath.prefix(index + 1)) }.buttonStyle(.plain).zentraFont(9.5).foregroundStyle(index == visualPath.count - 1 ? Color.zentraAccent : Color.zentraTextSecondary)
                 }
                 Spacer()
-                Text(ByteCountFormatter.string(fromByteCount: visualNodes.reduce(Int64(0)) { $0 + $1.totalBytes }, countStyle: .file))
+                Text(ZentraLocalization.bytes(visualNodes.reduce(Int64(0)) { $0 + $1.totalBytes }))
                     .zentraFont(9.5, weight: .semibold).foregroundStyle(Color.zentraTextTertiary)
                 if !visualPath.isEmpty { Button("storage.visual.up") { visualPath.removeLast() }.buttonStyle(.plain).zentraFont(10).foregroundStyle(Color.zentraTextSecondary) }
             }
@@ -218,7 +218,7 @@ struct StorageView: View {
                 Text(item.url.deletingLastPathComponent().path).lineLimit(1).zentraFont(9.5).foregroundStyle(Color.zentraTextTertiary)
             }
             Spacer()
-            Text(ByteCountFormatter.string(fromByteCount: item.size, countStyle: .file)).zentraFont(10.5).foregroundStyle(Color.zentraTextSecondary)
+            Text(ZentraLocalization.bytes(item.size)).zentraFont(10.5).foregroundStyle(Color.zentraTextSecondary)
         }.padding(11).background(RoundedRectangle(cornerRadius: 11).fill(checked ? Color.zentraAccent.opacity(0.07) : Color.zentraSurface))
          .contentShape(Rectangle()).onTapGesture { selection.toggle(item) }
          .contextMenu {
@@ -231,7 +231,7 @@ struct StorageView: View {
 
     private var selectionBar: some View {
         VStack { Spacer(); HStack(spacing: 14) {
-            Text(String(format: NSLocalizedString("storage.selected.summary", comment: ""), selection.selected.count, ByteCountFormatter.string(fromByteCount: selectedBytes, countStyle: .file))).zentraFont(11, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
+            Text(ZentraLocalization.format("storage.selected.summary", selection.selected.count, ZentraLocalization.bytes(selectedBytes))).zentraFont(11, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
             Spacer()
             Button("storage.action.reveal") { selection.reveal(selectedItems.map(\.url)) }.buttonStyle(.plain).foregroundStyle(Color.zentraTextSecondary)
             Button("storage.selection.clear") { selection.clear() }.buttonStyle(.plain).foregroundStyle(Color.zentraTextSecondary)
