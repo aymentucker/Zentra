@@ -190,8 +190,8 @@ struct DeveloperCleanerView: View {
                         }
                         Spacer()
                         VStack(alignment:.trailing,spacing:5) {
-                            Text(ByteCountFormatter.string(fromByteCount:result.bytes,countStyle:.file)).zentraFont(12,weight:.semibold)
-                            Text(String(format:NSLocalizedString("developer.files",comment:""),result.fileCount)).zentraFont(8.5).foregroundStyle(Color.zentraTextTertiary)
+                            Text(ZentraLocalization.bytes(result.bytes)).zentraFont(12,weight:.semibold)
+                            Text(ZentraLocalization.format("developer.files", result.fileCount)).zentraFont(8.5).foregroundStyle(Color.zentraTextTertiary)
                         }
                         Button { model.toggle(result) } label: {
                             Image(systemName:model.selected.contains(result.id) ? "checkmark.circle.fill" : (result.location.safety == .protected ? "lock.fill" : "circle"))
@@ -210,7 +210,7 @@ struct DeveloperCleanerView: View {
         ZentraCard {
             HStack {
                 VStack(alignment:.leading,spacing:3) {
-                    Text(String(format:NSLocalizedString("developer.selected",comment:""),model.selectedResults.count)).zentraFont(12,weight:.semibold)
+                    Text(ZentraLocalization.format("developer.selected", model.selectedResults.count)).zentraFont(12,weight:.semibold)
                     Text(ZentraLocalization.bytes(model.selectedBytes)).zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
                 }
                 Spacer()
