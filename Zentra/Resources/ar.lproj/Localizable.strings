@@ -308,3 +308,6 @@
 "smart.status.ready" = "جاهز";
 "smart.status.review" = "يُنصح بالمراجعة";
 "smart.status.attention" = "يحتاج إلى انتباه";
+
+"applications.scan" = "فحص التطبيقات";
+"developer.scan" = "فحص بيئة العمل";
