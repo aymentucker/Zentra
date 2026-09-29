@@ -20,14 +20,18 @@ final class ApplicationRemovalAuthorization: ObservableObject {
         .daemon(plistName: Self.daemonPlistName)
     }
 
-    func refresh() {
-        switch service.status {
-        case .enabled: state = .enabled
-        case .requiresApproval: state = .requiresApproval
-        case .notRegistered: state = .notRegistered
-        case .notFound: state = .unavailable
-        @unknown default: state = .unavailable
+    static func map(_ status: SMAppService.Status) -> ApplicationRemovalAuthorizationState {
+        switch status {
+        case .enabled: return .enabled
+        case .requiresApproval: return .requiresApproval
+        case .notRegistered: return .notRegistered
+        case .notFound: return .unavailable
+        @unknown default: return .unavailable
         }
+    }
+
+    func refresh() {
+        state = Self.map(service.status)
     }
 
     func requestRegistration() {
