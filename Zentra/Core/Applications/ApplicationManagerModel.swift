@@ -12,6 +12,7 @@ final class ApplicationManagerModel: ObservableObject {
     @Published var searchText = ""
     @Published var errorMessage: String?
     @Published private(set) var isRemoving = false
+    @Published var manualRemovalURL: URL?
 
     private let scanner = ApplicationScanner()
     private let artifactFinder = ApplicationArtifactFinder()
@@ -64,6 +65,12 @@ final class ApplicationManagerModel: ObservableObject {
     }
 
     func reveal(_ url: URL) { NSWorkspace.shared.activateFileViewerSelecting([url]) }
+
+    func revealManualRemoval() {
+        guard let url = manualRemovalURL else { return }
+        NSWorkspace.shared.activateFileViewerSelecting([url])
+        manualRemovalURL = nil
+    }
     func open(_ url: URL) { NSWorkspace.shared.open(url) }
 
     func uninstall(_ request: ApplicationRemovalPreview, selectedArtifacts selected: Set<URL>) {
@@ -72,7 +79,9 @@ final class ApplicationManagerModel: ObservableObject {
         Task {
             let result = await executor.execute(preview: request, includeArtifacts: selected)
             isRemoving = false
-            if !result.failed.isEmpty {
+            if result.applicationNeedsManualRemoval {
+                manualRemovalURL = request.application.url
+            } else if !result.failed.isEmpty {
                 let failedNames = result.failed.map(\.lastPathComponent).joined(separator: ", ")
                 errorMessage = String(format: NSLocalizedString("applications.error.partial.detail", comment: ""), failedNames)
             }
