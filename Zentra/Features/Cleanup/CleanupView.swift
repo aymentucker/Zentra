@@ -26,7 +26,13 @@ struct CleanupView: View {
                     }
 
                     if let review = scanSession.review {
-                        ScanReviewView(snapshot: review)
+                        if review.groups.values.allSatisfy({ $0.isEmpty }) {
+                            noResultsState
+                        } else {
+                            ScanReviewView(snapshot: review)
+                        }
+                    } else if case .failed = scanSession.state {
+                        errorState
                     } else if scanSession.state != .scanning && scanSession.state != .preparingResults {
                         cleanupCategories
                     }
@@ -36,6 +42,20 @@ struct CleanupView: View {
                 .padding(36)
             }
         }
+    }
+
+    private var noResultsState: some View {
+        ZentraCard {
+            VStack(spacing: 10) {
+                Image(systemName: "checkmark.circle.fill").font(.system(size: 28)).foregroundStyle(Color.zentraAccent)
+                Text("cleanup.none").zentraFont(14, weight: .semibold)
+                Text("cleanup.none.detail").zentraFont(10.5).foregroundStyle(Color.zentraTextSecondary)
+            }.frame(maxWidth: .infinity).padding(.vertical, 24)
+        }
+    }
+
+    private var errorState: some View {
+        ZentraStateView(state: .error, title: "scan.error.title", message: "scan.error.message", retryAction: startScan)
     }
 
     private var preparingResultsCard: some View {
