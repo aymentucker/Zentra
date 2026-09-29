@@ -33,6 +33,17 @@ struct SettingsView: View {
                         }
                     }
 
+                    ZentraSection("settings.about", subtitle: "settings.about.description") {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("app.name").zentraFont(13, weight: .semibold)
+                                Text(versionText).zentraFont(10.5).foregroundStyle(Color.zentraTextTertiary)
+                            }
+                            Spacer()
+                            Text("settings.about.macOS").zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
+                        }
+                    }
+
                     Spacer(minLength: 20)
                 }
                 .frame(maxWidth: 760, alignment: .leading)
@@ -41,6 +52,12 @@ struct SettingsView: View {
                 .padding(.vertical, 34)
             }
         }
+    }
+
+    private var versionText: String {
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
+        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "—"
+        return ZentraLocalization.format("settings.about.version", version, build)
     }
 }
 
