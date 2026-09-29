@@ -49,3 +49,30 @@ A future privileged removal component must not be a generic root file service. B
 9. be code signed and tested as part of the release artifact.
 
 Until those requirements are implemented and tested end-to-end, direct privileged uninstall remains a V1 release blocker.
+
+
+## Local build verification after removal-service target
+
+After pulling this branch, regenerate the Xcode project before testing because `project.yml` now contains the `ZentraRemovalService` target:
+
+```bash
+rm -rf Zentra.xcodeproj
+bash scripts/bootstrap.sh
+```
+
+Then verify in this order:
+
+```bash
+xcodebuild -project Zentra.xcodeproj -scheme Zentra -configuration Debug build
+xcodebuild -project Zentra.xcodeproj -scheme Zentra -configuration Debug test
+```
+
+Before any privileged-removal activation, inspect the built app and confirm the service/plist are inside the signed bundle:
+
+```bash
+find ~/Library/Developer/Xcode/DerivedData/Zentra-*/Build/Products/Debug/Zentra.app/Contents -maxdepth 3 \
+  \( -name 'ZentraRemovalService' -o -name 'com.zentra.app.removal-service.plist' \) -print
+codesign --verify --deep --strict --verbose=2 ~/Library/Developer/Xcode/DerivedData/Zentra-*/Build/Products/Debug/Zentra.app
+```
+
+The expected security behavior at this stage is still fail-closed: the service is packaged, but it must reject privileged XPC requests until the final client signing requirement is configured.
