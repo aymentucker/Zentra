@@ -39,12 +39,6 @@ struct CleanupView: View {
                 .padding(36)
             }
         }
-        .task {
-            guard isActive else { return }
-            if sourceAnalysis.summaries.isEmpty {
-                sourceAnalysis.start(sources: sourceCatalog.availableSources())
-            }
-        }
     }
 
     private var preparingResultsCard: some View {
