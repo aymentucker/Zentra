@@ -318,3 +318,8 @@
 "applications.authorization.authorize" = "تفويض وإعادة المحاولة";
 "applications.authorization.serviceUnavailable" = "خدمة الإزالة المصرح بها في Zentra غير متاحة حتى الآن.";
 "applications.authorization.invalidRequest" = "هذا التطبيق غير مؤهل للإزالة المصرح بها.";
+
+"settings.about" = "حول Zentra";
+"settings.about.description" = "معلومات إصدار نسخة Zentra الحالية.";
+"settings.about.version" = "الإصدار %@ · البناء %@";
+"settings.about.macOS" = "يتطلب macOS 14 أو أحدث";
