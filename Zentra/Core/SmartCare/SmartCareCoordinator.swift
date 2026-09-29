@@ -12,6 +12,7 @@ final class SmartCareCoordinator: ObservableObject {
     private let workspaceAnalyzer = WorkspaceCleanerAnalyzer()
     private let workspaceCatalog = WorkspaceCleanupCatalog()
     private let applicationScanner = ApplicationScanner()
+    private let storageService = SmartCareStorageService()
     private let performanceMonitor = PerformanceMonitor()
     private let targetPolicy = ScanTargetPolicy()
     private var task: Task<Void, Never>?
@@ -28,25 +29,30 @@ final class SmartCareCoordinator: ObservableObject {
                 }
                 try Task.checkCancellation()
                 let review = await Task.detached(priority: .userInitiated) { ScanReviewBuilder().build(scan) }.value
-                progress = 0.42
+                progress = 0.38
+
+                state = .scanning(.storage)
+                let storage = try storageService.snapshot()
+                try Task.checkCancellation()
+                progress = 0.48
 
                 state = .scanning(.workspace)
                 let workspaceResults = await workspaceAnalyzer.analyze(workspaceCatalog.locations())
                 try Task.checkCancellation()
                 let workspace = Self.workspaceSummary(workspaceResults)
-                progress = 0.68
+                progress = 0.70
 
                 state = .scanning(.applications)
                 let apps = try await applicationScanner.scan()
                 try Task.checkCancellation()
-                progress = 0.86
+                progress = 0.87
 
                 state = .scanning(.performance)
                 let performance = await performanceMonitor.snapshot()
                 try Task.checkCancellation()
                 progress = 1
 
-                summary = SmartCareSummary(cleanup: review, workspace: workspace, applications: apps, performance: performance, completedAt: Date())
+                summary = SmartCareSummary(cleanup: review, storage: storage, workspace: workspace, applications: apps, performance: performance, completedAt: Date())
                 state = .completed
             } catch is CancellationError {
                 state = .cancelled
