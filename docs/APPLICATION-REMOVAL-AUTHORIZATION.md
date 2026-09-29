@@ -47,3 +47,22 @@ Do not use the deprecated `SMJobBless` path for the V1 implementation.
 Registration/authorization is explicit and user visible. Zentra must expose service status and must not silently retry authorization in a loop.
 
 The privileged daemon remains a narrow broker for validated application-bundle removal; all trust-boundary requirements above still apply.
+
+
+## Current implementation status
+
+The repository now contains a hardened `ZentraRemovalService` tool target, an embedded LaunchDaemon plist, a Mach service declaration, a deliberately narrow XPC protocol, and daemon-side path/bundle validation.
+
+The listener currently **fails closed** and rejects every XPC connection. Privileged filesystem mutation is also intentionally disabled. This is deliberate: the service must not become active until the release signing identity is known and the daemon can enforce a concrete Zentra client code-signing requirement.
+
+For macOS 14+, the intended connection validation is an `NSXPCConnection` code-signing requirement before accepting privileged requests. The requirement must be derived from the final signed Zentra release identity and verified on a clean Mac. Do not weaken this to PID/name/path-only validation.
+
+### Remaining activation gate
+
+1. configure final Developer ID signing identity/team;
+2. encode the expected Zentra client signing requirement;
+3. enforce that requirement on incoming XPC connections;
+4. implement the validated app-bundle move operation without exposing a generic file API;
+5. wire the app-side XPC client only after `SMAppService` reports enabled;
+6. test approval, denial, upgrade, unregister, notarization, and clean-Mac behavior;
+7. only then remove the Finder fallback as the normal permission-denied path.
