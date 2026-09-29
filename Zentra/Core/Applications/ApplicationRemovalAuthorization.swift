@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import ServiceManagement
 
 enum ApplicationRemovalAuthorizationState: Equatable, Sendable {
