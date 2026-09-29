@@ -42,14 +42,13 @@ targets:
     dependencies:
       - target: ZentraRemovalService
         embed: false
-    postBuildScripts:
+    preBuildScripts:
       - name: Embed Removal Service
         script: |
           set -euo pipefail
           APP_CONTENTS="$BUILT_PRODUCTS_DIR/$WRAPPER_NAME/Contents"
           mkdir -p "$APP_CONTENTS/MacOS" "$APP_CONTENTS/Library/LaunchDaemons"
           cp "$BUILT_PRODUCTS_DIR/ZentraRemovalService" "$APP_CONTENTS/MacOS/ZentraRemovalService"
-          codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY" --options runtime --timestamp=none "$APP_CONTENTS/MacOS/ZentraRemovalService"
           cp "$SRCROOT/ZentraRemovalService/com.zentra.app.removal-service.plist" "$APP_CONTENTS/Library/LaunchDaemons/com.zentra.app.removal-service.plist"
     settings:
       base:
