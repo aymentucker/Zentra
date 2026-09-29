@@ -20,9 +20,15 @@ struct DuplicatesView: View {
 
                     if let analysis = model.analysis {
                         metrics(analysis)
-                        ForEach(analysis.groups) { group in
-                            groupCard(group)
+                        if analysis.groups.isEmpty {
+                            noResultsState
+                        } else {
+                            ForEach(analysis.groups) { group in
+                                groupCard(group)
+                            }
                         }
+                    } else if model.state == .failed {
+                        errorState
                     } else if model.state != .scanning {
                         emptyState
                     }
@@ -43,6 +49,15 @@ struct DuplicatesView: View {
             }
         } message: {
             Text("duplicates.confirm.detail")
+        }
+        .alert("scan.error.title", isPresented: Binding(
+            get: { model.errorMessage != nil },
+            set: { if !$0 { model.errorMessage = nil } }
+        )) {
+            Button("cleanup.cancel", role: .cancel) { model.errorMessage = nil }
+            Button("duplicates.choose") { model.errorMessage = nil; chooseFolders() }
+        } message: {
+            Text(model.errorMessage ?? ZentraLocalization.string("duplicates.error.detail"))
         }
     }
 
@@ -149,6 +164,20 @@ struct DuplicatesView: View {
                 }
             }
         }
+    }
+
+    private var noResultsState: some View {
+        ZentraCard {
+            VStack(spacing: 10) {
+                Image(systemName: "checkmark.circle.fill").font(.system(size: 28)).foregroundStyle(Color.zentraAccent)
+                Text("duplicates.none").zentraFont(14, weight: .semibold)
+                Text("duplicates.none.detail").zentraFont(10).foregroundStyle(Color.zentraTextTertiary)
+            }.frame(maxWidth: .infinity).padding(24)
+        }
+    }
+
+    private var errorState: some View {
+        ZentraStateView(state: .error, title: "scan.error.title", message: "duplicates.error.detail", retryAction: { chooseFolders() })
     }
 
     private var emptyState: some View {
