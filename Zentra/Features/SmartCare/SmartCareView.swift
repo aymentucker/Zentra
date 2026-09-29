@@ -52,9 +52,9 @@ struct SmartCareView: View {
             }
             Text("smart.overview").zentraFont(15, weight: .semibold)
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 240), spacing: 12)], spacing: 12) {
-                moduleCard("nav.cleanup", "smart.cleanup.detail", ByteCountFormatter.string(fromByteCount: s.cleanup.totalBytes, countStyle: .file), "sparkles")
-                moduleCard("nav.storage", "smart.storage.detail", ByteCountFormatter.string(fromByteCount: s.storage.availableBytes, countStyle: .file), "internaldrive")
-                moduleCard("nav.developer", "smart.workspace.detail", ByteCountFormatter.string(fromByteCount: s.workspace.safeBytes + s.workspace.reviewBytes + s.workspace.protectedBytes, countStyle: .file), "hammer")
+                moduleCard("nav.cleanup", "smart.cleanup.detail", ZentraLocalization.bytes(s.cleanup.totalBytes), "sparkles")
+                moduleCard("nav.storage", "smart.storage.detail", ZentraLocalization.bytes(s.storage.availableBytes), "internaldrive")
+                moduleCard("nav.developer", "smart.workspace.detail", ZentraLocalization.bytes(s.workspace.safeBytes + s.workspace.reviewBytes + s.workspace.protectedBytes), "hammer")
                 moduleCard("nav.applications", "smart.applications.detail", "\(s.applications.applications.count)", "square.grid.2x2")
                 moduleCard("nav.performance", "smart.performance.detail", String(format: "CPU %.0f%% · RAM %.0f%%", s.performance.cpuPercent, s.performance.memory.pressure * 100), "gauge.with.dots.needle.67percent")
             }
@@ -71,7 +71,7 @@ struct SmartCareView: View {
     }
 
     private func safetyMetric(_ title: LocalizedStringKey, _ count: Int, _ bytes: Int64, _ icon: String, _ color: Color) -> some View {
-        ZentraCard { VStack(alignment: .leading, spacing: 6) { Image(systemName: icon).foregroundStyle(color); Text("\(count)").zentraFont(17, weight: .semibold); Text(title).zentraFont(9.5).foregroundStyle(Color.zentraTextSecondary); Text(ByteCountFormatter.string(fromByteCount: bytes, countStyle: .file)).zentraFont(8.5).foregroundStyle(Color.zentraTextTertiary) }.frame(maxWidth: .infinity, alignment: .leading) }
+        ZentraCard { VStack(alignment: .leading, spacing: 6) { Image(systemName: icon).foregroundStyle(color); Text("\(count)").zentraFont(17, weight: .semibold); Text(title).zentraFont(9.5).foregroundStyle(Color.zentraTextSecondary); Text(ZentraLocalization.bytes(bytes)).zentraFont(8.5).foregroundStyle(Color.zentraTextTertiary) }.frame(maxWidth: .infinity, alignment: .leading) }
     }
 
     private func moduleCard(_ title: LocalizedStringKey, _ detail: LocalizedStringKey, _ value: String, _ icon: String) -> some View {
