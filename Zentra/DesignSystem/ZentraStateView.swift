@@ -10,6 +10,7 @@ struct ZentraStateView: View {
     let state: ZentraViewState
     let title: LocalizedStringKey
     let message: LocalizedStringKey
+    var retryTitle: LocalizedStringKey = "common.retry"
     var retryAction: (() -> Void)?
 
     var body: some View {
@@ -18,7 +19,7 @@ struct ZentraStateView: View {
             Text(title).zentraFont(17, weight: .semibold).foregroundStyle(Color.zentraTextPrimary)
             Text(message).zentraFont(13).foregroundStyle(Color.zentraTextSecondary).multilineTextAlignment(.center).frame(maxWidth: 380)
             if let retryAction {
-                ZentraPrimaryButton("common.retry", action: retryAction)
+                ZentraPrimaryButton(retryTitle, action: retryAction)
             }
         }
         .padding(28)
