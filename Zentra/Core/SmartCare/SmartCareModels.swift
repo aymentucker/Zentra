@@ -1,12 +1,26 @@
 import Foundation
 
 enum SmartCareModule: String, CaseIterable, Identifiable, Sendable {
-    case cleanup, workspace, applications, performance
+    case cleanup, storage, workspace, applications, performance
     var id: String { rawValue }
 }
 
 enum SmartCareRunState: Equatable {
     case idle, scanning(SmartCareModule), completed, cancelled, failed(String)
+}
+
+struct SmartCareStorageSummary: Sendable {
+    let totalBytes: Int64
+    let availableBytes: Int64
+    var usedBytes: Int64 { max(0, totalBytes - availableBytes) }
+    var usedFraction: Double {
+        guard totalBytes > 0 else { return 0 }
+        return min(1, max(0, Double(usedBytes) / Double(totalBytes)))
+    }
+}
+
+enum SmartCareStatus: String, Sendable {
+    case ready, reviewRecommended, attention
 }
 
 struct SmartCareWorkspaceSummary: Sendable {
@@ -20,6 +34,7 @@ struct SmartCareWorkspaceSummary: Sendable {
 
 struct SmartCareSummary: Sendable {
     let cleanup: ScanReviewSnapshot
+    let storage: SmartCareStorageSummary
     let workspace: SmartCareWorkspaceSummary
     let applications: ApplicationInventory
     let performance: PerformanceSnapshot
@@ -32,12 +47,9 @@ struct SmartCareSummary: Sendable {
     var reviewCount: Int { cleanup.count(for: .review) + workspace.reviewCount }
     var protectedCount: Int { cleanup.count(for: .protected) + workspace.protectedCount }
 
-    var healthScore: Int {
-        var score = 100
-        if performance.cpuPercent > 80 { score -= 12 }
-        if performance.memory.pressure > 0.85 { score -= 12 }
-        if reviewCount > 0 { score -= min(15, reviewCount) }
-        if safeBytes > 5_000_000_000 { score -= 10 }
-        return max(0, score)
+    var status: SmartCareStatus {
+        if storage.usedFraction >= 0.95 || performance.memory.pressure >= 0.9 { return .attention }
+        if reviewCount > 0 || storage.usedFraction >= 0.85 || performance.cpuPercent >= 85 { return .reviewRecommended }
+        return .ready
     }
 }
