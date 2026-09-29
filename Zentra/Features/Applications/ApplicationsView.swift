@@ -38,6 +38,18 @@ struct ApplicationsView: View {
                 pendingArtifacts = []
             }
         } message: { Text("applications.confirm.detail") }
+        .alert("applications.authorization.title", isPresented: Binding(
+            get: { model.pendingAuthorizedRemoval != nil },
+            set: { _ in }
+        )) {
+            Button("applications.authorization.authorize") { model.retryWithAuthorization() }
+            Button("applications.permission.reveal") { model.useFinderFallback() }
+            Button("cleanup.cancel", role: .cancel) { }
+        } message: {
+            Text(model.authorizationState == .requiresApproval
+                 ? "applications.authorization.approval"
+                 : "applications.authorization.detail")
+        }
         .alert("applications.permission.title", isPresented: Binding(
             get: { model.manualRemovalURL != nil },
             set: { if !$0 { model.manualRemovalURL = nil } }
