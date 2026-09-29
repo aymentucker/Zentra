@@ -87,3 +87,15 @@ codesign --verify --deep --strict --verbose=2 ~/Library/Developer/Xcode/DerivedD
 ```
 
 The expected security behavior at this stage is still fail-closed: the service is packaged, but it must reject privileged XPC requests until the final client signing requirement is configured.
+
+## Verified Final-Audit Debug Baseline — 2026-09-29
+
+After the final-audit lifecycle, localization, state, Smart Care navigation, and workspace/duplicate cleanup hardening changes, the regenerated Xcode project was verified locally on macOS:
+
+- Debug build: **BUILD SUCCEEDED**
+- Unit tests: **TEST SUCCEEDED**
+- Tests executed: **54**
+- Failures: **0**
+
+Expected Debug notes remain for ad-hoc code signing/hardened runtime and the always-run removal-service embed script. This baseline verifies compilation and unit tests only; it does not satisfy the Release Developer ID, privileged XPC signing requirement, notarization, or clean-Mac distribution gates.
+
