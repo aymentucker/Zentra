@@ -3,9 +3,6 @@ import AppKit
 
 struct DeveloperCleanerView: View {
     @StateObject private var model = WorkspaceCleanerModel()
-    let isActive: Bool
-
-    init(isActive: Bool = true) { self.isActive = isActive }
     @State private var tab: CleanerTab = .developer
     @State private var showingConfirmation = false
 
