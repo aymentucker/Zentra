@@ -53,7 +53,7 @@ struct ContentView: View {
             persistent(.duplicates) { DuplicatesView() }
             persistent(.tidyUp) { TidyUpView() }
             persistent(.applications) { ApplicationsView() }
-            persistent(.performance) { PerformanceView() }
+            persistent(.performance) { PerformanceView(isActive: selection == .performance) }
             persistent(.developer) { DeveloperCleanerView() }
             persistent(.settings) { SettingsView() }
 
