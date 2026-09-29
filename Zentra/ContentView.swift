@@ -25,7 +25,6 @@ struct ContentView: View {
         .environment(\.layoutDirection, .leftToRight)
         .background(Color.zentraBackground)
         .preferredColorScheme(.dark)
-        .id("shell-\(language.rawValue)")
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: selection)
     }
 
