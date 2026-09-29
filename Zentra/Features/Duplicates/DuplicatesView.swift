@@ -70,7 +70,7 @@ struct DuplicatesView: View {
                 ProgressView()
                 VStack(alignment: .leading, spacing: 4) {
                     Text("duplicates.scanning").zentraFont(12, weight: .semibold)
-                    Text("\(model.files) · \(ByteCountFormatter.string(fromByteCount: model.bytes, countStyle: .file))")
+                    Text("\(model.files) · \(ZentraLocalization.bytes(model.bytes))")
                         .zentraFont(10)
                         .foregroundStyle(Color.zentraTextTertiary)
                     if let currentURL = model.currentURL {
@@ -90,7 +90,7 @@ struct DuplicatesView: View {
         HStack(spacing: 12) {
             metric("duplicates.groups", "\(analysis.groups.count)")
             metric("duplicates.files", "\(analysis.duplicateFiles)")
-            metric("duplicates.reclaim", ByteCountFormatter.string(fromByteCount: analysis.reclaimableBytes, countStyle: .file))
+            metric("duplicates.reclaim", ZentraLocalization.bytes(analysis.reclaimableBytes))
         }
     }
 
@@ -109,11 +109,11 @@ struct DuplicatesView: View {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
                     Image(systemName: "square.stack.3d.up.fill").foregroundStyle(Color.zentraAccent)
-                    Text(ByteCountFormatter.string(fromByteCount: group.size, countStyle: .file))
+                    Text(ZentraLocalization.bytes(group.size))
                         .zentraFont(12, weight: .semibold)
                     Text("· \(group.files.count)").foregroundStyle(Color.zentraTextTertiary)
                     Spacer()
-                    Text(ByteCountFormatter.string(fromByteCount: group.reclaimableBytes, countStyle: .file))
+                    Text(ZentraLocalization.bytes(group.reclaimableBytes))
                         .zentraFont(10)
                         .foregroundStyle(Color.zentraAccent)
                 }
@@ -171,7 +171,7 @@ struct DuplicatesView: View {
         VStack {
             Spacer()
             HStack {
-                Text(String(format: NSLocalizedString("duplicates.selected", comment: ""), model.selected.count))
+                Text(ZentraLocalization.format("duplicates.selected", model.selected.count))
                     .zentraFont(11, weight: .semibold)
                 Spacer()
                 Button("storage.selection.clear") { model.selected = [] }
@@ -190,7 +190,7 @@ struct DuplicatesView: View {
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = true
-        panel.prompt = String(localized: "duplicates.choose")
+        panel.prompt = ZentraLocalization.string("duplicates.choose")
 
         guard panel.runModal() == .OK else { return }
         roots = panel.urls
