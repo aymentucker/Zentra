@@ -323,3 +323,6 @@
 "settings.about.description" = "معلومات إصدار نسخة Zentra الحالية.";
 "settings.about.version" = "الإصدار %@ · البناء %@";
 "settings.about.macOS" = "يتطلب macOS 14 أو أحدث";
+
+"applications.search.empty" = "لا توجد تطبيقات مطابقة";
+"applications.search.empty.detail" = "جرّب اسم تطبيق آخر أو معرّف حزمة مختلفًا.";
