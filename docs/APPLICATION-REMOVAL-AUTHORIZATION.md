@@ -38,4 +38,12 @@ Validation must live in the privileged component, not only in the UI process.
 
 Do not ship the privileged path until the final distribution identity, helper installation mechanism, authorization model, XPC/client validation, hardened runtime settings, signing, notarization, upgrade behavior, uninstall behavior, and clean-Mac tests are verified together.
 
-The exact helper technology must be selected against the deployment/distribution target and current Apple platform guidance at implementation time; do not build a legacy or unrestricted privileged helper merely to bypass permissions.
+## Selected platform mechanism
+
+Zentra targets macOS 14+, so V1 will use the modern ServiceManagement model: an app-bundled LaunchDaemon registered with `SMAppService.daemon(plistName:)`. The daemon plist belongs under `Contents/Library/LaunchDaemons`, uses `BundleProgram`, and points to a helper executable kept inside the Zentra app bundle.
+
+Do not use the deprecated `SMJobBless` path for the V1 implementation.
+
+Registration/authorization is explicit and user visible. Zentra must expose service status and must not silently retry authorization in a loop.
+
+The privileged daemon remains a narrow broker for validated application-bundle removal; all trust-boundary requirements above still apply.
