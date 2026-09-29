@@ -54,7 +54,8 @@ struct StorageView: View {
                         fullDiskNotice(analysis)
                         categoryGrid(analysis)
                         explorer
-                    } else if model.state != .scanning { emptyState }
+                    } else if case .failed = model.state { errorState }
+                    else if model.state != .scanning { emptyState }
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 48).padding(.vertical, 36)
             }
             if !selection.selected.isEmpty { selectionBar }
@@ -125,7 +126,7 @@ struct StorageView: View {
                     Button { selectedCategory = selectedCategory == category ? nil : category; selection.clear() } label: {
                         VStack(alignment: .leading, spacing: 5) {
                             Text(category.titleKey).zentraFont(11, weight: .semibold)
-                            Text(ByteCountFormatter.string(fromByteCount: analysis.categoryBytes[category, default: 0], countStyle: .file)).zentraFont(10)
+                            Text(ZentraLocalization.bytes(analysis.categoryBytes[category, default: 0])).zentraFont(10)
                         }.foregroundStyle(selectedCategory == category ? Color.zentraAccent : Color.zentraTextSecondary)
                          .frame(maxWidth: .infinity, alignment: .leading).padding(12)
                          .background(RoundedRectangle(cornerRadius: 12).fill(selectedCategory == category ? Color.zentraAccent.opacity(0.09) : Color.zentraSurface))
@@ -237,6 +238,15 @@ struct StorageView: View {
             Button("storage.selection.clear") { selection.clear() }.buttonStyle(.plain).foregroundStyle(Color.zentraTextSecondary)
             Button("storage.action.trash", role: .destructive) { requestTrash(selectedItems) }.disabled(selection.isDeleting)
         }.padding(.horizontal, 18).frame(height: 54).background(.ultraThinMaterial).clipShape(RoundedRectangle(cornerRadius: 16)).padding(20) }
+    }
+
+    private var errorState: some View {
+        ZentraStateView(
+            state: .error,
+            title: "storage.error.title",
+            message: "storage.error.detail",
+            retryAction: { showLocationPicker = true }
+        )
     }
 
     private var emptyState: some View {
