@@ -2,6 +2,9 @@ import SwiftUI
 
 struct CleanupView: View {
     @StateObject private var scanSession = ScanSession()
+    let isActive: Bool
+
+    init(isActive: Bool = true) { self.isActive = isActive }
     @StateObject private var sourceAnalysis = CleanupSourceAnalysisModel()
     private let sourceCatalog = CleanupSourceCatalog()
     @State private var enabledSources = Set(CleanupSourceKind.allCases)
@@ -37,6 +40,7 @@ struct CleanupView: View {
             }
         }
         .task {
+            guard isActive else { return }
             if sourceAnalysis.summaries.isEmpty {
                 sourceAnalysis.start(sources: sourceCatalog.availableSources())
             }
