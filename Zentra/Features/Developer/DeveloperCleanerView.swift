@@ -3,6 +3,9 @@ import AppKit
 
 struct DeveloperCleanerView: View {
     @StateObject private var model = WorkspaceCleanerModel()
+    let isActive: Bool
+
+    init(isActive: Bool = true) { self.isActive = isActive }
     @State private var tab: CleanerTab = .developer
     @State private var showingConfirmation = false
 
@@ -39,7 +42,8 @@ struct DeveloperCleanerView: View {
                 .padding(.vertical, 36)
             }
         }
-        .task { if model.results.isEmpty { model.scan() } }
+        .task { if isActive && model.results.isEmpty { model.scan() } }
+        .onChange(of: isActive) { _, active in if active && model.results.isEmpty && !model.isScanning { model.scan() } }
         .alert("developer.confirm.title",isPresented:$showingConfirmation) {
             Button("cleanup.cancel",role:.cancel){}
             Button("cleanup.confirm.action",role:.destructive){ model.moveSelectedToTrash() }
