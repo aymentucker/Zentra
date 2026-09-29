@@ -51,10 +51,18 @@ final class WorkspaceCleanerModel: ObservableObject {
     private var task: Task<Void, Never>?
 
     func scan() {
-        task?.cancel(); isScanning = true; errorMessage = nil
+        task?.cancel()
+        results = []
+        selected.removeAll()
+        lastCleanedBytes = 0
+        isScanning = true
+        errorMessage = nil
         task = Task {
             let values = await analyzer.analyze(catalog.locations())
-            guard !Task.isCancelled else { return }
+            guard !Task.isCancelled else {
+                isScanning = false
+                return
+            }
             results = values.filter(\.exists)
             selected = Set(results.filter { $0.location.safety == .safe && $0.bytes > 0 }.map { $0.id })
             isScanning = false
@@ -77,18 +85,30 @@ final class WorkspaceCleanerModel: ObservableObject {
         isCleaning = true; errorMessage = nil
         Task {
             var cleaned: Int64 = 0
+            var failures: [String] = []
+
             for item in items {
                 guard FileManager.default.fileExists(atPath: item.location.url.path) else { continue }
                 do {
                     var destination: NSURL?
                     try FileManager.default.trashItem(at: item.location.url, resultingItemURL: &destination)
-                    if !FileManager.default.fileExists(atPath: item.location.url.path) { cleaned += item.bytes }
-                } catch { errorMessage = error.localizedDescription }
+                    if !FileManager.default.fileExists(atPath: item.location.url.path) {
+                        cleaned += item.bytes
+                        selected.remove(item.id)
+                    }
+                } catch {
+                    failures.append("\(item.location.name): \(error.localizedDescription)")
+                }
             }
+
             lastCleanedBytes = cleaned
-            selected.removeAll()
             isCleaning = false
-            scan()
+
+            if failures.isEmpty {
+                scan()
+            } else {
+                errorMessage = failures.joined(separator: "\n")
+            }
         }
     }
 }
