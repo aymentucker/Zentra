@@ -33,6 +33,8 @@ struct TidyUpView: View {
                         }
 
                         if !analysis.items.isEmpty { actionBar }
+                    } else if model.errorMessage != nil && !model.isScanning {
+                        errorState
                     } else if !model.isScanning {
                         emptyState
                     }
@@ -144,6 +146,16 @@ struct TidyUpView: View {
                 .buttonStyle(.plain)
             ZentraPrimaryButton("tidy.organize") { confirm = true }
         }
+    }
+
+    private var errorState: some View {
+        ZentraStateView(
+            state: .error,
+            title: "scan.error.title",
+            message: "tidy.error.detail",
+            retryTitle: "tidy.choose",
+            retryAction: { chooseFolder() }
+        )
     }
 
     private var noResultsState: some View {
