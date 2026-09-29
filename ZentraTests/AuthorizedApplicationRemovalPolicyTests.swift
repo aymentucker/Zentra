@@ -8,6 +8,13 @@ final class AuthorizedApplicationRemovalPolicyTests: XCTestCase {
         XCTAssertFalse(AuthorizedApplicationRemovalPolicy.validateCandidate(URL(fileURLWithPath: "/Applications/not-an-app.txt"), currentApplicationURL: nil))
     }
 
+    func testRejectsMissingApplicationEvenUnderApprovedRoot() {
+        XCTAssertFalse(AuthorizedApplicationRemovalPolicy.validateCandidate(
+            URL(fileURLWithPath: "/Applications/ZentraDefinitelyMissing.app"),
+            currentApplicationURL: nil
+        ))
+    }
+
     func testRejectsCurrentApplication() {
         let current = Bundle.main.bundleURL
         XCTAssertFalse(AuthorizedApplicationRemovalPolicy.validateCandidate(current, currentApplicationURL: current))
