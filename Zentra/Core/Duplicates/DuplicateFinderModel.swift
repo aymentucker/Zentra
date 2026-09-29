@@ -24,6 +24,8 @@ final class DuplicateFinderModel: ObservableObject {
         selected = []
         files = 0
         bytes = 0
+        currentURL = nil
+        errorMessage = nil
         state = .scanning
 
         task = Task {
@@ -79,9 +81,10 @@ final class DuplicateFinderModel: ObservableObject {
             }
         }
 
-        // Re-scan the exact user-selected roots. Reconstructing roots from duplicate
-        // parents could silently narrow the scan after cleanup.
-        if !scanRoots.isEmpty {
+        // Re-scan only after a fully successful cleanup. If any item could not
+        // be moved, keep the current results and surface the failure so the user
+        // can review exactly what remains instead of erasing the operation error.
+        if errorMessage == nil, !scanRoots.isEmpty {
             start(roots: scanRoots)
         }
     }
