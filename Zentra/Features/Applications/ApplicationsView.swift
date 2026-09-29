@@ -39,6 +39,15 @@ struct ApplicationsView: View {
                 pendingArtifacts = []
             }
         } message: { Text("applications.confirm.detail") }
+        .alert("applications.permission.title", isPresented: Binding(
+            get: { model.manualRemovalURL != nil },
+            set: { if !$0 { model.manualRemovalURL = nil } }
+        )) {
+            Button("cleanup.cancel", role: .cancel) { model.manualRemovalURL = nil }
+            Button("applications.permission.reveal") { model.revealManualRemoval() }
+        } message: {
+            Text("applications.permission.detail")
+        }
         .alert("scan.error.title", isPresented: Binding(get: { model.errorMessage != nil }, set: { if !$0 { model.errorMessage = nil } })) {
             Button("common.retry") { model.errorMessage = nil; model.scan() }
         } message: { Text(model.errorMessage ?? "scan.error.message") }
