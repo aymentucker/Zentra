@@ -2,6 +2,7 @@ import XCTest
 import ServiceManagement
 @testable import Zentra
 
+@MainActor
 final class ApplicationRemovalAuthorizationTests: XCTestCase {
     func testServiceStatusMapping() {
         XCTAssertEqual(ApplicationRemovalAuthorization.map(.enabled), .enabled)
