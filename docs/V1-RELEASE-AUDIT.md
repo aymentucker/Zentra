@@ -30,6 +30,17 @@ SwiftUI text follows the selected in-app locale. Foundation/model formatting mus
 
 Distribution still requires a valid Developer ID / App Store signing choice, archive validation, notarization where applicable, and testing the signed artifact on a clean Mac.
 
+## Verified development baseline
+
+On 2026-09-29 the generated Debug project was verified locally with:
+
+- `BUILD SUCCEEDED`
+- 54 unit tests executed
+- 0 failures / 0 unexpected failures
+- `TEST SUCCEEDED`
+
+This verifies the current development target and test suite only. It does not replace signed Release archive, notarization, privileged-service approval, or clean-Mac distribution testing.
+
 ## Application uninstall blocker
 
 The current uninstaller intentionally stops if macOS denies moving an app bundle from `/Applications`. It never continues by deleting leftovers after the main bundle fails.
